@@ -1,19 +1,19 @@
-<div class="card" *ngIf="item$ | async as product">
+<div class="card" *ngIf="this.item">
     <div class="card-header">
-        <h3 class="card-title">{{product.productName}}</h3>
+        <h3 class="card-title">{{this.item.productName}}</h3>
 
     </div>
-    <img [src]="imgURL + product.nameID + imgType" class="card-img-top img-30vh">
+    <img [src]="imgURL + this.item.nameID + imgType" class="card-img-top img-30vh">
     <div class="card-body">
-        <h4 class="card-title">$ {{product.cost | number: '1.2-2'}}</h4>
-        <h5 class="card-subtitle mb-2 text-body-secondary">ID: {{product.productID}}</h5>
+        <h4 class="card-title">$ {{this.item.cost | number: '1.2-2'}}</h4>
+        <h5 class="card-subtitle mb-2 text-body-secondary">ID: {{this.item.productID}}</h5>
 
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
                 <h6>Available Stock: {{stock}}</h6>
             </li>
-            <li class="list-group-item">{{product.category | uppercase }}</li>
-            <li class="list-group-item">{{product.details}}</li>
+            <li class="list-group-item">{{this.item.category | uppercase }}</li>
+            <li class="list-group-item">{{this.item.details}}</li>
             <li class="list-group-item">INSERT ATTRIBUTES HERE</li>
         </ul>
 
@@ -35,7 +35,7 @@
                 </div>
             </div>
             <div class="col-auto">
-                <button [routerLink]="['uc']" class="btn btn-success ">Add to Cart</button>
+                <button class="btn btn-success" (click)="addToCart()">Add to Cart</button>
             </div>
         </div>
     </div>

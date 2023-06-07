@@ -14,6 +14,10 @@
 - add pagination count % numberofdisplay + current page
 - cart item
 
+- insert consoleoutputs
+
+- Optimize Stock vs product calls
+
 # FIX
 
 - path when selecting from category component
@@ -29,6 +33,7 @@
 - [ ] option for random/sequential
 - [ ] method to update discount/deduct
 - [ ] fix navbar router for active
+- [ ] how to integrate popper/jquery into angular to use bootstrap scripts
 
 # EXPLORE
 

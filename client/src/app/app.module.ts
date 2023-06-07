@@ -11,6 +11,7 @@ import { CatMainComponent } from './catalogue/cat-main/cat-main.component';
 import { ItemDetailComponent } from './catalogue/item-detail/item-detail.component';
 import { CategoryListComponent } from './catalogue/category-list/category-list.component';
 import { CartMainComponent } from './cart/cart-main/cart-main.component';
+import { CartItemComponent } from './cart/cart-item/cart-item.component';
 
 const routes: Routes = [
   { path: '', component: CatMainComponent },
@@ -31,6 +32,7 @@ const routes: Routes = [
     ItemDetailComponent,
     CategoryListComponent,
     CartMainComponent,
+    CartItemComponent,
   ],
   imports: [
     BrowserModule,

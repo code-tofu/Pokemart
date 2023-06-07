@@ -1,3 +1,5 @@
+import { CartMainComponent } from '../cart/cart-main/cart-main.component';
+
 export interface CatalogueItem {
   productID: string;
   nameID: string;
@@ -25,5 +27,16 @@ export interface CategoryCount {
 
 export interface Qty {
   productID: string;
+  quantity: number;
+}
+
+export interface CartString {
+  productID: string;
+  nameID: string;
+  productName: string;
+}
+
+export interface CartItem {
+  productString: CartString;
   quantity: number;
 }

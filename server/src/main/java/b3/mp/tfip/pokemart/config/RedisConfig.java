@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
@@ -25,12 +24,10 @@ public class RedisConfig {
     @Value("${spring.data.redis.password}")
     private String redisPassword;
 
-    @Bean // (""?)
+    @Bean("Cart")
     @Scope("singleton")
-    @Primary // PRIMARY?
     public RedisTemplate<String, String> redisTemplate() {
 
-        // Set redis config parameters
         final RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
         config.setHostName(redisHost);
         config.setPort(redisPort.get());
@@ -41,18 +38,16 @@ public class RedisConfig {
         }
         config.setDatabase(0);
 
-        // Use redis config for jedis client
         final JedisClientConfiguration jedisClient = JedisClientConfiguration.builder().build();
         final JedisConnectionFactory jedisFac = new JedisConnectionFactory(config, jedisClient);
         jedisFac.afterPropertiesSet();
 
-        // Set up redistemplate and associated KV hashing
         RedisTemplate<String, String> r = new RedisTemplate<String, String>();
         r.setConnectionFactory(jedisFac);
         r.setKeySerializer(new StringRedisSerializer());
-        r.setHashKeySerializer(new StringRedisSerializer()); // DEPENDS ON DB STRUCTURE
         r.setValueSerializer(r.getKeySerializer());
-        r.setHashValueSerializer(r.getKeySerializer()); // DEPENDS ON DB STRUCTURE
+        r.setHashKeySerializer(r.getKeySerializer());
+        r.setHashValueSerializer(r.getKeySerializer());
 
         System.out.println("Connected to Redis" + redisHost + ":" + redisPort + "-Database"
                 + Integer.toString(config.getDatabase()));
