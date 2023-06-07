@@ -1,0 +1,42 @@
+<div class="card" *ngIf="item$ | async as product">
+    <div class="card-header">
+        <h3 class="card-title">{{product.productName}}</h3>
+
+    </div>
+    <img [src]="imgURL + product.nameID + imgType" class="card-img-top img-30vh">
+    <div class="card-body">
+        <h4 class="card-title">$ {{product.cost | number: '1.2-2'}}</h4>
+        <h5 class="card-subtitle mb-2 text-body-secondary">ID: {{product.productID}}</h5>
+
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <h6>Available Stock: {{stock}}</h6>
+            </li>
+            <li class="list-group-item">{{product.category | uppercase }}</li>
+            <li class="list-group-item">{{product.details}}</li>
+            <li class="list-group-item">INSERT ATTRIBUTES HERE</li>
+        </ul>
+
+    </div>
+
+    <div class="card-footer text-body-secondary container justify-content-end">
+        <div class="row gx-1">
+            <div class="col">
+                <button [routerLink]="['']" class="btn btn-warning me-md-2">Back</button>
+            </div>
+            <div class="col"></div>
+            <div class="col-4">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-primary" (click)="decreaseQty()"
+                        [disabled]="this.quantity &lt; 2">-</button>
+                    <input type="text" class="form-control btn-outline btn-primary center-text" [(ngModel)]="quantity">
+                    <button type="button" class="btn btn-primary" (click)="increaseQty()" [disabled]="this.quantity
+                        >stock-1">+</button>
+                </div>
+            </div>
+            <div class="col-auto">
+                <button [routerLink]="['uc']" class="btn btn-success ">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+</div>

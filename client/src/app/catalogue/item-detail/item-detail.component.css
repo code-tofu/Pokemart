@@ -1,0 +1,20 @@
+.right-text {
+    text-align: right;
+}
+
+.center-text {
+    text-align: center;
+    font-weight: bold;
+}
+
+.img-300px {
+    height: auto;
+    max-width: 300px;
+    margin: auto;
+}
+
+.img-30vh {
+    height: 35vh;
+    width: auto;
+    margin: auto;
+}
