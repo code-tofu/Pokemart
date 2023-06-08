@@ -1,5 +1,9 @@
 # DO TODAY
 
+Catalogue:
+- add attributes in detail page
+- add badge for size of cart
+
 Cart Feature
 - cart service
 - cart controller
@@ -7,7 +11,7 @@ Cart Feature
 - cart link
 - cart item
 - calculator total
--
+
 Pagination Feature
 - pagination control logic
 - pagination get
