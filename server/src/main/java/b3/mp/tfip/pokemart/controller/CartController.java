@@ -30,8 +30,9 @@ public class CartController {
         try {
             System.out.println(payload);
             JsonObject cartJson = Utils.getJsonObjectFromStr(payload);
-            cartSvc.insertNewCartItem(userID, cartJson.getString("productString"), cartJson.getInt("quantity"));
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            cartSvc.insertNewCartItem(userID, cartJson.getString("productID"), cartJson.getInt("quantity"));
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(Json.createObjectBuilder().add("201 CREATED", "Inserted New Cart Item").build().toString());
 
         } catch (Exception ex) {
             return ControllerUtil.exceptionHandler(ex);
@@ -45,7 +46,7 @@ public class CartController {
             JsonArrayBuilder jsonAB = Json.createArrayBuilder();
             JsonObjectBuilder jsonOB = Json.createObjectBuilder();
             for (Map.Entry<String, Integer> entry : cartMap.entrySet()) {
-                jsonAB.add(jsonOB.add("productString", entry.getKey()).add("quantity", entry.getValue()));
+                jsonAB.add(jsonOB.add("productID", entry.getKey()).add("quantity", entry.getValue()));
             }
             return ResponseEntity.status(HttpStatus.OK).body(jsonAB.build().toString());
         } catch (Exception ex) {

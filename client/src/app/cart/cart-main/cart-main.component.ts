@@ -1,7 +1,6 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
-import { CartItem } from 'src/app/model/cart-item.model';
-import { Stock } from 'src/app/model/catalogue-item.model';
+import { Component, inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { CartItem } from 'src/app/model/cart.model';
 import { CartService } from 'src/app/services/cart.service';
 
 @Component({
@@ -9,27 +8,12 @@ import { CartService } from 'src/app/services/cart.service';
   templateUrl: './cart-main.component.html',
   styleUrls: ['./cart-main.component.css'],
 })
-export class CartMainComponent implements OnInit {
+export class CartMainComponent {
   cartSvc = inject(CartService);
-  cart: CartItem[] = [];
+
+  cart$!: Observable<CartItem[]>;
 
   ngOnInit(): void {
-    let respArr: Stock[] = [];
-    firstValueFrom(this.cartSvc.getFullCart())
-      .then((resp) => {
-        respArr = resp;
-        respArr.forEach((qty) => {
-          console.info(qty);
-          this.cart.push({
-            productString: this.cartSvc.fromProductString(
-              JSON.parse(JSON.stringify(qty))['productString']
-            ),
-            quantity: qty.quantity,
-          });
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.cart$ = this.cartSvc.getFullCart();
   }
 }

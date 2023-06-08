@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { CatalogueItem } from 'src/app/model/catalogue-item.model';
+import { CatalogueItem } from 'src/app/model/catalogue.model';
 import { CatalogueService } from 'src/app/services/catalogue.service';
 
 const perPage: number = 10;
@@ -22,18 +22,25 @@ export class CatMainComponent implements OnInit {
   maxpage: number = 5; //TODO TO CHANGE
 
   ngOnInit(): void {
-    const urllen: number = this.actRoute.snapshot.url.length;
-    if (this.actRoute.snapshot.url[urllen - 1].path == 'category') {
+    console.info('>> [INFO] ', this.actRoute.snapshot.routeConfig);
+    if (this.actRoute.snapshot.routeConfig!.path == 'shop/category/:category') {
       this.catalogue$ = this.catSvc.getCataloguebyCategory(
         this.actRoute.snapshot.params['category']
       );
       this.category = this.actRoute.snapshot.params['category'];
-    } else if (this.actRoute.snapshot.url[urllen - 1].path == 'search') {
+      console.info('>> [INFO] ', 'Load Shop by Category:', this.category);
+    } else if (this.actRoute.snapshot.routeConfig!.path == 'shop/search') {
       this.catalogue$ = this.catSvc.getCataloguebySearch(
+        this.actRoute.snapshot.queryParams['query']
+      );
+      console.info(
+        '>> [INFO] ',
+        'Load Shop by Search:',
         this.actRoute.snapshot.queryParams['query']
       );
     } else {
       this.catalogue$ = this.catSvc.getCatalogue(this.page * perPage);
+      console.info('>> [INFO] ', 'Load Shop Main');
     }
   }
 

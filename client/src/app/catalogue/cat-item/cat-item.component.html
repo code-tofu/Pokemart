@@ -7,7 +7,8 @@
         </div>
     </div>
     <div class="card-footer text-body-secondary">
-        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+            [attr.data-bs-target]="'#backdrop' + item.productID">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                 class="bi bi-lightning align-icon" viewBox="0 0 16 16">
                 <path
@@ -16,29 +17,37 @@
         </button>
 
         <!-- Modal -->
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" [attr.id]="'backdrop' + item.productID" data-bs-backdrop="static"
+            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Input Quantity:</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body inline">
-                        <div>
-                            <h4>{{item.productName}}</h4>
-                        </div>
-                        <div class="btn-group width-150" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-primary" (click)="decreaseQty()"
-                                [disabled]="this.quantity!.value &lt; 2">-</button>
-                            <input type="text" class="form-control btn-outline btn-primary center-text"
-                                [formControl]="quantity">
-                            <button type="button" class="btn btn-primary" (click)="increaseQty()" [disabled]="this.quantity!.value
+                    <div class="modal-body ">
+                        <div class="inline">
+                            <div>
+                                <h4>{{item.productName}}</h4>
+                            </div>
+                            <div class="btn-group width-150" role="group" aria-label="Basic example">
+                                <button type="button" class="btn btn-primary" (click)="decreaseQty()"
+                                    [disabled]="this.quantity!.value &lt; 2">-</button>
+                                <input type="text" class="form-control btn-outline btn-primary center-text"
+                                    [formControl]="quantity">
+                                <button type="button" class="btn btn-primary" (click)="increaseQty()" [disabled]="this.quantity!.value
                         &gt; this.item.stock-1">+</button>
+                            </div>
+                            <div>
+                                <h4>Total: ${{item.cost * this.quantity!.value | number: '1.2-2'}}</h4>
+                            </div>
                         </div>
-                        <div>
-                            <h4>Total: ${{item.cost * this.quantity!.value | number: '1.2-2'}}</h4>
-                        </div>
+
+                        <p class="warn-text" *ngIf="this.quantity!.hasError('min')">Please input a minimum quantity of 1
+                        </p>
+                        <p class="warn-text" *ngIf="this.quantity!.hasError('max')">You are only allowed to purchase a
+                            maximum of {{item.stock}} due to limited
+                            stock</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

@@ -2,7 +2,8 @@ import { Component, Input, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { CatalogueItem } from 'src/app/model/catalogue-item.model';
+import { CartReq } from 'src/app/model/cart.model';
+import { CatalogueItem } from 'src/app/model/catalogue.model';
 import { CartService } from 'src/app/services/cart.service';
 
 const imgURL: String =
@@ -20,8 +21,8 @@ export class CatItemComponent implements OnInit {
   imgsrc!: String;
 
   router = inject(Router);
-  cartSvc = inject(CartService);
   fb = inject(FormBuilder);
+  cartSvc = inject(CartService);
   quantity: FormControl = new FormControl<number>(1);
 
   ngOnInit(): void {
@@ -48,18 +49,18 @@ export class CatItemComponent implements OnInit {
   }
 
   addToCart() {
-    const productString = {
+    const req: CartReq = {
       productID: this.item.productID,
-      nameID: this.item.nameID,
-      productName: this.item.productName,
+      quantity: this.quantity.value,
     };
-    console.info(productString);
-    firstValueFrom(this.cartSvc.addToCart(productString, this.quantity!.value))
+    firstValueFrom(this.cartSvc.addToCart(req))
       .then((resp) => {
+        console.info('>> [INFO] Server Response:', resp);
         this.router.navigate(['/cart']);
       })
       .catch((err) => {
-        console.log(err);
+        alert('Connection Issue: Please Try Again Later');
+        console.error('>> [ERROR] Server Error:', err);
       });
   }
 }

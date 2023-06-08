@@ -7,7 +7,8 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, firstValueFrom } from 'rxjs';
-import { Product } from 'src/app/model/catalogue-item.model';
+import { CartReq } from 'src/app/model/cart.model';
+import { Product } from 'src/app/model/catalogue.model';
 import { CartService } from 'src/app/services/cart.service';
 import { CatalogueService } from 'src/app/services/catalogue.service';
 
@@ -24,8 +25,8 @@ export class ItemDetailComponent implements OnInit {
   actRoute = inject(ActivatedRoute);
   catSvc = inject(CatalogueService);
   router = inject(Router);
-  cartSvc = inject(CartService);
   fb = inject(FormBuilder);
+  cartSvc = inject(CartService);
 
   item!: Product;
   imgsrc!: String;
@@ -72,19 +73,18 @@ export class ItemDetailComponent implements OnInit {
   }
 
   addToCart() {
-    const productString = {
+    const req: CartReq = {
       productID: this.item.productID,
-      nameID: this.item.nameID,
-      productName: this.item.productName,
+      quantity: this.quantity.value,
     };
-    console.info(productString);
-    firstValueFrom(this.cartSvc.addToCart(productString, this.quantity!.value))
-      .then(() => {
+    firstValueFrom(this.cartSvc.addToCart(req))
+      .then((resp) => {
+        console.info('>> [INFO] Server Response:', resp);
         this.router.navigate(['/cart']);
       })
       .catch((err) => {
         alert('Connection Issue: Please Try Again Later');
-        console.log(err);
+        console.error('>> [ERROR] Server Error:', err);
       });
   }
 }

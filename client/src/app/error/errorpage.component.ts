@@ -15,7 +15,7 @@ export class ErrorpageComponent implements OnInit {
 
   ngOnInit(): void {
     console.info('>> [INFO] Path:', this.actRoute.snapshot.url[0].path);
-    if (this.actRoute.snapshot.url[0].path == 'uc') {
+    if (this.actRoute.snapshot.url[0].path == 'construction') {
       this.titleMain = "We're Sorry";
       this.subtitleFirst = 'This page is still under construction.';
       this.subtitleSecond = 'Please come again soon!';

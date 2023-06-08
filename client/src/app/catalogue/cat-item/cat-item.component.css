@@ -25,3 +25,8 @@
 .width-150 {
     width: 150px;
 }
+
+.warn-text {
+    color: #dc3545;
+    font-weight: bold;
+}

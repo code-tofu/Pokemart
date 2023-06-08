@@ -20,6 +20,11 @@
     </div>
 
     <div class="card-footer text-body-secondary container justify-content-end">
+        <p class="warn-text" *ngIf="this.quantity!.hasError('min')">Please input a minimum quantity of 1
+        </p>
+        <p class="warn-text" *ngIf="this.quantity!.hasError('max')">You are only allowed to purchase a
+            maximum of {{stock}} due to limited
+            stock</p>
         <div class="row gx-1">
             <div class="col">
                 <button [routerLink]="['']" class="btn btn-warning me-md-2">Back</button>

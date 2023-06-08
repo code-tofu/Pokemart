@@ -4,14 +4,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
-import { ErrorpageComponent } from './errorpage/errorpage.component';
+import { ErrorpageComponent } from './error/errorpage.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CatItemComponent } from './catalogue/cat-item/cat-item.component';
 import { CatMainComponent } from './catalogue/cat-main/cat-main.component';
 import { ItemDetailComponent } from './catalogue/item-detail/item-detail.component';
 import { CategoryListComponent } from './catalogue/category-list/category-list.component';
+
+import { NavTopComponent } from './nav-top/nav-top.component';
 import { CartMainComponent } from './cart/cart-main/cart-main.component';
-import { CartItemComponent } from './cart/cart-item/cart-item.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'shop', pathMatch: 'full' },
@@ -19,8 +20,8 @@ const routes: Routes = [
   { path: 'shop/category/:category', component: CatMainComponent },
   { path: 'shop/search', component: CatMainComponent },
   { path: 'category', component: CategoryListComponent },
-  { path: 'cart', component: CartMainComponent },
-  { path: 'uc', component: ErrorpageComponent },
+  //   { path: 'cart', component: CartMainComponent },
+  { path: 'construction', component: ErrorpageComponent },
   { path: 'detail/:productID', component: ItemDetailComponent },
   { path: '**', component: ErrorpageComponent },
 ];
@@ -33,8 +34,8 @@ const routes: Routes = [
     CatMainComponent,
     ItemDetailComponent,
     CategoryListComponent,
+    NavTopComponent,
     CartMainComponent,
-    CartItemComponent,
   ],
   imports: [
     BrowserModule,

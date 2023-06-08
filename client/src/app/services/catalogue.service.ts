@@ -5,7 +5,7 @@ import {
   CategoryCount,
   Product,
   Stock,
-} from '../model/catalogue-item.model';
+} from '../model/catalogue.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 const inventoryURL = 'api/inventory/';

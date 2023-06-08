@@ -18,3 +18,8 @@
     width: auto;
     margin: auto;
 }
+
+.warn-text {
+    color: #dc3545;
+    font-weight: bold;
+}

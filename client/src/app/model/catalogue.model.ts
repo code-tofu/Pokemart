@@ -1,5 +1,3 @@
-import { CartMainComponent } from '../cart/cart-main/cart-main.component';
-
 export interface CatalogueItem {
   productID: string;
   nameID: string;
