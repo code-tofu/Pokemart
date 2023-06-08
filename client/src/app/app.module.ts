@@ -14,8 +14,10 @@ import { CartMainComponent } from './cart/cart-main/cart-main.component';
 import { CartItemComponent } from './cart/cart-item/cart-item.component';
 
 const routes: Routes = [
-  { path: '', component: CatMainComponent },
-  { path: 'category/:category', component: CatMainComponent },
+  { path: '', redirectTo: 'shop', pathMatch: 'full' },
+  { path: 'shop', component: CatMainComponent },
+  { path: 'shop/category/:category', component: CatMainComponent },
+  { path: 'shop/search', component: CatMainComponent },
   { path: 'category', component: CategoryListComponent },
   { path: 'cart', component: CartMainComponent },
   { path: 'uc', component: ErrorpageComponent },

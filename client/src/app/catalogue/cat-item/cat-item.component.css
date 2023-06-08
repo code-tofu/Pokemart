@@ -11,3 +11,17 @@
 .align-icon {
     vertical-align: -0.125em;
 }
+
+.center-text {
+    text-align: center;
+    font-weight: bold;
+}
+
+.inline {
+    display: flex;
+    justify-content: space-between;
+}
+
+.width-150 {
+    width: 150px;
+}

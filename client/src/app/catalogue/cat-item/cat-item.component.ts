@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { CatalogueItem } from 'src/app/model/catalogue-item.model';
@@ -7,7 +8,6 @@ import { CartService } from 'src/app/services/cart.service';
 const imgURL: String =
   'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/';
 const imgType: String = '.png';
-const defaultqty:number = 1;
 
 @Component({
   selector: 'app-cat-item',
@@ -21,16 +21,32 @@ export class CatItemComponent implements OnInit {
 
   router = inject(Router);
   cartSvc = inject(CartService);
+  fb = inject(FormBuilder);
+  quantity: FormControl = new FormControl<number>(1);
 
   ngOnInit(): void {
     this.imgsrc = imgURL + this.item.nameID + imgType;
+    this.quantity.setValidators([
+      Validators.required,
+      Validators.min(1),
+      Validators.max(this.item.stock),
+    ]);
   }
 
   detailPage() {
     this.router.navigate(['/detail', this.item.productID]);
   }
 
-  //TODO: add quantity
+  increaseQty() {
+    if (this.quantity!.value < this.item.stock)
+      this.quantity.setValue(this.quantity!.value + 1);
+  }
+
+  decreaseQty() {
+    if (this.quantity!.value > 1)
+      this.quantity.setValue(this.quantity!.value - 1);
+  }
+
   addToCart() {
     const productString = {
       productID: this.item.productID,
@@ -38,7 +54,7 @@ export class CatItemComponent implements OnInit {
       productName: this.item.productName,
     };
     console.info(productString);
-    firstValueFrom(this.cartSvc.addToCart(productString, defaultqty))
+    firstValueFrom(this.cartSvc.addToCart(productString, this.quantity!.value))
       .then((resp) => {
         this.router.navigate(['/cart']);
       })

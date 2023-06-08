@@ -3,7 +3,7 @@
         <h3 class="card-title">{{this.item.productName}}</h3>
 
     </div>
-    <img [src]="imgURL + this.item.nameID + imgType" class="card-img-top img-30vh">
+    <img [src]="imgsrc" class="card-img-top img-30vh">
     <div class="card-body">
         <h4 class="card-title">$ {{this.item.cost | number: '1.2-2'}}</h4>
         <h5 class="card-subtitle mb-2 text-body-secondary">ID: {{this.item.productID}}</h5>
@@ -28,14 +28,15 @@
             <div class="col-4">
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <button type="button" class="btn btn-primary" (click)="decreaseQty()"
-                        [disabled]="this.quantity &lt; 2">-</button>
-                    <input type="text" class="form-control btn-outline btn-primary center-text" [(ngModel)]="quantity">
-                    <button type="button" class="btn btn-primary" (click)="increaseQty()" [disabled]="this.quantity
-                        >stock-1">+</button>
+                        [disabled]="this.quantity!.value &lt; 2">-</button>
+                    <input type="text" class="form-control btn-outline btn-primary center-text"
+                        [formControl]="quantity">
+                    <button type="button" class="btn btn-primary" (click)="increaseQty()" [disabled]="this.quantity!.value
+                        &gt; stock-1">+</button>
                 </div>
             </div>
             <div class="col-auto">
-                <button class="btn btn-success" (click)="addToCart()">Add to Cart</button>
+                <button class="btn btn-success" (click)="addToCart()" [disabled]="quantity.invalid">Add to Cart</button>
             </div>
         </div>
     </div>

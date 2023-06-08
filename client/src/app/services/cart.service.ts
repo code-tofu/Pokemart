@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UserService } from './user.service';
-import { CartItem, CartString, Qty } from '../model/catalogue-item.model';
+import { CartItem, CartString } from '../model/cart-item.model';
+import { Stock } from '../model/catalogue-item.model';
 
 const cartURL = 'api/cart/';
 
@@ -44,6 +45,6 @@ export class CartService {
   }
 
   getFullCart() {
-    return this.http.get<Qty[]>(cartURL + this.userSvc.tempuser);
+    return this.http.get<Stock[]>(cartURL + this.userSvc.tempuser);
   }
 }

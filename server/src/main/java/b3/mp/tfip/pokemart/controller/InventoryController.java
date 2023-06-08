@@ -24,15 +24,17 @@ import jakarta.json.JsonObjectBuilder;
 @RestController
 public class InventoryController {
 
+    public static final int PAGE_ELEMENT_LIMIT = 10;
+
     @Autowired
     InventoryService invSvc;
 
-    @GetMapping("api/inventory/storeMain")
-    public ResponseEntity<String> getStoreMain(@RequestParam(defaultValue = "10") String limit,
-            @RequestParam(defaultValue = "0") String offset) {
+    @GetMapping("api/inventory/shopMain")
+    public ResponseEntity<String> getStoreMain(@RequestParam(defaultValue = "0") String page) {
         try {
-            List<CatalogueComponentDTO> storeCompList = invSvc.getStoreComponentData(Integer.parseInt(limit),
-                    Integer.parseInt(offset));
+            List<CatalogueComponentDTO> storeCompList = invSvc.getStoreComponentData(
+                    PAGE_ELEMENT_LIMIT, PAGE_ELEMENT_LIMIT *
+                            Integer.parseInt(page));
             ObjectMapper mapper = new ObjectMapper();
             return ResponseEntity.status(HttpStatus.OK).body(mapper.writeValueAsString(storeCompList));
         } catch (Exception ex) {
@@ -75,6 +77,20 @@ public class InventoryController {
             JsonObjectBuilder jsonOB = Json.createObjectBuilder().add("productID", productID).add("quantity",
                     quantity.get());
             return ResponseEntity.status(HttpStatus.OK).body(jsonOB.build().toString());
+        } catch (Exception ex) {
+            return ControllerUtil.exceptionHandler(ex);
+        }
+    }
+
+    @GetMapping("api/inventory/search")
+    public ResponseEntity<String> getInventoryBySearch(@RequestParam String query,
+            @RequestParam(defaultValue = "0") String page) {
+        try {
+            List<CatalogueComponentDTO> storeCompListCategory = invSvc.getStoreComponentDataBySearch(query,
+                    PAGE_ELEMENT_LIMIT, PAGE_ELEMENT_LIMIT *
+                            Integer.parseInt(page));
+            ObjectMapper mapper = new ObjectMapper();
+            return ResponseEntity.status(HttpStatus.OK).body(mapper.writeValueAsString(storeCompListCategory));
         } catch (Exception ex) {
             return ControllerUtil.exceptionHandler(ex);
         }

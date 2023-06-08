@@ -22,14 +22,16 @@ export class CatMainComponent implements OnInit {
   maxpage: number = 5; //TODO TO CHANGE
 
   ngOnInit(): void {
-    //TODO: BAD IMPLEMENTATION TO CHECK PATH
-    if (this.actRoute.snapshot.url[0]) {
-      if (this.actRoute.snapshot.url[0].path == 'category') {
-        this.catalogue$ = this.catSvc.getCataloguebyCategory(
-          this.actRoute.snapshot.params['category']
-        );
-        this.category = this.actRoute.snapshot.params['category'];
-      }
+    const urllen: number = this.actRoute.snapshot.url.length;
+    if (this.actRoute.snapshot.url[urllen - 1].path == 'category') {
+      this.catalogue$ = this.catSvc.getCataloguebyCategory(
+        this.actRoute.snapshot.params['category']
+      );
+      this.category = this.actRoute.snapshot.params['category'];
+    } else if (this.actRoute.snapshot.url[urllen - 1].path == 'search') {
+      this.catalogue$ = this.catSvc.getCataloguebySearch(
+        this.actRoute.snapshot.queryParams['query']
+      );
     } else {
       this.catalogue$ = this.catSvc.getCatalogue(this.page * perPage);
     }

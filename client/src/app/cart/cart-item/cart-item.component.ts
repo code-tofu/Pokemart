@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { CartItem } from 'src/app/model/catalogue-item.model';
+import { Component, Input, OnInit, inject } from '@angular/core';
+import { CartItem } from 'src/app/model/cart-item.model';
 
 const imgURL: String =
   'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/';

@@ -2,10 +2,10 @@
     <nav class="navbar border-bottom border-dark-subtle margin-bot-5px sticky-top bg-body-tertiary">
         <div class="container-fluid">
             <img class="logo" src="api\img\logo.png">
-            <!-- <h1 class="navbar-brand">Welcome!</h1> -->
             <form class="d-flex" role="search">
-                <input class="form-control form-control-sm me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-success" type="submit">
+                <input class="form-control form-control-sm me-2" type="search" placeholder="Search" aria-label="Search"
+                    [formControl]="searchQuery">
+                <button class="btn btn-success" type="button" (click)="search()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-search align-icon" viewBox="0 0 16 16">
                         <path

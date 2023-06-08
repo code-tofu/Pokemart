@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { CartItem, Qty } from 'src/app/model/catalogue-item.model';
+import { CartItem } from 'src/app/model/cart-item.model';
+import { Stock } from 'src/app/model/catalogue-item.model';
 import { CartService } from 'src/app/services/cart.service';
 
 @Component({
@@ -13,7 +14,7 @@ export class CartMainComponent implements OnInit {
   cart: CartItem[] = [];
 
   ngOnInit(): void {
-    let respArr: Qty[] = [];
+    let respArr: Stock[] = [];
     firstValueFrom(this.cartSvc.getFullCart())
       .then((resp) => {
         respArr = resp;

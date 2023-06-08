@@ -1,10 +1,19 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, firstValueFrom } from 'rxjs';
 import { Product } from 'src/app/model/catalogue-item.model';
 import { CartService } from 'src/app/services/cart.service';
 import { CatalogueService } from 'src/app/services/catalogue.service';
+
+const imgURL: String =
+  'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/';
+const imgType: String = '.png';
 
 @Component({
   selector: 'app-item-detail',
@@ -16,15 +25,11 @@ export class ItemDetailComponent implements OnInit {
   catSvc = inject(CatalogueService);
   router = inject(Router);
   cartSvc = inject(CartService);
+  fb = inject(FormBuilder);
 
   item!: Product;
   imgsrc!: String;
-  quantity: number = 1;
   stock!: number;
-
-  imgURL: String =
-    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/';
-  imgType: String = '.png';
 
   ngOnInit(): void {
     firstValueFrom(
@@ -33,6 +38,7 @@ export class ItemDetailComponent implements OnInit {
       .then((resp) => {
         console.info(resp);
         this.item = resp;
+        this.imgsrc = imgURL + this.item.nameID + imgType;
       })
       .catch((err) => {
         console.log(err);
@@ -43,18 +49,26 @@ export class ItemDetailComponent implements OnInit {
     )
       .then((resp) => {
         this.stock = resp.quantity;
+        this.quantity.setValidators([
+          Validators.required,
+          Validators.min(1),
+          Validators.max(this.stock),
+        ]);
       })
       .catch((err) => {
         console.log(err);
       });
   }
 
+  quantity: FormControl = new FormControl<number>(1);
   increaseQty() {
-    if (this.quantity < this.stock) this.quantity += 1;
+    if (this.quantity!.value < this.stock)
+      this.quantity.setValue(this.quantity!.value + 1);
   }
 
   decreaseQty() {
-    if (this.quantity > 1) this.quantity -= 1;
+    if (this.quantity!.value > 1)
+      this.quantity.setValue(this.quantity!.value - 1);
   }
 
   addToCart() {
@@ -64,11 +78,12 @@ export class ItemDetailComponent implements OnInit {
       productName: this.item.productName,
     };
     console.info(productString);
-    firstValueFrom(this.cartSvc.addToCart(productString, +this.quantity))
-      .then((resp) => {
+    firstValueFrom(this.cartSvc.addToCart(productString, this.quantity!.value))
+      .then(() => {
         this.router.navigate(['/cart']);
       })
       .catch((err) => {
+        alert('Connection Issue: Please Try Again Later');
         console.log(err);
       });
   }

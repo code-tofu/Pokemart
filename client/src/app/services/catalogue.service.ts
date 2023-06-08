@@ -4,9 +4,9 @@ import {
   CatalogueItem,
   CategoryCount,
   Product,
-  Qty,
+  Stock,
 } from '../model/catalogue-item.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 const inventoryURL = 'api/inventory/';
 const productURL = 'api/product/';
@@ -19,13 +19,20 @@ export class CatalogueService {
   http = inject(HttpClient);
 
   getCatalogue(offset: Number): Observable<CatalogueItem[]> {
-    return this.http.get<CatalogueItem[]>(inventoryURL + 'storeMain');
+    return this.http.get<CatalogueItem[]>(inventoryURL + 'shopMain');
   }
 
-  getCataloguebyCategory(category: String): Observable<CatalogueItem[]> {
+  getCataloguebyCategory(category: string): Observable<CatalogueItem[]> {
     return this.http.get<CatalogueItem[]>(
       inventoryURL + 'category/' + category
     );
+  }
+
+  getCataloguebySearch(searchquery: string): Observable<CatalogueItem[]> {
+    let queryParams = new HttpParams().append('query', searchquery);
+    return this.http.get<CatalogueItem[]>(inventoryURL + 'search', {
+      params: queryParams,
+    });
   }
 
   getProduct(productID: String): Observable<Product> {
@@ -36,7 +43,7 @@ export class CatalogueService {
     return this.http.get<CategoryCount[]>(inventoryURL + 'categoryMain');
   }
 
-  getStock(productID: String): Observable<Qty> {
-    return this.http.get<Qty>(inventoryURL + productID);
+  getStock(productID: String): Observable<Stock> {
+    return this.http.get<Stock>(inventoryURL + productID);
   }
 }

@@ -33,4 +33,8 @@ public class InventoryService {
         return invRepo.getStockofProduct(productID);
     }
 
+    public List<CatalogueComponentDTO> getStoreComponentDataBySearch(String searchQuery, int limit, int offset) {
+        return invRepo.getStoreComponentDataBySearch(searchQuery, limit, offset);
+    }
+
 }

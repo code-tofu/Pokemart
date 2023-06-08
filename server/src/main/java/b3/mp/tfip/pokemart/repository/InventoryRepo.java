@@ -33,7 +33,7 @@ public class InventoryRepo {
     }
 
     public List<CatalogueComponentDTO> getStoreComponentData(int limit, int offset) throws DataAccessException {
-        return jTemplate.query(SELECT_STOREITEMCOMPONENT_DATA_LIMITED, new CatalogueComponentMapper(), limit, offset);
+        return jTemplate.query(SELECT_STOREITEMCOMPONENT_DATA_WLIMIT, new CatalogueComponentMapper(), limit, offset);
     }
 
     public Map<String, Integer> getAllInventoryCategories() throws DataAccessException {
@@ -48,6 +48,12 @@ public class InventoryRepo {
     public List<CatalogueComponentDTO> getStoreComponentDataByCategory(String category)
             throws DataAccessException {
         return jTemplate.query(SELECT_INVENTORY_BY_CATEGORY, new CatalogueComponentMapper(), category);
+    }
+
+    public List<CatalogueComponentDTO> getStoreComponentDataBySearch(String searchQuery, int limit, int offset)
+            throws DataAccessException {
+        return jTemplate.query(SELECT_INVENTORY_BY_SEARCH_WLIMIT, new CatalogueComponentMapper(),
+                "%" + searchQuery + "%", limit, offset);
     }
 
     public Optional<Integer> getStockofProduct(String productID) throws DataAccessException {
