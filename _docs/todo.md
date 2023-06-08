@@ -1,37 +1,31 @@
 # DO TODAY
 
+Cart Feature
 - cart service
 - cart controller
 - cart component
 - cart link
-
-- offset in service
+- cart item
+- calculator total
+-
+Pagination Feature
 - pagination control logic
 - pagination get
 - pagination total
-
 - add pagination count % numberofdisplay + current page
-- cart item
+- add sort order 
+- offset in service
 
-- insert consoleoutputs
-
-- Optimize Stock vs product calls
-
-# FIX
-
-- path when selecting from category component
-- sticky layout clashes with 404 page
-- fix regex for details parser next line issue
+Content Manager
+- add sprite blob auto extractor for S3
+- S3 data upload
+- admin module
+- option for random/sequential pull from API database 
+- method to update discount/deduct
 
 # TODO
 
-- [ ] add sprite blob extractor
-- [ ] check with chuk on data access exception
-- [ ] finish s3 upload
-- [ ] filter for 0 price
-- [ ] option for random/sequential
-- [ ] method to update discount/deduct
-- [ ] fix navbar router for active
+- [ ] check with chuk on data access exception handler and general handler 
 
 # EXPLORE
 
