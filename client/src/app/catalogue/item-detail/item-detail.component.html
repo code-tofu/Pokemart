@@ -14,7 +14,7 @@
             </li>
             <li class="list-group-item">{{this.item.category | uppercase }}</li>
             <li class="list-group-item">{{this.item.details}}</li>
-            <li class="list-group-item">INSERT ATTRIBUTES HERE</li>
+
         </ul>
 
     </div>
@@ -25,7 +25,11 @@
         <p class="warn-text" *ngIf="this.quantity!.hasError('max')">You are only allowed to purchase a
             maximum of {{stock}} due to limited
             stock</p>
-        <div class="row gx-1">
+
+        <div class="row">
+            <h4>Total: ${{item.cost * this.quantity!.value | number: '1.2-2'}}</h4>
+        </div>
+        <div class=" row gx-1">
             <div class="col">
                 <button [routerLink]="['']" class="btn btn-warning me-md-2">Back</button>
             </div>

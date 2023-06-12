@@ -39,7 +39,13 @@ export class ItemDetailComponent implements OnInit {
       .then((resp) => {
         console.info(resp);
         this.item = resp;
-        this.imgsrc = imgURL + this.item.nameID + imgType;
+        if (
+          !(this.item.nameID.includes('tm') || this.item.nameID.includes('hm'))
+        ) {
+          this.imgsrc = imgURL + this.item.nameID + imgType;
+        } else {
+          this.imgsrc = '/api/img/tm.png';
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -61,15 +67,19 @@ export class ItemDetailComponent implements OnInit {
       });
   }
 
-  quantity: FormControl = new FormControl<number>(1);
+  quantity: FormControl = new FormControl<number>(
+    !!this.actRoute.snapshot.queryParams['quantity']
+      ? this.actRoute.snapshot.queryParams['quantity']
+      : 1
+  );
   increaseQty() {
     if (this.quantity!.value < this.stock)
-      this.quantity.setValue(this.quantity!.value + 1);
+      this.quantity.setValue(+this.quantity!.value + 1);
   }
 
   decreaseQty() {
     if (this.quantity!.value > 1)
-      this.quantity.setValue(this.quantity!.value - 1);
+      this.quantity.setValue(+this.quantity!.value - 1);
   }
 
   addToCart() {

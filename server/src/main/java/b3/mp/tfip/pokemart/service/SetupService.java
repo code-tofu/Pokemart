@@ -14,8 +14,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import b3.mp.tfip.pokemart.repository.InventoryRepo;
-import b3.mp.tfip.pokemart.repository.ProductRepo;
+import b3.mp.tfip.pokemart.repository.InventoryRepository;
+import b3.mp.tfip.pokemart.repository.ProductRepository;
 import b3.mp.tfip.pokemart.utils.ProductUtils;
 import b3.mp.tfip.pokemart.utils.Utils;
 import jakarta.json.JsonObject;
@@ -24,17 +24,17 @@ import jakarta.json.JsonObject;
 public class SetupService {
 
     public static final int MAX_ITEM_ID = 999;
-    public static final int MAX_PRODUCT_DB_SIZE = 10;
+    public static final int MAX_PRODUCT_DB_SIZE = 999;
     public static final int MAX_INVENTORY_SIZE = 99;
 
     @Value("${api.poke.data.uri}")
     private String pokeAPI;
 
     @Autowired
-    ProductRepo productRepo;
+    ProductRepository productRepo;
 
     @Autowired
-    InventoryRepo invRepo;
+    InventoryRepository invRepo;
 
     public void createNewDatabase(int size) {
         Random rand = new Random();
@@ -50,6 +50,12 @@ public class SetupService {
                 }
 
                 JsonObject productJson = Utils.getJsonObjectFromStr(itemJsonStr.get());
+
+                if (productJson.getJsonNumber("cost").doubleValue() == 0L) {
+                    System.out.println(">> [INFO] Item is zero cost. Restarting Download");
+                    continue;
+                }
+
                 if (!productRepo.insertProduct(ProductUtils.createProductDAOFromJson(productJson))) {
                     System.out.println(">> [WARNING] Insertion into DB Failed. Restarting Download");
                     continue;

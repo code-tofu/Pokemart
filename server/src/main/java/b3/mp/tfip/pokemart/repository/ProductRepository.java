@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class ProductRepo {
+public class ProductRepository {
 
     @Autowired
     JdbcTemplate jTemplate;

@@ -1,9 +1,9 @@
 <div class="card height-100">
     <div (click)="detailPage()">
-        <img [src]=" imgsrc" class="card-img-top img-120px">
+        <img [src]="imgsrc" class="card-img-top img-120px">
         <div class="card-body">
             <h5 class="card-title">{{item.productName}}</h5>
-            <h6 class="card-text">$ {{item.cost | number: '1.2-2'}} <br> {{item.stock}} in stock</h6>
+            <h6 class="card-text">$ {{item.cost | number: '1.2-2'}} <br> {{item.quantity}} in stock</h6>
         </div>
     </div>
     <div class="card-footer text-body-secondary">
@@ -36,7 +36,7 @@
                                 <input type="text" class="form-control btn-outline btn-primary center-text"
                                     [formControl]="quantity">
                                 <button type="button" class="btn btn-primary" (click)="increaseQty()" [disabled]="this.quantity!.value
-                        &gt; this.item.stock-1">+</button>
+                        &gt; this.item.quantity-1">+</button>
                             </div>
                             <div>
                                 <h4>Total: ${{item.cost * this.quantity!.value | number: '1.2-2'}}</h4>
@@ -46,20 +46,22 @@
                         <p class="warn-text" *ngIf="this.quantity!.hasError('min')">Please input a minimum quantity of 1
                         </p>
                         <p class="warn-text" *ngIf="this.quantity!.hasError('max')">You are only allowed to purchase a
-                            maximum of {{item.stock}} due to limited
+                            maximum of {{item.quantity}} due to limited
                             stock</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button class="btn btn-success " [disabled]="quantity.invalid" (click)="addToCart()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        <button class="btn btn-success" [disabled]="quantity.invalid" (click)="addToCart()"
+                            data-bs-dismiss="modal">
+                            <svg xmlns=" http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-cart-plus align-icon" viewBox="0 0 16 16">
                                 <path
                                     d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z" />
                                 <path
                                     d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
                             </svg>
-                            Add to Cart</button>
+                            Add to Cart
+                        </button>
                     </div>
                 </div>
             </div>

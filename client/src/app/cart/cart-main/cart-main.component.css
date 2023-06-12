@@ -1,0 +1,11 @@
+.vertical-center {
+    vertical-align: middle;
+}
+
+.align-icon {
+    vertical-align: -0.125em;
+}
+
+.center-text {
+    justify-content: center;
+}

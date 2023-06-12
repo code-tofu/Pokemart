@@ -9,16 +9,20 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import b3.mp.tfip.pokemart.model.CatalogueComponentDTO;
-import b3.mp.tfip.pokemart.repository.InventoryRepo;
+import b3.mp.tfip.pokemart.repository.InventoryRepository;
 
 @Service
 public class InventoryService {
 
     @Autowired
-    InventoryRepo invRepo;
+    InventoryRepository invRepo;
 
-    public List<CatalogueComponentDTO> getStoreComponentData(int limit, int offset) throws DataAccessException {
-        return invRepo.getStoreComponentData(limit, offset);
+    public List<CatalogueComponentDTO> getShopMainData(int limit, int offset) throws DataAccessException {
+        return invRepo.getShopMainData(limit, offset);
+    }
+
+    public CatalogueComponentDTO getShopMainItemByID(String productID) throws DataAccessException {
+        return invRepo.getShopMainItemByID(productID);
     }
 
     public Map<String, Integer> getAllInventoryCategories() throws DataAccessException {
@@ -35,6 +39,18 @@ public class InventoryService {
 
     public List<CatalogueComponentDTO> getStoreComponentDataBySearch(String searchQuery, int limit, int offset) {
         return invRepo.getStoreComponentDataBySearch(searchQuery, limit, offset);
+    }
+
+    public Optional<Integer> getProductsTotalCount() throws DataAccessException {
+        return invRepo.getProductsTotalCount();
+    }
+
+    public Optional<Integer> getProductsTotalCountByCategory(String category) throws DataAccessException {
+        return invRepo.getProductsTotalCountByCategory(category);
+    }
+
+    public Optional<Integer> getProductsTotalCountBySearch(String search) throws DataAccessException {
+        return invRepo.getProductsTotalCountBySearch(search);
     }
 
 }

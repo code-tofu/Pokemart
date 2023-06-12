@@ -14,7 +14,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 
 @Repository
-public class SpacesRepo {
+public class SpacesRepository {
 
     public static final String type = "image";
     public static final String bucket = "tofu-pokemart";

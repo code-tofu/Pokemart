@@ -11,7 +11,7 @@ import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class CartRepo {
+public class CartRepository {
 
     @Autowired
     @Qualifier("Cart")
@@ -22,13 +22,13 @@ public class CartRepo {
         rTemplate.opsForHash().put(userID, productString, Integer.toString(quantity));
     }
 
-    public void deleteCartItem(String userID, String productString) {
-        rTemplate.opsForHash().delete(userID, productString); // TODO: del returns the number of fields that were
-                                                              // removed
+    public long deleteCartItem(String userID, String productID) {
+        return rTemplate.opsForHash().delete(userID, productID);
+        // NOTE: del returns the number of fields that were removed
     }
 
     public void incrCartItem(String userID, String productString) {
-        rTemplate.opsForHash().increment(userID, productString, 1); // TODO: incr returns value at field after increment
+        rTemplate.opsForHash().increment(userID, productString, 1); // NOTE: incr returns value at field after increment
     }
 
     public void decrCartItem(String userID, String productString) {
@@ -47,7 +47,7 @@ public class CartRepo {
             Map.Entry<Object, Object> entry = cursor.next();
             cart.put(entry.getKey().toString(), Integer.parseInt(entry.getValue().toString()));
         }
-        System.out.println(cart);
+        System.out.println(">>[INFO} Cart for User " + userID + ":" + cart);
         return cart;
     }
 

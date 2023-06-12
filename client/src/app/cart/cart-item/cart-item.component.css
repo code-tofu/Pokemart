@@ -1,0 +1,17 @@
+.padding-25em {
+    padding: 0.25em;
+
+}
+
+.padding-0 {
+    padding: 0;
+}
+
+.align-icon {
+    vertical-align: -0.125em;
+}
+
+.img-fill {
+    height: auto;
+    width: 100%;
+}

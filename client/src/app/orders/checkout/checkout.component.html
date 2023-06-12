@@ -1,0 +1,70 @@
+<div class="container">
+
+    <h6>Your Order:</h6>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Item</th>
+                <th scope="col">Qty</th>
+                <th scope="col">Price/ea</th>
+                <th scope="col">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of cart$|async">
+                <td scope="row">{{item.productName}}</td>
+                <td>{{item.quantity}}</td>
+                <td>${{item.cost | number: '1.2-2'}}</td>
+                <td>${{item.quantity * item.cost | number: '1.2-2'}}</td>
+            </tr>
+            <tr>
+                <td class="table-secondary text-bold" colspan="2">Total:</td>
+                <td class="table-success text-bold" colspan="2">${{ this.cartSvc.total | number: '1.2-2' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h6>Your Shipping Details (Click to Edit):</h6>
+    <form [formGroup]="shipForm">
+        <div class="form-floating">
+            <input type="text" id="name" class=" form-control form-control-sm" formControlName="customerName"
+                [class.is-invalid]="shipForm.get('customerName')?.invalid">
+            <label for="name">Name:</label>
+        </div>
+
+        <div class="form-floating">
+            <input type="email" id="email" class=" form-control form-control-sm" formControlName="customerEmail"
+                [class.is-invalid]="shipForm.get('customerEmail')?.invalid">
+            <label for="email">Email:</label>
+        </div>
+
+        <div class="form-floating">
+            <input type="text" id="phone" class=" form-control form-control-sm" formControlName="customerPhone"
+                [class.is-invalid]="shipForm.get('customerPhone')?.invalid">
+            <label for="phone">Phone Number:</label>
+        </div>
+
+        <div class="form-floating">
+            <input type="text" id="shippingAddress" class=" form-control form-control-sm"
+                formControlName="customerShippingAddress"
+                [class.is-invalid]="shipForm.get('customerShippingAddress')?.invalid">
+            <label for="shippingAddress">Shipping Address:</label>
+        </div>
+    </form>
+
+
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-7 d-flex justify-content-end">
+            <button class="btn btn-danger" (click)="createOrder()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-cart-check-fill align-icon" viewBox="0 0 16 16">
+                    <path
+                        d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-1.646-7.646-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708z" />
+                </svg>
+                Checkout
+            </button>
+        </div>
+    </div>
+
+</div>

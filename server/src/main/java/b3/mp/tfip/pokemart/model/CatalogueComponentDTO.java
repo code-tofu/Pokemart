@@ -15,7 +15,7 @@ public class CatalogueComponentDTO {
     private String nameID;
     private String productName;
     private double cost;
-    private int stock; // TODO: CHANGE DB TO STOCK
+    private int quantity; // quantity can be either inventory stock or quantity purchased
     private double discount;
     private double deduct;
 

@@ -13,6 +13,10 @@ import { CategoryListComponent } from './catalogue/category-list/category-list.c
 
 import { NavTopComponent } from './nav-top/nav-top.component';
 import { CartMainComponent } from './cart/cart-main/cart-main.component';
+import { CartItemComponent } from './cart/cart-item/cart-item.component';
+import { HistoryComponent } from './orders/history/history.component';
+import { CheckoutComponent } from './orders/checkout/checkout.component';
+import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'shop', pathMatch: 'full' },
@@ -20,9 +24,12 @@ const routes: Routes = [
   { path: 'shop/category/:category', component: CatMainComponent },
   { path: 'shop/search', component: CatMainComponent },
   { path: 'category', component: CategoryListComponent },
-  //   { path: 'cart', component: CartMainComponent },
+  { path: 'cart', component: CartMainComponent },
   { path: 'construction', component: ErrorpageComponent },
   { path: 'detail/:productID', component: ItemDetailComponent },
+  { path: 'checkout', component: CheckoutComponent },
+  { path: 'order/:orderID', component: OrderDetailComponent },
+  { path: 'history', component: HistoryComponent },
   { path: '**', component: ErrorpageComponent },
 ];
 
@@ -36,6 +43,10 @@ const routes: Routes = [
     CategoryListComponent,
     NavTopComponent,
     CartMainComponent,
+    CartItemComponent,
+    HistoryComponent,
+    CheckoutComponent,
+    OrderDetailComponent,
   ],
   imports: [
     BrowserModule,

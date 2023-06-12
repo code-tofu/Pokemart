@@ -8,13 +8,13 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import b3.mp.tfip.pokemart.model.ProductDAO;
-import b3.mp.tfip.pokemart.repository.ProductRepo;
+import b3.mp.tfip.pokemart.repository.ProductRepository;
 
 @Service
 public class ProductService {
 
     @Autowired
-    ProductRepo productRepo;
+    ProductRepository productRepo;
 
     public Optional<ProductDAO> getProductByProductID(String productID) throws DataAccessException {
         return productRepo.getProductByProductID(productID);

@@ -3,7 +3,7 @@ export interface CatalogueItem {
   nameID: string;
   productName: string;
   cost: number;
-  stock: number;
+  quantity: number;
   discount: number;
   deduct: number;
 }
@@ -23,7 +23,7 @@ export interface CategoryCount {
   count: number;
 }
 
-export interface Stock {
+export interface ItemCount {
   productID: string;
   quantity: number;
 }

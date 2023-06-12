@@ -4,9 +4,10 @@ import {
   CatalogueItem,
   CategoryCount,
   Product,
-  Stock,
+  ItemCount,
 } from '../model/catalogue.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { query } from '@angular/animations';
 
 const inventoryURL = 'api/inventory/';
 const productURL = 'api/product/';
@@ -18,8 +19,12 @@ export class CatalogueService {
   constructor() {}
   http = inject(HttpClient);
 
-  getCatalogue(offset: Number): Observable<CatalogueItem[]> {
-    return this.http.get<CatalogueItem[]>(inventoryURL + 'shopMain');
+  getCatalogue(page: Number): Observable<CatalogueItem[]> {
+    console.info('>> [INFO]: Query Store Main Page`:', page);
+    let queryParams = new HttpParams().set('page', page.toString());
+    return this.http.get<CatalogueItem[]>(inventoryURL + 'shopMain', {
+      params: queryParams,
+    });
   }
 
   getCataloguebyCategory(category: string): Observable<CatalogueItem[]> {
@@ -43,7 +48,25 @@ export class CatalogueService {
     return this.http.get<CategoryCount[]>(inventoryURL + 'categoryMain');
   }
 
-  getStock(productID: String): Observable<Stock> {
-    return this.http.get<Stock>(inventoryURL + productID);
+  getStock(productID: String): Observable<ItemCount> {
+    return this.http.get<ItemCount>(inventoryURL + productID);
+  }
+
+  getTotalCountAllProducts(): Observable<number> {
+    return this.http.get<number>(inventoryURL + 'count');
+  }
+
+  getTotalCountBySearch(searchquery: string): Observable<number> {
+    let queryParams = new HttpParams().append('query', searchquery);
+    return this.http.get<number>(inventoryURL + 'countSearch', {
+      params: queryParams,
+    });
+  }
+
+  getTotalCountByCategory(category: string): Observable<number> {
+    let queryParams = new HttpParams().append('category', category);
+    return this.http.get<number>(inventoryURL + 'countCategory', {
+      params: queryParams,
+    });
   }
 }

@@ -1,32 +1,49 @@
-<div class="container">
-    <h6 *ngIf="this.category">Showing products under {{category|uppercase}} category:</h6>
-    <h6 *ngIf="!this.category">Click on the products for more details:</h6>
-</div>
-
-<div class="container text-center">
-
-    <div class="row row-cols-2 gx-2 gy-2">
-        <div *ngFor=" let item of catalogue$ | async, let i=index">
-            <app-cat-item class="col" [item]="item"></app-cat-item>
-        </div>
+<div *ngIf="this.maxpage != 0;else noProducts">
+    <div class="container">
+        <h6 *ngIf="this.category">Showing products under {{category|uppercase}} category:</h6>
+        <h6 *ngIf="!this.category">Click on the products for more details:</h6>
     </div>
 
-    <nav>
-        <ul class="pagination justify-content-center padding-top-10px">
-            <li class="page-item" [class.disabled]="this.page == 0" (click)="decreasePage()">
-                <a class="page-link">Previous</a>
-            </li>
-            <li class="page-item" *ngIf="this.page != 0"><a class="page-link" href="#">{{this.page}}</a></li>
-            <li class="page-item active"><a class="page-link" href="#">{{this.page+1}}</a></li>
-            <li class="page-item" *ngIf="this.page &lt; this.maxpage"><a class="page-link" href="#">{{this.page+2}}</a>
-            </li>
-            <li class="page-item" *ngIf="this.page &lt; this.maxpage-1"><a class="page-link"
-                    href="#">{{this.page+3}}</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" [class.disabled]="this.page == this.maxpage" (click)="increasePage()">Next</a>
-            </li>
-        </ul>
-    </nav>
+    <div class="container text-center">
 
+        <div class="row row-cols-2 gx-2 gy-2">
+            <div *ngFor=" let item of catalogue$ | async, let i=index">
+                <app-cat-item class="col" [item]="item"></app-cat-item>
+            </div>
+        </div>
+
+        <div class="btn-group padding-10px" role=" group">
+            <button type="button" class="btn btn-outline-primary" [class.disabled]="this.page == 0"
+                (click)="decreasePage()">Previous</button>
+            <button type="button" class="btn btn-outline-primary" *ngIf="this.page != 0"
+                (click)="goToPage($event)">{{this.page}}</button>
+            <button type=" button" class="btn btn-primary" (click)="goToPage($event)">{{this.page+1}}</button>
+            <button type="button" class="btn btn-outline-primary" *ngIf="this.page &lt; this.maxpage-1"
+                (click)="goToPage($event)">{{this.page+2}}</button>
+            <button type="button" class="btn btn-outline-primary" *ngIf="this.page &lt; this.maxpage-2"
+                (click)="goToPage($event)">{{this.page+3}}</button>
+            <button type="button" class="btn btn-outline-primary" [class.disabled]="this.page == this.maxpage-1"
+                (click)="increasePage()">Next</button>
+        </div>
+
+    </div>
 </div>
+
+<ng-template #noProducts>
+    <div class="container">
+        <h6>There are no products matching your search: "{{searchQuery}}"</h6>
+        <div class="row padding-top-10px">
+            <div class="col"></div>
+            <div class="col-6 d-flex justify-content-end">
+                <button class="btn btn-primary" [routerLink]="['/shop']">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-bag align-icon" viewBox="0 0 16 16">
+                        <path
+                            d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
+                    </svg>
+                    Return to Shop
+                </button>
+            </div>
+        </div>
+    </div>
+</ng-template>

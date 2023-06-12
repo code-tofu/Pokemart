@@ -7,9 +7,9 @@
 
 ## Console:
 
-- [INFO]
-- [WARNING]
-- [ERROR]
+- > > [INFO]
+- > > [WARNING]
+- > > [ERROR]
 
 ## Nomenclature:
 
@@ -30,3 +30,20 @@
   - SQL object_id
   - Mongo \_id
   - Java objectID
+
+## Structure
+
+- Config
+- Controllers
+- Utils
+- Models
+- Respository
+- Services
+- Static/Resources
+
+- components
+- modules
+- server
+- models
+- material module
+- router modules

@@ -1,11 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, SimpleChanges, inject } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav-top',
@@ -13,11 +13,14 @@ import { Router } from '@angular/router';
   styleUrls: ['./nav-top.component.css'],
 })
 export class NavTopComponent {
-  searchQuery: FormControl = new FormControl<string>(
-    '',
-    Validators.minLength(3)
-  );
+  searchQuery: FormControl = new FormControl<string>('', [
+    Validators.minLength(3),
+  ]);
   router = inject(Router);
+
+  //   ngOnInit(): void {
+  //     this.searchQuery.setErrors({ length: false });
+  //   }
 
   search() {
     if (this.searchQuery.invalid || this.searchQuery.value.trim() < 3) {

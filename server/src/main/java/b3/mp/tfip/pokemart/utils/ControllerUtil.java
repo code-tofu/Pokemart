@@ -12,7 +12,6 @@ import jakarta.json.JsonObjectBuilder;
 
 public class ControllerUtil {
 
-    // TODO:REFACTOR ALL EXCEPTION HANDLERS
     public static ResponseEntity<String> exceptionHandler(Exception ex) {
         if (ex instanceof NumberFormatException) {
             System.err.println(">> [ERROR] " + ex);

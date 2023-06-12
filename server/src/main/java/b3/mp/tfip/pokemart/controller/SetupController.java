@@ -40,6 +40,7 @@ public class SetupController {
         try {
             setupSvc.createNewInventory();
             JsonObject resp = Json.createObjectBuilder().add("201 Created", "Inventory Creation Success").build();
+            System.out.println(">> [INFO] Inventory Creation Success");
             return ResponseEntity.status(HttpStatus.CREATED).body(resp.toString());
         } catch (DataAccessException NFerr) {
             System.err.println(">> [ERROR] " + NFerr);

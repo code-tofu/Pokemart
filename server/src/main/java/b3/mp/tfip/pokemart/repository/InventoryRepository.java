@@ -10,13 +10,13 @@ import b3.mp.tfip.pokemart.model.CatalogueComponentDTO;
 
 import static b3.mp.tfip.pokemart.repository.InventoryQueries.*;
 
-import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 @Repository
-public class InventoryRepo {
+public class InventoryRepository {
 
     @Autowired
     JdbcTemplate jTemplate;
@@ -32,13 +32,17 @@ public class InventoryRepo {
         }
     }
 
-    public List<CatalogueComponentDTO> getStoreComponentData(int limit, int offset) throws DataAccessException {
-        return jTemplate.query(SELECT_STOREITEMCOMPONENT_DATA_WLIMIT, new CatalogueComponentMapper(), limit, offset);
+    public List<CatalogueComponentDTO> getShopMainData(int limit, int offset) throws DataAccessException {
+        return jTemplate.query(SELECT_SHOPMAIN_ITEMDATA_WLIMIT, new CatalogueComponentMapper(), limit, offset);
+    }
+
+    public CatalogueComponentDTO getShopMainItemByID(String productID) throws DataAccessException {
+        return jTemplate.queryForObject(SELECT_SHOPMAIN_ITEMDATA_BY_ID, new CatalogueComponentMapper(), productID);
     }
 
     public Map<String, Integer> getAllInventoryCategories() throws DataAccessException {
         SqlRowSet rs = jTemplate.queryForRowSet(SELECT_ALL_CATEGORIES_IN_INVENTORY);
-        Map<String, Integer> queryMap = new HashMap<>();
+        Map<String, Integer> queryMap = new TreeMap<>();
         while (rs.next()) {
             queryMap.put(rs.getString("category"), rs.getInt("count"));
         }
@@ -62,6 +66,19 @@ public class InventoryRepo {
             return Optional.of(rs.getInt("quantity"));
         }
         return Optional.empty();
+    }
+
+    public Optional<Integer> getProductsTotalCount() throws DataAccessException {
+        return Optional.of(jTemplate.queryForObject(SELECT_TOTAL_COUNT_ALL_PRODUCTS, Integer.class));
+    }
+
+    public Optional<Integer> getProductsTotalCountByCategory(String category) throws DataAccessException {
+        return Optional.of(jTemplate.queryForObject(SELECT_TOTAL_COUNT_BY_CATEGORY, Integer.class, category));
+    }
+
+    public Optional<Integer> getProductsTotalCountBySearch(String searchQuery) throws DataAccessException {
+        return Optional
+                .of(jTemplate.queryForObject(SELECT_TOTAL_COUNT_BY_SEARCH, Integer.class, "%" + searchQuery + "%"));
     }
 
 }
