@@ -17,9 +17,11 @@ import { CartItemComponent } from './cart/cart-item/cart-item.component';
 import { HistoryComponent } from './orders/history/history.component';
 import { CheckoutComponent } from './orders/checkout/checkout.component';
 import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
+import { LoginComponent } from './auth/login/login.component';
+import { LandingComponent } from './auth/landing/landing.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'shop', pathMatch: 'full' },
+  { path: '', component: LandingComponent },
   { path: 'shop', component: CatMainComponent },
   { path: 'shop/category/:category', component: CatMainComponent },
   { path: 'shop/search', component: CatMainComponent },
@@ -47,6 +49,8 @@ const routes: Routes = [
     HistoryComponent,
     CheckoutComponent,
     OrderDetailComponent,
+    LoginComponent,
+    LandingComponent,
   ],
   imports: [
     BrowserModule,
