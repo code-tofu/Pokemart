@@ -26,7 +26,7 @@ DESC product_data;
 
 -- note that BLOB holds up to 65,535 bytes and MEDIUMBLOB holds up to 16,777,215 bytes
 
-INSERT INTO product_data (product_id, api_id, name_id, category,cost,details,product_name) VALUES  (?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO product_data (product_id, api_id, name_id, category,cost,details,product_name) VALUES  (?, ?, ?, ?, ?, ?, ?)
 
 SELECT product_id, api_id, name_id, category,cost,product_name FROM product_data;
 SELECT details FROM product_data;

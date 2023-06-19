@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS inventory;
 CREATE TABLE inventory (
     product_id VARCHAR(8) NOT NULL,
-    quantity INT NOT NULL,
+    stock INT NOT NULL,
     discount DOUBLE(3,1),
     deduct DOUBLE(8,2),
     FOREIGN KEY (product_id) REFERENCES product_data(product_id)
@@ -13,7 +13,7 @@ DESC inventory;
 -- | Field      | Type        | Null | Key | Default | Extra |
 -- +------------+-------------+------+-----+---------+-------+
 -- | product_id | varchar(8)  | NO   |     | NULL    |       |
--- | quantity   | int         | NO   |     | NULL    |       |
+-- | stock      | int         | NO   |     | NULL    |       |
 -- | discount   | double(3,1) | YES  |     | NULL    |       |
 -- | deduct     | double(8,2) | YES  |     | NULL    |       |
 -- +------------+-------------+------+-----+---------+-------+
