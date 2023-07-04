@@ -15,7 +15,7 @@ public class AuthEntryPointImpl implements AuthenticationEntryPoint {
     
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException{
-        System.out.println(">> [ERROR] " + authException);
+        System.out.println(">> [ERROR] AuthEntryPoint:" + authException);
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error 401: Unauthorized Access. Request requires HTTP authentication");
     }
 }

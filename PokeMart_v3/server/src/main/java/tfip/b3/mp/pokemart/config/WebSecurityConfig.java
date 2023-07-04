@@ -24,10 +24,8 @@ public class WebSecurityConfig {
 
     @Autowired
     private UserService userDetailsSvc;
-
     @Autowired
     private AuthEntryPointImpl authExceptionHandler;
-
     @Autowired
     private OncePerRequestFilterImpl jwtAuthFilter;
 
@@ -52,18 +50,24 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
-
-            .authorizeHttpRequests(auth -> // NOTE:antmatchers are deprecated for request matchers
+            //configure filter settings
+            .authorizeHttpRequests(auth -> 
             auth.requestMatchers("/api/auth/**").permitAll()
-                    .requestMatchers("/api/authtest/**").permitAll()
-                    .anyRequest().authenticated()
-                    )
-
+            .requestMatchers("/api/inventory/**").permitAll()
+            .requestMatchers("/api/product/**").permitAll()
+            .requestMatchers("/api/img/**").permitAll()
+            .requestMatchers("/api/user/**").permitAll()
+            .requestMatchers("/api/sales/**").permitAll()
+            .requestMatchers("/api/cart/**").permitAll()
+            // .hasAuthority("ROLE_DEVELOPER")
+            .anyRequest().authenticated()
+            )
+            //configure sessionmanagement
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
+            //configure the auth providers and filter
             .authenticationProvider(daoAuthProvider())
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-            
+            //configure authentrypoint to handle auth provider exceptions
             .exceptionHandling(exception -> exception.authenticationEntryPoint(authExceptionHandler));
 
         return http.build();

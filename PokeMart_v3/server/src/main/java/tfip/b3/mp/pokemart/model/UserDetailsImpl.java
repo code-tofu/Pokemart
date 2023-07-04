@@ -24,7 +24,7 @@ public class UserDetailsImpl implements UserDetails{
     boolean accountNonExpired;
     boolean credentialsNonExpired;
     boolean accountNonLocked;
-    List<SimpleGrantedAuthority> authorities;
+    List<SimpleGrantedAuthority> authorities; //singleauthorityonly i.e. role
 }
 
 

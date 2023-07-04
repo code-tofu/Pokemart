@@ -6,9 +6,6 @@ import { CartReq } from 'src/app/model/cart.model';
 import { CatalogueItem } from 'src/app/model/catalogue.model';
 import { CartService } from 'src/app/services/cart.service';
 
-const imgURL: String =
-  'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/';
-const imgType: String = '.png';
 
 @Component({
   selector: 'app-cat-item',

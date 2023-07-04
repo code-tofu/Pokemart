@@ -1,3 +1,4 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "livePreview.defaultPreviewPath": "/client/src/app/auth/signup/signup.component.html"
 }

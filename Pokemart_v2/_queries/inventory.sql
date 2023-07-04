@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS inventory;
 CREATE TABLE inventory (
-    product_id VARCHAR(8) NOT NULL,
+    product_id VARCHAR(8) NOT NULL UNIQUE,
     stock INT NOT NULL,
     discount DOUBLE(3,1),
     deduct DOUBLE(8,2),

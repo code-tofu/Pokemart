@@ -5,7 +5,7 @@ import { Observable, firstValueFrom } from 'rxjs';
 import { CatalogueItem } from 'src/app/model/catalogue.model';
 import { CatalogueService } from 'src/app/services/catalogue.service';
 
-const perPage: number = 10; //pagination vs offset done on server side
+
 
 @Component({
   selector: 'app-cat-main',
@@ -79,8 +79,7 @@ export class CatMainComponent implements OnInit {
     if (
       e.srcElement.innerText - 1 < this.maxpage &&
       e.srcElement.innerText - 1 > 0
-    )
-      this.page = +e.srcElement.innerText - 1;
+    ) this.page = +e.srcElement.innerText - 1;
     this.catalogue$ = this.catSvc.getCatalogue(this.page);
   }
 }

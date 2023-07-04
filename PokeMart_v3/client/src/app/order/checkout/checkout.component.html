@@ -1,0 +1,110 @@
+<div class="container text-body limit-md">
+    <h5 class="text-primary-emphasis">Your Order:</h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Item</th>
+                <th scope="col">Qty</th>
+                <th scope="col">Price/ea</th>
+                <th scope="col">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let cartItem of cart$ |async">
+                <td scope="row">{{cartItem.item.productName}}</td>
+                <td>{{cartItem.quantity}}</td>
+                <td>
+                    <div class="d-flex flex-wrap">
+                        <div class="flex-shrink-1" [class.discount-text]="cartItem.item.discount" class="me-1">
+                            ${{cartItem.item.cost|
+                            number: '1.2-2'}}</div>
+                        <div class="flex-shrink-1" *ngIf="cartItem.item.discount" class="text-danger">
+                            ${{cartItem.item.cost-cartItem.item.discount| number: '1.2-2'}}
+                        </div>
+                    </div>
+                </td>
+
+                <td>${{cartItem.quantity * cartItem.item.cost | number: '1.2-2'}}</td>
+            </tr>
+            <tr>
+                <td colspan="2"><strong>Total:</strong></td>
+                <td class="table-success text-success-emphasis text-center" colspan="2"><strong>$
+                        {{ cartSvc.total| number: '1.2-2' }}</strong>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="mb-3">
+    <h5 class="text-primary-emphasis">Select Shipping Options</h5>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+        <label class="form-check-label" for="flexRadioDefault1">
+            Default Shipping
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+        <label class="form-check-label" for="flexRadioDefault2">
+            Expressing Shipping
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" checked>
+        <label class="form-check-label" for="flexRadioDefault3">
+            Self-Collect
+        </label>
+    </div>
+</div>
+
+    <div class="mb-3">
+        <h5 class="text-primary-emphasis">Select Collection Point:</h5>
+
+    </div>
+
+    <h5 class="text-primary-emphasis">Your Shipping Details (Click to Edit):</h5>
+    <form [formGroup]="shipForm">
+        <div class="form-floating">
+            <input type="text" id="name" class=" form-control form-control-sm" formControlName="customerName"
+                [class.is-invalid]="shipForm.get('customerName')?.invalid">
+            <label for="name">Name:</label>
+        </div>
+
+        <div class="form-floating">
+            <input type="email" id="email" class=" form-control form-control-sm" formControlName="customerEmail"
+                [class.is-invalid]="shipForm.get('customerEmail')?.invalid">
+            <label for="email">Email:</label>
+        </div>
+
+        <div class="form-floating">
+            <input type="text" id="phone" class=" form-control form-control-sm" formControlName="customerPhone"
+                [class.is-invalid]="shipForm.get('customerPhone')?.invalid">
+            <label for="phone">Phone Number:</label>
+        </div>
+
+        <div class="form-floating">
+            <input type="text" id="shippingAddress" class=" form-control form-control-sm"
+                formControlName="customerShippingAddress"
+                [class.is-invalid]="shipForm.get('customerShippingAddress')?.invalid">
+            <label for="shippingAddress">Shipping Address:</label>
+        </div>
+    </form>
+
+    <div class="d-flex justify-content-end mt-2">
+        <button class="btn btn-danger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-cart-check-fill align-icon" viewBox="0 0 16 16">
+                <path
+                    d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-1.646-7.646-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708z" />
+            </svg>
+            Checkout
+        </button>
+    </div>
+
+    <div *ngIf="apiLoaded$ | async">
+        <google-map [options]="mapOptions" width="100%" #map>
+          <map-marker [position] = "HQmarker.position" [options]="HQmarkerOptions"></map-marker>
+        </google-map>
+      </div>
+
+</div>

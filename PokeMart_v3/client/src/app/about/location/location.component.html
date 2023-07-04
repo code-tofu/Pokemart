@@ -1,0 +1,9 @@
+<div class = "container text-body">
+
+    <div *ngIf="apiLoaded$ | async">
+        <google-map [options]="mapOptions" width="100%">
+          <map-marker [position] = "HQmarker.position" [options]="HQmarkerOptions"></map-marker>
+        </google-map>
+      </div>
+
+</div>

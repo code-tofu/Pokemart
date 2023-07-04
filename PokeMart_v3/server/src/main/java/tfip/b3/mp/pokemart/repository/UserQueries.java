@@ -23,7 +23,7 @@ public class UserQueries {
         """;
 
     public static final String INSERT_NEW_USER_PROFILE = """
-        INSERT INTO user_profiles (user_id,customer_name,customer_email,customer_phone,shipping_address,birthday,gender,member_level,member_since) VALUES (?,?,?,?,?,?,?,?,?)
+        INSERT INTO user_profiles (user_id,customer_name,customer_email,customer_phone,shipping_address,birthdate,gender,member_level,member_since) VALUES (?,?,?,?,?,?,?,?,?)
         """;
     
     public static final String EXISTS_USER_BY_USERID = """

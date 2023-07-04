@@ -42,7 +42,6 @@ public class JWTUtil {
     private Claims extractAllClaims(String jwtToken) {
         return Jwts.parserBuilder().setSigningKey(getSecretKey()).build().parseClaimsJws(jwtToken).getBody();
     }
-
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
@@ -60,7 +59,7 @@ public class JWTUtil {
         return extractExpiration(jwtToken).before(new Date());
     }
 
-    //TODO: ReviewMe
+    //TODO: REVIEW MW
     public boolean checkJwtToken(String jwtStr) {
         try {
           Jwts.parserBuilder().setSigningKey(getSecretKey()).build().parse(jwtStr);
@@ -84,19 +83,17 @@ public class JWTUtil {
     }
 
 
-
     //TOKEN GENERATORS
     public String generateToken(String subject) {
-        System.out.println(">> [INFO] GENERATE TOKEN Subject:" + subject);
+        System.out.println(">> [INFO] TOKENGEN: Generate Token  Subject:" + subject);
         return generateToken(subject,new HashMap<>());
     }
     public String generateToken(String subject, Map<String, Object> customClaims){
-        System.out.println(">> [INFO] GENERATE CUSTOM TOKEN Subject:" + subject);
+        System.out.println(">> [INFO] TOKENGEN: Generate Custom Token Subject:" + subject + "|Custom Claims:" + customClaims);
         return buildToken(subject, customClaims);
     }
-
     public String buildToken(String subject,Map<String, Object> customClaims) {
-        System.out.println(">> [INFO] BUILD TOKEN Subject:" + subject);
+        System.out.println(">> [INFO] TOKENGEN: Building Token");
         return Jwts
                 .builder()
                 .setClaims(customClaims) //NOTE: This will override existing claims. is this necessary?

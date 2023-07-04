@@ -10,7 +10,6 @@ import { CatalogueService } from 'src/app/services/catalogue.service';
 })
 export class CategoryListComponent {
   categories$!: Observable<CategoryCount[]>;
-
   catSvc = inject(CatalogueService);
 
   ngOnInit(): void {

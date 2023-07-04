@@ -9,14 +9,13 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserProfile {
-
+public class UserProfileDAO {
     private String userID;
     private String customerName;
     private String customerEmail;
     private String customerPhone;
     private String shippingAddress;
-    private Long birthday;
+    private Long birthdate;
     private String gender;
     private MemberLevel memberLevel;
     private Long memberSince;

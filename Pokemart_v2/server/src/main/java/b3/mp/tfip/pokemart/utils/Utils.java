@@ -21,15 +21,15 @@ import jakarta.json.JsonValue;
 
 public class Utils {
 
-    public static JsonObject getJsonObjectFromStr(String jsonString) {
-        StringReader sr = new StringReader(jsonString.toString());
-        JsonReader jsr = Json.createReader(sr);
-        return (JsonObject) jsr.read();
-    }
-
     public static String generateUUID(int numOfChar) {
         return UUID.randomUUID().toString().substring(0, numOfChar);
     }
+
+    public static JsonObject getJsonObjectFromStr(String jsonString){
+    StringReader sr = new StringReader(jsonString.toString());
+    JsonReader jsr = Json.createReader(sr);
+    return (JsonObject) jsr.read();
+}   
 
     public static JsonArrayBuilder createItemJsonABFromMap(Map<String, Integer> itemMap, String key, String value) {
         JsonArrayBuilder jsonAB = Json.createArrayBuilder();
@@ -38,7 +38,6 @@ public class Utils {
             jsonAB.add(jsonOB.add(key, entry.getKey()).add(value, entry.getValue()));
         }
         return jsonAB;
-
     }
 
     public static List<ItemCountDAO> createItemCountListFromJson(JsonArray jsonArr, String key, String value) {

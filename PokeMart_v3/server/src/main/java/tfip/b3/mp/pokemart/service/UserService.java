@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import tfip.b3.mp.pokemart.model.RegisterRequest;
 import tfip.b3.mp.pokemart.model.Roles;
 import tfip.b3.mp.pokemart.model.UserDetailsImpl;
-import tfip.b3.mp.pokemart.model.UserProfile;
+import tfip.b3.mp.pokemart.model.UserProfileDAO;
 import tfip.b3.mp.pokemart.repository.UserRepository;
 
 @Service
@@ -31,7 +31,7 @@ public class UserService implements UserDetailsService{
         return userRepo.createNewUser(registerRequest,role);
     }
 
-    public UserProfile getUserProfileByUserID(String userID) throws DataAccessException{
+    public UserProfileDAO getUserProfileByUserID(String userID) throws DataAccessException{
         return userRepo.getUserProfileByUserID(userID);
     }
     

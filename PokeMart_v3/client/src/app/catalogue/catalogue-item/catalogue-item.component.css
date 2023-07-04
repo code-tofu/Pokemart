@@ -1,0 +1,28 @@
+.height-100pct {
+    height: 100%;
+}
+
+.bottom-align {
+    display: inline-block;
+    height: 100%;
+    vertical-align: bottom;
+}
+
+.img-100max {
+    height: auto;
+    max-width: 100px;
+    margin: auto;
+}
+
+.discount-text{
+    text-decoration: line-through;
+    color: #808080;
+}
+
+.card-comment{
+    position: absolute;
+    top: 2px;
+    right: 3px;
+    width: 100%;
+    text-align: right;
+}

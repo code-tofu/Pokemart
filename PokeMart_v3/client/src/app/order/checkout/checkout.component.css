@@ -1,0 +1,8 @@
+.limit-md{
+    max-width: 768px;
+}
+
+.discount-text{
+    text-decoration: line-through;
+    color: #808080;
+}

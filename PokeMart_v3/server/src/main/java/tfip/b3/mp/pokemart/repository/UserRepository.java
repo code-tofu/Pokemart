@@ -10,8 +10,8 @@ import tfip.b3.mp.pokemart.model.MemberLevel;
 import tfip.b3.mp.pokemart.model.RegisterRequest;
 import tfip.b3.mp.pokemart.model.Roles;
 import tfip.b3.mp.pokemart.model.UserDetailsImpl;
-import tfip.b3.mp.pokemart.model.UserProfile;
-import tfip.b3.mp.pokemart.utils.Utils;
+import tfip.b3.mp.pokemart.model.UserProfileDAO;
+import tfip.b3.mp.pokemart.utils.GeneralUtils;
 
 import static tfip.b3.mp.pokemart.repository.UserQueries.*;
 
@@ -31,20 +31,21 @@ public class UserRepository {
         return jTemplate.queryForObject(SELECT_USERDETAILS_BY_USERID, new UserDetailsMapper(), userID);
     }
 
-    public UserProfile getUserProfileByEmail(String email) throws DataAccessException{
+    public UserProfileDAO getUserProfileByEmail(String email) throws DataAccessException{
         return jTemplate.queryForObject(SELECT_USERPROFILE_BY_EMAIL, new UserProfileMapper(),email);
     }
 
-    public UserProfile getUserProfileByUserID(String userID) throws DataAccessException{
+    public UserProfileDAO getUserProfileByUserID(String userID) throws DataAccessException{
         return jTemplate.queryForObject(SELECT_USERPROFILE_BY_USERID, new UserProfileMapper(),userID);
     }
+    
 
     @Transactional
     public String createNewUser(RegisterRequest registerRequest,  Roles role) throws DataAccessException{
-        String newUserID = "u" + Utils.generateUUID(8);
+        String newUserID = "u" + GeneralUtils.generateUUID(8);
         System.out.println(newUserID);
         while(jTemplate.queryForObject(EXISTS_USER_BY_USERID,Boolean.class, newUserID)){
-            newUserID = "u" + Utils.generateUUID(8);
+            newUserID = "u" + GeneralUtils.generateUUID(8);
         }
         jTemplate.update(INSERT_NEW_USER_DETAILS,
             newUserID,
@@ -59,7 +60,7 @@ public class UserRepository {
             registerRequest.getCustomerEmail(),
             registerRequest.getCustomerPhone(),
             registerRequest.getShippingAddress(),
-            new Date(registerRequest.getBirthday()),
+            new Date(registerRequest.getBirthdate()),
             registerRequest.getGender(),
             MemberLevel.BRONZE.toString(),
             new Date()

@@ -1,0 +1,57 @@
+<div class="container text-body limit-md">
+
+    <h5 class="text-primary-emphasis">Your Profile:</h5>
+    <dl class="row">
+        <dt class="col-5">User ID:</dt>
+        <dd class="col-7">{{this.userSvc.user.userID}}</dd>
+        <dt class="col-5">Member Since:</dt>
+        <dd class="col-7">{{this.userSvc.user.memberSince | date}}</dd>
+        <dt class="col-5">Membership:</dt>
+        <dd class="col-7">{{this.userSvc.user.memberLevel}}</dd>
+    </dl>
+
+<form [formGroup]="profileForm" readonly>
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control form-control-plaintext" readonly id="name" formControlName="customerName" placeholder="Name">
+        <label for="name">Name</label>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input type="email" class="form-control" id="email" formControlName="customerEmail" placeholder="Email">
+        <label for="email">Email</label>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="phone" formControlName="customerPhone" placeholder="Phone">
+        <label for="phone">Phone</label>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="shippingAddress" formControlName="shippingAddress" placeholder="Shipping Address">
+        <label for="shippingAddress">Shipping Address</label>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input type="date" class="form-control" id="birthdate" formControlName="birthdate" placeholder="DOB">
+        <label for="birthdate">Date of Birth</label>
+    </div>
+
+    <div class="form-floating ">
+    <select class="form-select" id="gender" formControlName="gender" placeholder="Gender">
+        <option value="M">M</option>
+        <option value="F">F</option>
+        <option value="L">L</option>
+        <option value="G">G</option>
+        <option value="B">B</option>
+        <option value="T">T</option>
+        <option value="Q">Q</option>
+        <option value="I">I</option>
+        <option value="A">A</option>
+        <option value="A">+</option>
+    </select>
+        <label for="gender">Gender</label>
+    </div>
+    <br>
+</form>
+
+</div>
