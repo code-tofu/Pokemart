@@ -38,6 +38,7 @@ export class CheckoutComponent implements OnInit {
   router = inject(Router);
   fb = inject(FormBuilder);
   http = inject(HttpClient);
+  
 
   cart$!: Observable<CartItem[]>;
   shipForm!: FormGroup;
@@ -55,7 +56,6 @@ export class CheckoutComponent implements OnInit {
   googleMap!: GoogleMap;
   mapOptions: google.maps.MapOptions = {
     mapId: '4e4dc093ebd5865d',
-    center: HQ_ISS,
     zoom: 16,
     clickableIcons: false,
   };
@@ -65,6 +65,7 @@ export class CheckoutComponent implements OnInit {
 
   addressChangeflag: boolean = false;
   shippingChangeflag: boolean = false;
+  EXPRESS_FACTOR:number = 2
 
   ngOnInit(): void {
     this.cart$ = this.cartSvc.getCart();
@@ -185,13 +186,14 @@ export class CheckoutComponent implements OnInit {
   }
 
   changeMarkerLocation(newLocation: google.maps.LatLngLiteral) {
-    this.deliveryMarker = newLocation;
+     this.deliveryMarker = newLocation;
+    console.info(">> [INFO] MARKER AT: ", newLocation);
+    this.getShippingCosts(newLocation);
   }
 
   selectOnMap(e: any): void {
     console.log('>> [INFO]: Selected Location', e.latLng);
-    this.deliveryMarker = e.latLng;
-    this.getShippingCosts(e.latLng);
+    this.changeMarkerLocation(e.latLng);
     this.mapSvc.geocoder
       .geocode({
         location: e.latLng,
