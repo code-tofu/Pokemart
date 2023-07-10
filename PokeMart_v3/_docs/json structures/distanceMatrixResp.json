@@ -1,0 +1,47 @@
+[
+{
+    "destination_addresses": [
+      "Yishun Ave 2, Ave 7 and St 22, Yishun Neighbourhood Park, Singapore 752106"
+    ],
+    "origin_addresses": [
+      "25 Heng Mui Keng Terrace, Institute of Systems Science, Singapore 119615"
+    ],
+    "rows": [
+      {
+        "elements": [
+          {
+            "distance": {
+              "text": "30.7 km",
+              "value": 30698
+            },
+            "duration": {
+              "text": "35 mins",
+              "value": 2087
+            },
+            "status": "OK"
+          }
+        ]
+      }
+    ],
+    "status": "OK"
+  }
+,
+  {
+    "destination_addresses": [
+        "35.661138192124071,139.729166062392"
+    ],
+    "origin_addresses": [
+        "1.2923021783210697,103.77657727116461"
+    ],
+    "rows": [
+        {
+            "elements": [
+                {
+                    "status": "ZERO_RESULTS"
+                }
+            ]
+        }
+    ],
+    "status": "OK"
+}
+]

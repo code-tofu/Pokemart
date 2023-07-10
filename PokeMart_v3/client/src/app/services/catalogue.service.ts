@@ -13,10 +13,10 @@ export class CatalogueService {
 
   constructor() { }
   http = inject(HttpClient);
-  error = inject(ErrorService)
+  error = inject(ErrorService);
 
   getCatalogue(page: Number): Observable<CatalogueItem[]> {
-    console.info('>> [INFO]: Query Store Catalogue, Page:', page);
+    console.info('>> [INFO] Query Store Catalogue Page:', page);
     let queryParams = new HttpParams().append('page', page.toString()).append('limit', itemsPerPage);
     return this.http.get<CatalogueItem[]>(inventoryURL + 'shop', {
       params: queryParams,

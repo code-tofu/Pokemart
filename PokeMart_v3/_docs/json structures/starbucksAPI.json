@@ -1,0 +1,73 @@
+{
+    "data": {
+      "store": [
+        {
+          "storeAmenities": {
+            "termContentItems": [
+              {
+                "displayText": "Mobile Order and Pay"
+              },
+              {
+                "displayText": "Free Wifi"
+              }
+            ]
+          },
+          "address": "100 Tras Street #01-05, 100 AM, Singapore 079027",
+          "coordinate": {
+            "lat": "1.2744762533133427",
+            "long": "103.84336004841293"
+          },
+          "image": {
+            "paths": [
+              
+            ]
+          },
+          "openingHours": {
+            "contentItems": [
+              {
+                "key": "Mon",
+                "value": "07:30 AM to 10:00 PM"
+              },
+              {
+                "key": "Tue",
+                "value": "07:30 AM to 10:00 PM"
+              },
+              {
+                "key": "Wed",
+                "value": "07:30 AM to 10:00 PM"
+              },
+              {
+                "key": "Thu",
+                "value": "07:30 AM to 10:00 PM"
+              },
+              {
+                "key": "Fri",
+                "value": "07:30 AM to 10:00 PM"
+              },
+              {
+                "key": "Sat",
+                "value": "08:00 AM to 10:00 PM"
+              },
+              {
+                "key": "Sun",
+                "value": "08:00 AM to 10:00 PM"
+              },
+              {
+                "key": "Public Holiday",
+                "value": "08:00 AM to 10:00 PM"
+              },
+              {
+                "key": "Eve of Public Holiday",
+                "value": "07:30 AM to 10:00 PM"
+              }
+            ]
+          },
+          "phone": "6910 1229",
+          "displayText": "100 AM",
+          "contentItemId": "48eg96xg3cptv3852w339193x7",
+          "expiryDate": null,
+          "publishDate": null
+        }
+    ]
+    }
+}

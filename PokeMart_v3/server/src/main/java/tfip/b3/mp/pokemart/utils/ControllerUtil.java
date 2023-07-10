@@ -6,6 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.maps.errors.ApiException;
+
+import java.io.IOException;
+
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
@@ -38,8 +42,15 @@ public class ControllerUtil {
                     .build();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resp.toString());
         }
+        if (ex instanceof ApiException | ex instanceof InterruptedException | ex instanceof IOException){
+            System.out.println(">> [INFO] Distance Matrix Error: " + ex);
+             JsonObjectBuilder resp = Json.createObjectBuilder().add("Error", ex.toString());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resp.build().toString());
+
+        }
         JsonObjectBuilder jsonOB = Json.createObjectBuilder().add("Error", ex.toString());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonOB.build().toString());
     }
 
 }
+

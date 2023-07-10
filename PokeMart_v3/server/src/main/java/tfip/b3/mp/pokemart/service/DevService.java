@@ -21,11 +21,14 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
 import tfip.b3.mp.pokemart.model.ProductDAO;
 import tfip.b3.mp.pokemart.repository.InventoryRepository;
 import tfip.b3.mp.pokemart.repository.ProductRepository;
 import tfip.b3.mp.pokemart.repository.SpacesRepository;
+import tfip.b3.mp.pokemart.repository.StoreRepository;
 import tfip.b3.mp.pokemart.utils.ProductUtil;
 import tfip.b3.mp.pokemart.utils.GeneralUtils;
 
@@ -42,6 +45,8 @@ public class DevService {
     private String productImgURL;
     @Value("${api.img.file.type}")
     private String productImgType;
+    @Value("${api.sb.stores.uri}")
+    private String sbStoresURL;
 
     @Autowired
     ProductRepository productRepo;
@@ -49,6 +54,8 @@ public class DevService {
     InventoryRepository invRepo;
     @Autowired
     SpacesRepository spacesRepo;
+    @Autowired
+    StoreRepository storesRepo;
 
     public void createNewDatabase(int size) {
         Random rand = new Random();
@@ -115,7 +122,7 @@ public class DevService {
 
         try {
             ResponseEntity<String> resp = restTemplate.exchange(req, String.class);
-            System.out.println(">> [INFO] API RESPONSE:" + resp.getBody());
+            // System.out.println(">> [INFO] API RESPONSE:" + resp.getBody());
             return Optional.of(resp.getBody());
         } catch (RestClientException restErr) {
             System.out.println(">> [ERROR] PokeAPI Server Error:" + restErr);
@@ -145,6 +152,27 @@ public class DevService {
         InputStream is = new BufferedInputStream(url.openStream());
         byte[] img = is.readAllBytes();
         spacesRepo.uploadSprite(prodData, img,product.getNameID(), productImgType);
+    }
+
+    public void createNewStores() {
+        System.out.println(">> [INFO] Retrieve Data From:" + sbStoresURL);
+         RestTemplate restTemplate = new RestTemplate();
+        RequestEntity<Void> req = RequestEntity.get(sbStoresURL).build();
+        try {
+            ResponseEntity<String> resp = restTemplate.exchange(req, String.class);
+            // System.out.println(">> [INFO] API RESPONSE:" + resp.getBody());
+            JsonObject respJson = GeneralUtils.getJsonObjectFromStr(resp.getBody());
+            JsonArray jsonArr = respJson.getJsonObject("data").getJsonArray("store");
+            System.out.println(">> [INFO] Creating Stores DB of Size:" + jsonArr.size());
+            int count=0;
+            for(JsonValue jsonVal:jsonArr){
+                storesRepo.insertStore(jsonVal.asJsonObject());
+                count++;
+            }
+            System.out.println(">> [INFO] Created Stores DB of Size:" + count);
+        } catch (RestClientException restErr) {
+            System.out.println(">> [ERROR] SB Server Error:" + restErr);
+        }
     }
 
 }

@@ -1,8 +1,7 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, OnInit, inject } from '@angular/core';
 import { cartURL } from '../endpoint.constants';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from './user.service';
-import { CatalogueItem } from '../model/catalogue.model';
 import { Observable, catchError, of, tap } from 'rxjs';
 import { CartItem, CartReq } from '../model/cart.model';
 import { ErrorService } from './error.service';
@@ -10,7 +9,7 @@ import { ErrorService } from './error.service';
 @Injectable({
   providedIn: 'root'
 })
-export class CartService {
+export class CartService{
 
   constructor() { }
   http = inject(HttpClient);
@@ -18,14 +17,13 @@ export class CartService {
   userSvc = inject(UserService);
   total!:number;
   cart!: CartItem[];
-    
 
   getCart():Observable<CartItem[]>{
     if(!this.userSvc.userID){
       console.info('>> [INFO] LoadCart:', 'User Not Signed In');
       return of([]);
     }
-    console.info('>> [INFO] ', 'Get Cart User:',this.userSvc.userID);
+    console.info('>> [INFO] Get Cart User:',this.userSvc.userID);
     return this.http.get<CartItem[]>(cartURL + this.userSvc.userID)
     .pipe(tap((resp) => {
     this.cart = resp;

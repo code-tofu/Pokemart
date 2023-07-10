@@ -1,9 +1,23 @@
 <div class = "container text-body">
 
-    <div *ngIf="apiLoaded$ | async">
-        <google-map [options]="mapOptions" width="100%">
-          <map-marker [position] = "HQmarker.position" [options]="HQmarkerOptions"></map-marker>
+    <div *ngIf="apiLoaded; else noMap">
+        <google-map [options]="mapOptions" width="100%" #findUs>
+          <map-marker [position] = "{lat:HQ.storeLat, lng:HQ.storeLng}"
+          [options]="HQMarkerOptions"
+          #marker="mapMarker" (mapClick)="openInfo(marker, HQ)"
+          ></map-marker>
+          <map-marker *ngFor="let store of stores$ | async; let i=index"
+          [options]="StoreMarkerOptions"
+          [position]= "{lat:store.storeLat, lng:store.storeLng}"
+          #marker="mapMarker" (mapClick)="openInfo(marker,store)"
+          ></map-marker>
+          <map-info-window [options]="infoOptions"></map-info-window>
+
         </google-map>
       </div>
-
 </div>
+
+
+<ng-template #noMap>
+  <h5 class="text-primary-emphasis">Map Service Unavailable. Please Check Your Internet Connection</h5>
+</ng-template>  

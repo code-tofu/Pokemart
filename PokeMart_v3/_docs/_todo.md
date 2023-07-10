@@ -1,7 +1,7 @@
 # ONESTEPATATIME
 
 # NEEDHELPPLS
-1. observables and promises, chains
+1. observables and promises, chains, async chains
 
 
 # NANI??

@@ -19,6 +19,8 @@ public class DevController {
 
     @Autowired
     DevService devSvc;
+
+
     
     @GetMapping("/api/dev/create/productDB")
     public ResponseEntity<String> createProductDB(@RequestParam(defaultValue = PRODUCT_DB_DEFAULT_SIZE) String size) {
@@ -36,6 +38,14 @@ public class DevController {
             devSvc.createNewInventory();
             JsonObject resp = Json.createObjectBuilder().add("201 Created", "Inventory Creation Success").build();
             System.out.println(">> [INFO] Inventory Creation Success");
+            return ResponseEntity.status(HttpStatus.CREATED).body(resp.toString());
+    }
+
+    @GetMapping("/api/setup/create/stores")
+        public ResponseEntity<String> createNewStores() {
+            devSvc.createNewStores();
+            JsonObject resp = Json.createObjectBuilder().add("201 Created", "Store Database Creation Success").build();
+            System.out.println(">> [INFO] Store Database Creation Success");
             return ResponseEntity.status(HttpStatus.CREATED).body(resp.toString());
     }
 }

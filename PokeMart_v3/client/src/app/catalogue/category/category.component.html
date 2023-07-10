@@ -2,25 +2,23 @@
     <h5 class="text-primary-emphasis"> Select a Category to View Relevant Products:</h5>
 
 
-<ul class="list-group">
-    <li *ngFor="let category of categories$ | async"
-        class="list-group-item d-flex justify-content-between align-items-start"
-        [routerLink]="['../','shop','category',category.category]">
-        <h6 class=" fw-bold mb-1">{{category.category | uppercase}}</h6>
-        <span class="badge bg-primary rounded-pill">{{category.count}}</span>
-    </li>
-</ul>
+    <ul class="list-group">
+        <li *ngFor="let category of categories$ | async"
+            class="list-group-item d-flex justify-content-between align-items-start"
+            [routerLink]="['../','shop','category',category.category]">
+            <h6 class=" fw-bold mb-1">{{category.category | uppercase}}</h6>
+            <span class="badge bg-primary rounded-pill">{{category.count}}</span>
+        </li>
+    </ul>
 
-<div class="d-flex justify-content-center p-3">
-    <ngb-pagination
-	[collectionSize]="maxPage"
-	[(page)]="currentPage"
-	[maxSize]="3"
-    [pageSize]="catPerPage"
-	[rotate]="true"
-	[boundaryLinks]="true"
-    (pageChange)="goToPage($event)"
-></ngb-pagination>
-</div>
+    <div class="d-flex justify-content-center p-3">
+        <ngb-pagination [collectionSize]="maxPage" [(page)]="currentPage" [maxSize]="3" [pageSize]="catPerPage"
+            [rotate]="true" [boundaryLinks]="true" (pageChange)="goToPage($event)"></ngb-pagination>
+    </div>
 
 </div>
+
+<!-- FIXME: this does not work -->
+<ng-template #noCategory>
+    <h5 class="text-primary-emphasis">Connection Error</h5>
+</ng-template>

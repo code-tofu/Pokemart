@@ -59,6 +59,7 @@ public class WebSecurityConfig {
             .requestMatchers("/api/user/**").permitAll()
             .requestMatchers("/api/sales/**").permitAll()
             .requestMatchers("/api/cart/**").permitAll()
+            .requestMatchers("/api/map/**").permitAll()
             // .hasAuthority("ROLE_DEVELOPER")
             .anyRequest().authenticated()
             )

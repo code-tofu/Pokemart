@@ -87,7 +87,7 @@ public class InventoryRepository {
     }
 
 
-    //TODO: FIX NULL ISSUES
+    //FIXME: FIX NULL ISSUES
     public Optional<Integer> getProductsTotalCount() throws DataAccessException {
         return Optional.of(jTemplate.queryForObject(SELECT_TOTAL_COUNT_ALL_PRODUCTS, Integer.class));
     }
