@@ -29,6 +29,7 @@ public class OrderRepository {
         Document newDoc = OrderUtil.createDocFromOrder(order);
         System.out.println(">> [INFO] Inserting:" + newDoc);
         Document returnDoc = mTemplate.insert(newDoc, "orders");
+        System.out.println(returnDoc);
         return OrderUtil.createOrderFromBson(returnDoc);
     }
 

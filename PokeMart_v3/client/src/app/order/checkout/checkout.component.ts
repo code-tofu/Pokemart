@@ -17,19 +17,21 @@ import { Router } from '@angular/router';
 import { Observable, Subscription, firstValueFrom } from 'rxjs';
 import { API_KEY, GMAP_GEOCODE_URL, HQ_ISS } from 'src/app/endpoint.constants';
 import { CartItem } from 'src/app/model/cart.model';
-import { DistanceDTO, Shipping, StoreDTO } from 'src/app/model/map.model';
+import { DistanceDTO, SHIPPINGSTR, Shipping, StoreDTO } from 'src/app/model/map.model';
+import { DeliveryDetails, Order } from 'src/app/model/order.model';
 import { CartService } from 'src/app/services/cart.service';
 import { MapService } from 'src/app/services/map.service';
 import { OrderService } from 'src/app/services/order.service';
 import { UserService } from 'src/app/services/user.service';
 
-const shipping = ['Default', 'Express', 'Self Collect'];
+
 
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css'],
 })
+
 export class CheckoutComponent implements OnInit {
   cartSvc = inject(CartService);
   userSvc = inject(UserService);
@@ -39,13 +41,12 @@ export class CheckoutComponent implements OnInit {
   fb = inject(FormBuilder);
   http = inject(HttpClient);
   
-
-  cart$!: Observable<CartItem[]>;
+  cart!: CartItem[];
   shipForm!: FormGroup;
   shippingCost!: DistanceDTO;
   shippingType: Shipping = Shipping.DEFAULT;
   selectedShippingCost!: number;
-  shipping = shipping;
+  shipping = SHIPPINGSTR;
 
   APILoaded!: boolean;
   APIStatusSub!: Subscription;
@@ -68,7 +69,7 @@ export class CheckoutComponent implements OnInit {
   EXPRESS_FACTOR:number = 2
 
   ngOnInit(): void {
-    this.cart$ = this.cartSvc.getCart();
+    this.getCart();
     this.stores$ = this.mapSvc.getAllStores();
     this.shipForm = this.createForm();
 
@@ -99,6 +100,16 @@ export class CheckoutComponent implements OnInit {
           console.log('>> [ERROR]: GMAPS GEOCODE API ERROR:' + err)
         );
     });
+  }
+
+  getCart(){
+    firstValueFrom(this.cartSvc.getCart())
+      .then((resp) => {
+        this.cart = resp;
+      })
+      .catch((err) =>
+        console.log('>> [ERROR]: GMAPS GEOCODE API ERROR:' + err)
+      );
   }
 
   createForm(): FormGroup {
@@ -210,9 +221,26 @@ export class CheckoutComponent implements OnInit {
       });
   }
 
-  checkout() {
-    console.info(this.collectionStore.value);
+  checkOut(){
+    if(this.shippingType == Shipping.SELFCOLLECT){
+    this.shipForm.get("customerShippingAddress")?.setValue("POKEMON STORE:" + this.collectionStore.value);
+    }
+
+    const newOrder:Order = this.orderSvc.generateOrder(this.cart, this.userSvc.userID, this.shipForm.value as DeliveryDetails, this.shipping[this.shippingType],this.selectedShippingCost,this.cartSvc.total, this.cartSvc.total + this.selectedShippingCost);
+
+    firstValueFrom(this.orderSvc.postOrder(newOrder))
+    .then((resp) => {
+      console.info('>> [INFO] Server Response:', resp);
+      alert('Your Order is being processed');
+      this.router.navigate(['/order', resp.orderID]);
+    })
+    .catch((err) => {
+      alert('Connection Issue: Please Try Again Later');
+      console.error('>> [ERROR] Server Error:', err);
+    });
+
   }
+
 }
 
 // coupon: FormControl = new FormControl<string>('', [

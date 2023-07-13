@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import tfip.b3.mp.pokemart.model.OrderDAO;
 import tfip.b3.mp.pokemart.model.OrderSummaryDAO;
+import tfip.b3.mp.pokemart.service.EmailService;
 import tfip.b3.mp.pokemart.service.OrderService;
 import tfip.b3.mp.pokemart.utils.ControllerUtil;
 import tfip.b3.mp.pokemart.utils.GeneralUtils;
@@ -26,6 +27,9 @@ public class OrderController {
     @Autowired
     OrderService orderSvc;
 
+    @Autowired
+    EmailService emailSvc;
+
     @PostMapping(path = "/api/order/newOrder", consumes = "application/json")
     public ResponseEntity<String> placeOrder(@RequestBody String orderJson) {
         System.out.println(">> [INFO] Recieved:" + orderJson);
@@ -36,6 +40,16 @@ public class OrderController {
                     ">> [INFO] Created Order:" + processedOrder.getOrderID() + " |Date: "
                             + processedOrder.getOrderDate());
             ObjectMapper mapper = new ObjectMapper();
+            emailSvc.sendSimpleMail(
+                "pokemart.tofucode@gmail.com",
+                "Your Order " + processedOrder.getOrderID() + " has been confirmed!",
+                "Order ID: " + processedOrder.getOrderID() +
+                " | Order Date: " + processedOrder.getOrderDate());
+            emailSvc.sendThymeLeafEmail(
+                                "benjamin.ftc@gmail.com",
+                "THYMELEAF SAYS: Your Order " + processedOrder.getOrderID() + " has been confirmed!",
+                "THYMELEAF SAYS: Order ID: " + processedOrder.getOrderID() +
+                " | Order Date: " + processedOrder.getOrderDate());
             return ResponseEntity.status(HttpStatus.CREATED).body(mapper.writeValueAsString(processedOrder));
         } catch (Exception ex) {
             return ControllerUtil.exceptionHandler(ex);

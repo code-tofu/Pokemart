@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { AuthRequest, AuthResponse, RegisterRequest, UserProfile } from '../model/auth.model';
-import { Observable, firstValueFrom } from 'rxjs';
+import { Observable, Subject, firstValueFrom, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { authURL, userURL } from '../endpoint.constants';
 import { ErrorService } from './error.service';
@@ -19,6 +19,8 @@ export class UserService {
   user!: UserProfile;
   role!: string
 
+  authenticationStatus: Subject<boolean> = new Subject<boolean>();
+
   authenticate(auth:AuthRequest){
     console.info(">> [INFO] Authenticating:", auth.username);
     firstValueFrom(this.postAuthRequest(auth))
@@ -34,12 +36,14 @@ export class UserService {
       this.getUserDetails(this.username).subscribe( (response) => {
         this.user = response;
       })
+      this.authenticationStatus.next(true)
     })
     .catch((err) => {
       if(err.status == 401) console.error("UNAUTHORIZED: WRONG/USERNAME PASSWORD");
-      this.error.httpErrorHandler(err)
+      if(err.status == 500) alert("Connection Issue: Please Try Again Later");
+      this.authenticationStatus.next(false);
     });
-  }
+  } 
 
   signup(signup: RegisterRequest){
     console.info(">> [INFO] Authenticating:", signup);

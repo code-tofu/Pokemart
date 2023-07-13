@@ -48,13 +48,8 @@ export class CartService{
 
   calculateTotal() {
     let calc = 0;
-    this.cart.forEach((cartItem) => (calc += cartItem.quantity * cartItem.item.cost));
+    this.cart.forEach((cartItem) => (calc += cartItem.quantity * (cartItem.item.cost-cartItem.item.discount)));
     return calc;
   }
 
-  calculateFinal(){
-
-  }
-
-  
 }

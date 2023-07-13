@@ -1,0 +1,39 @@
+<div class="container" >
+    <div *ngIf="orderSummaries">
+    <h5 class="text-primary-emphasis">Click on the Order to see more details:</h5>
+    <table class="table" *ngIf="orderSummaries.length > 0; else historyEmpty">
+        <thead>
+            <tr>
+                <th scope="col">Order ID</th>
+                <th scope="col">Order Date</th>
+                <th scope="col">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let order of orderSummaries" [routerLink]="['../','order',order.orderID]">
+                <td class="text-primary"><u>{{order.orderID}}</u></td>
+                <td>{{order.orderDate |date }}</td>
+                <td>${{order.total | number: '1.2-2'}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+    <div class="row padding-top-10px">
+        <div class="col"></div>
+        <div class="col-6 d-flex justify-content-end">
+            <button class="btn btn-primary" [routerLink]="['/shop']">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-bag align-icon" viewBox="0 0 16 16">
+                    <path
+                        d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
+                </svg>
+                Return to Shop
+            </button>
+        </div>
+    </div>
+
+    <ng-template #historyEmpty>
+        <div class="container">
+            <h6>You have no previous purchases. Add items to your cart today!</h6>
+        </div>
+    </ng-template>

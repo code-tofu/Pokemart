@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { ItemDetail } from '../model/catalogue.model';
 import { CatalogueService } from '../services/catalogue.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,8 +6,8 @@ import { firstValueFrom } from 'rxjs';
 import { FormControl, Validators } from '@angular/forms';
 import { CartReq } from '../model/cart.model';
 import { CartService } from '../services/cart.service';
-import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { Utils } from '../utils';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -20,9 +20,14 @@ export class ItemDetailComponent {
   cartSvc = inject(CartService);
   actRoute = inject(ActivatedRoute);
   router = inject(Router);
+  modalService = inject(NgbModal);
   
   item!: ItemDetail;
   imgsrc!: String;
+  
+  @ViewChild('content')
+  content!: ElementRef;
+
 
   quantity: FormControl = new FormControl<number>(
     !!this.actRoute.snapshot.queryParams['quantity']
@@ -49,6 +54,7 @@ export class ItemDetailComponent {
       .catch((err) => {
         this.catalogueSvc.error.httpObjErrorHandler(err);
       });
+
   }
 
 
@@ -67,8 +73,12 @@ export class ItemDetailComponent {
       productID: this.item.productID,
       quantity: +this.quantity.value,
     };
-    this.cartSvc.addToCart(req).subscribe(()=>this.router.navigate(['/cart']))
+    this.cartSvc.addToCart(req).subscribe()
+    this.openVerticallyCentered(this.content)
   }
 
+	openVerticallyCentered(content:any) {
+		this.modalService.open(content, { centered: true });
+	}
 
 }

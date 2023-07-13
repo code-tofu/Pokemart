@@ -21,7 +21,7 @@ export class LocationComponent implements OnDestroy {
 
   ngOnInit(): void {
     this.APIStatusSub = this.mapSvc.APIStatus$.subscribe((status) => {
-      console.log("[INFO] GMAP JSAPI LOADED:",status.valueOf());
+      console.log(">> [INFO] GMAP JS API LOADED:",status.valueOf());
       this.apiLoaded = status.valueOf();
     });
     this.stores$ = this.mapSvc.getAllStores();

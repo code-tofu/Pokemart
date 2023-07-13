@@ -1,0 +1,12 @@
+.limit-md{
+    max-width: 1200px;
+}
+
+.align-icon {
+    vertical-align: -0.125em;
+}
+
+.discount-text{
+    text-decoration: line-through;
+    color: #808080;
+}

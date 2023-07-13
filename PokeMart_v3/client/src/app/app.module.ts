@@ -20,11 +20,11 @@ import { EditComponent } from './sales/edit/edit.component';
 import { WebcamModule } from 'ngx-webcam';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CheckoutComponent } from './order/checkout/checkout.component';
-import { OrderComponent } from './order/order/order.component';
 import { ProfileComponent } from './auth/profile/profile.component';
 import { OrderDetailComponent } from './order/order-detail/order-detail.component';
 import { LocationComponent } from './about/location/location.component';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { HistoryComponent } from './order/history/history.component';
 
 
 const routes: Routes = [
@@ -47,6 +47,8 @@ const routes: Routes = [
   { path: 'checkout', component: CheckoutComponent },
   { path: 'order/:orderID', component: OrderDetailComponent },
 
+  { path: 'history', component: HistoryComponent },
+
   { path: 'findUs', component: LocationComponent },
   
   { path: 'construction', component: ErrorComponent },
@@ -59,7 +61,7 @@ const routes: Routes = [
 
 
 
-// { path: 'history', component: HistoryComponent },
+
 
 
 @NgModule({
@@ -79,10 +81,10 @@ const routes: Routes = [
     UploadComponent,
     EditComponent,
     CheckoutComponent,
-    OrderComponent,
     ProfileComponent,
     OrderDetailComponent,
-    LocationComponent
+    LocationComponent,
+    HistoryComponent
     
   ],
   imports: [

@@ -49,6 +49,7 @@ public class ControllerUtil {
 
         }
         JsonObjectBuilder jsonOB = Json.createObjectBuilder().add("Error", ex.toString());
+        System.err.println(">> [ERROR] " + ex.toString());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonOB.build().toString());
     }
 

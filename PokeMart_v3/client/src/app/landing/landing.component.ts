@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { UserService } from '../services/user.service';
 
 @Component({
@@ -7,5 +7,6 @@ import { UserService } from '../services/user.service';
   styleUrls: ['./landing.component.css']
 })
 export class LandingComponent {
+  userSvc = inject(UserService);
 
 }

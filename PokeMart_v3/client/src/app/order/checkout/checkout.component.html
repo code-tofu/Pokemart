@@ -83,8 +83,7 @@
             <div class="card-header d-flex justify-content-between p-2">
                 <div>
                     <h6 class="card-title"><small>Select the delivery location by searching for the address above or
-                            selecting
-                            the location below:</small></h6>
+                            selecting the location below:</small></h6>
                 </div>
                 <div class="align-self-center">
                     <button class="btn btn-warning btn-sm" (click)="changeAddress()"
@@ -129,7 +128,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let cartItem of cart$ |async">
+                <tr *ngFor="let cartItem of cart">
                     <td scope="row">{{cartItem.item.productName}}</td>
                     <td>{{cartItem.quantity}}</td>
                     <td>
@@ -142,7 +141,7 @@
                             </div>
                         </div>
                     </td>
-                    <td>${{cartItem.quantity * cartItem.item.cost | number: '1.2-2'}}</td>
+                    <td>${{cartItem.quantity * (cartItem.item.cost-cartItem.item.discount) | number: '1.2-2'}}</td>
                 </tr>
                 <tr>
                     <td colspan="2"><strong>SubTotal:</strong></td>
@@ -176,7 +175,7 @@
         Please select a Collection Store
     </div>
     <div class="d-flex justify-content-end mt-2">
-        <button class="btn btn-danger" (click)="checkout()" *ngIf="!(shippingType.valueOf() == 2);else selfCollect">
+        <button class="btn btn-danger" (click)="checkOut()" *ngIf="!(shippingType.valueOf() == 2);else selfCollect">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                 class="bi bi-cart-check-fill align-icon" viewBox="0 0 16 16">
                 <path
@@ -188,7 +187,7 @@
 </div>
 
 <ng-template #selfCollect>
-    <button class="btn btn-danger ms-2" (click)="checkout()" [disabled]="collectionStore.value==''">
+    <button class="btn btn-danger ms-2" (click)="checkOut()" [disabled]="collectionStore.value==''">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
             class="bi bi-cart-check-fill align-icon" viewBox="0 0 16 16">
             <path

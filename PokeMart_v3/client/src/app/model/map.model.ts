@@ -19,3 +19,5 @@ export enum Shipping {
     EXPRESS,
     SELFCOLLECT,
   }
+
+export const SHIPPINGSTR = ['DEFAULT', 'EXPRESS', 'SELFCOLLECT'];
