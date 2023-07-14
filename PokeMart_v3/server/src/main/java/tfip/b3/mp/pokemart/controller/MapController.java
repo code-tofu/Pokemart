@@ -29,7 +29,7 @@ public class MapController {
     public ResponseEntity<String> getAllStores() {
         try {
             List<StoreDAO> storesList = mapSvc.getAllStores();
-            System.out.println(storesList.size());
+            System.out.println(">> [INFO] Showing Stores List of Size: " + storesList.size());
             ObjectMapper mapper = new ObjectMapper();
             return ResponseEntity.status(HttpStatus.CREATED).body(mapper.writeValueAsString(storesList));
         } catch (Exception ex) {
