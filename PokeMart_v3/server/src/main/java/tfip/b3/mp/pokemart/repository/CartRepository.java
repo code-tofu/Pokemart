@@ -18,7 +18,6 @@ public class CartRepository {
     RedisTemplate<String, String> rTemplate;
 
     public void insertNewCartItem(String userID, String productString, int quantity) {
-
         rTemplate.opsForHash().put(userID, productString, Integer.toString(quantity));
     }
 

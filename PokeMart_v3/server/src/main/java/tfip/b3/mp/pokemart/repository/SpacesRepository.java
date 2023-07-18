@@ -20,10 +20,13 @@ import com.amazonaws.services.s3.model.PutObjectResult;
 public class SpacesRepository {
 
     private static final String type = "image";
+    @Value("api.img.file.type")
+    private String fileType;
     @Value("${s3.bucket}")
     private String bucket;
     @Value("${s3.dir.name}")
     private String dirName;
+    
 
     @Autowired
     private AmazonS3 s3;
@@ -35,7 +38,7 @@ public class SpacesRepository {
         metadata.setContentLength(file.length);
         metadata.setUserMetadata(prodData);
 
-        String key = dirName + "/sprite/" + fileName;
+        String key = dirName + "/sprite/" + fileName + "." + fileType;
         PutObjectRequest putReq = new PutObjectRequest(bucket, key,
                 new ByteArrayInputStream(file), metadata);
         putReq = putReq.withCannedAcl(CannedAccessControlList.PublicRead);

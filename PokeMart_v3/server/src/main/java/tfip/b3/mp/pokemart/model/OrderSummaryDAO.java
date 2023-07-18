@@ -16,5 +16,6 @@ public class OrderSummaryDAO {
     private String orderID;
     private Date orderDate;
     private double total;
+    private boolean delivered;
 
 }

@@ -25,8 +25,6 @@ DESC user_details
 -- | account_non_locked      | tinyint(1)                                                                | NO   |     | NULL    |       |
 -- +-------------------------+---------------------------------------------------------------------------+------+-----+---------+-------+
 
-INSERT INTO user_details VALUES ('u00000000','profoak', '$2y$10$HQAhMpPP0rMUqL2ZPoHvsuc33GVD3kcm0hCOgfHGGSvngO62LBhWm', TRUE, TRUE,TRUE,TRUE,'ROLE_DEVELOPER');
-
 -- +----------+------------+-----------+----------------+---------+---------------------+-------------------------+--------------------+
 -- | username | password   | user_id   | role           | enabled | account_non_expired | credentials_non_expired | account_non_locked |
 -- +----------+------------+-----------+----------------+---------+---------------------+-------------------------+--------------------+

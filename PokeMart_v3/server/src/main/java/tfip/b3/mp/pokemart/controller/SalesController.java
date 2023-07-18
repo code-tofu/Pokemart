@@ -52,7 +52,7 @@ public class SalesController {
         }
     }
 
-        @PostMapping("api/sales/editComments/{productID}")
+    @PostMapping("api/sales/editComments/{productID}")
     public ResponseEntity<String> editCommentsOfProduct(@PathVariable String productID, @RequestBody String payload) {
         try {
             System.out.println(">>[INFO] Edit Comment of " + productID + "- Comment:" + payload);

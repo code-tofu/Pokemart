@@ -5,14 +5,18 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
 import tfip.b3.mp.pokemart.model.OrderDAO;
 import tfip.b3.mp.pokemart.model.OrderSummaryDAO;
 import tfip.b3.mp.pokemart.service.EmailService;
@@ -39,17 +43,11 @@ public class OrderController {
             System.out.println(
                     ">> [INFO] Created Order:" + processedOrder.getOrderID() + " |Date: "
                             + processedOrder.getOrderDate());
+                        
+            emailSvc.sendOrderEmail("pokemart.tofucode@gmail.com", //processedOrder.getCustomerEmail()
+            "Your Order " + processedOrder.getOrderID() + " has been confirmed!", processedOrder);
+
             ObjectMapper mapper = new ObjectMapper();
-            emailSvc.sendSimpleMail(
-                "pokemart.tofucode@gmail.com",
-                "Your Order " + processedOrder.getOrderID() + " has been confirmed!",
-                "Order ID: " + processedOrder.getOrderID() +
-                " | Order Date: " + processedOrder.getOrderDate());
-            emailSvc.sendThymeLeafEmail(
-                                "benjamin.ftc@gmail.com",
-                "THYMELEAF SAYS: Your Order " + processedOrder.getOrderID() + " has been confirmed!",
-                "THYMELEAF SAYS: Order ID: " + processedOrder.getOrderID() +
-                " | Order Date: " + processedOrder.getOrderDate());
             return ResponseEntity.status(HttpStatus.CREATED).body(mapper.writeValueAsString(processedOrder));
         } catch (Exception ex) {
             return ControllerUtil.exceptionHandler(ex);
@@ -78,6 +76,16 @@ public class OrderController {
         } catch (Exception ex) {
             return ControllerUtil.exceptionHandler(ex);
         }
+    }
+
+    @DeleteMapping(path = "/api/order/{orderId}")
+    @ResponseBody
+    public ResponseEntity<String> deliveredOrder(@PathVariable String orderId) {
+        if (orderSvc.markOrderDelivered(orderId))
+            return ResponseEntity.ok().build();
+        JsonObject error = Json.createObjectBuilder().add("404 Error", "Order Not Found").build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.toString());
+
     }
 
 }

@@ -30,6 +30,10 @@ public class UserQueries {
         SELECT EXISTS(SELECT * from user_details WHERE user_id= ? )
         """;
 
+    public static final String EXIST_BY_EMAIL_AND_ID = """
+        SELECT EXISTS(SELECT * FROM user_profiles WHERE user_id = ? AND customer_email = ?)
+    """;
+
 }
 
     

@@ -3,11 +3,11 @@
     <h5 class="text-primary-emphasis">Your Profile:</h5>
     <dl class="row">
         <dt class="col-5">User ID:</dt>
-        <dd class="col-7">{{this.userSvc.user.userID}}</dd>
+        <dd class="col-7">{{this.userSvc.user!.userID}}</dd>
         <dt class="col-5">Member Since:</dt>
-        <dd class="col-7">{{this.userSvc.user.memberSince | date}}</dd>
+        <dd class="col-7">{{this.userSvc.user!.memberSince | date}}</dd>
         <dt class="col-5">Membership:</dt>
-        <dd class="col-7">{{this.userSvc.user.memberLevel}}</dd>
+        <dd class="col-7">{{this.userSvc.user!.memberLevel}}</dd>
     </dl>
 
 <form [formGroup]="profileForm" readonly>

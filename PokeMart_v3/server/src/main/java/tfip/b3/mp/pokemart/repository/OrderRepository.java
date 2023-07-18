@@ -13,7 +13,11 @@ import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.aggregation.SortOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
+
+import com.mongodb.client.result.UpdateResult;
 
 import tfip.b3.mp.pokemart.model.OrderDAO;
 import tfip.b3.mp.pokemart.model.OrderSummaryDAO;
@@ -43,23 +47,50 @@ public class OrderRepository {
     }
 
     public List<OrderSummaryDAO> getOrderSummaryByCustomerID(String customerID) {
-        MatchOperation matchEmail = Aggregation.match(Criteria.where("customerID").is(customerID));
+        MatchOperation matchID = Aggregation.match(Criteria.where("customerID").is(customerID));
         SortOperation sortByDate = Aggregation.sort(Sort.Direction.DESC, "orderDate");
-        ProjectionOperation projectFields = Aggregation.project("orderID", "total", "orderDate");
-        Aggregation agg = Aggregation.newAggregation(matchEmail, projectFields, sortByDate);
+        ProjectionOperation projectFields = Aggregation.project("orderID", "total", "orderDate","delivered");
+        Aggregation agg = Aggregation.newAggregation(matchID, projectFields, sortByDate);
         AggregationResults<Document> resultDocs = mTemplate.aggregate(agg, "orders", Document.class);
 
         List<OrderSummaryDAO> resultList = new LinkedList<>();
         for (Document doc : resultDocs) {
-            System.out.println(doc.getDate("orderDate"));
+            System.out.println(doc.toString());
             resultList.add(
                     new OrderSummaryDAO(
                             doc.getString("orderID"),
                             doc.getDate("orderDate"),
-                            doc.getDouble("total")));
+                            doc.getDouble("total"),
+                            doc.getBoolean("delivered", false)));
         }
         return resultList;
     }
+
+    public String getCustomerIDbyOrderID(String orderID) {
+        MatchOperation matchOrder = Aggregation.match(Criteria.where("orderID").is(orderID));
+        ProjectionOperation projectFields = Aggregation.project("customerID");
+        Aggregation agg = Aggregation.newAggregation(matchOrder,projectFields);
+        AggregationResults<Document> resultDocs = mTemplate.aggregate(agg, "orders", Document.class);
+        if (resultDocs.iterator().hasNext())
+            return resultDocs.iterator().next().getString("customerID");
+        return null;
+    }
+
+    public boolean markOrderDelivered(String orderId) {
+        System.out.println(orderId);
+        Query query = Query.query(Criteria.where("orderID").is(orderId));
+        Update updateField = new Update().set("delivered", true);
+        UpdateResult result = mTemplate.updateFirst(query, updateField, Document.class, "orders");
+        System.out.println(result);
+        if (result.getModifiedCount() > 0 ) {
+            System.out.println(">> [INFO] ORDER " + orderId + " Delivered");
+            return true;
+        } else {
+        System.out.println(">> [INFO] ORDER " + orderId + " Not Found");
+        return false;
+        }
+    }
+
 
 
 

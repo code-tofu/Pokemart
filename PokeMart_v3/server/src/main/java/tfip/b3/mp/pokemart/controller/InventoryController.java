@@ -75,7 +75,7 @@ public class InventoryController {
     public ResponseEntity<String> getProductsTotalCount() {
         try {
             Optional<Integer> count = invSvc.getProductsTotalCount();
-            System.out.println(count);
+            System.out.println("[INFO] Total Product Count:" + count.get());
             if (count.isPresent()) {
                 ObjectMapper mapper = new ObjectMapper();
                 return ResponseEntity.status(HttpStatus.OK).body(mapper.writeValueAsString(count.get()));

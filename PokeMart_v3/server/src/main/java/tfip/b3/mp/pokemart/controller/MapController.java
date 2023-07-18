@@ -25,7 +25,7 @@ public class MapController {
     @Autowired
     MapService mapSvc;
 
-    @GetMapping("/api/map/stores")
+    @GetMapping("/api/location/stores")
     public ResponseEntity<String> getAllStores() {
         try {
             List<StoreDAO> storesList = mapSvc.getAllStores();

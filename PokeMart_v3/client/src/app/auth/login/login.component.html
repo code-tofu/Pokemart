@@ -6,7 +6,7 @@
 
         <h1 class="display-6 ">Hello! Please Sign In:</h1>
 
-        <div class="input-group input-group-lg mb-3">
+        <div class="input-group input-group-lg ">
             <span class="input-group-text ">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person"
                     viewBox="0 0 16 16">
@@ -20,8 +20,17 @@
                 <label for="inputEmail" class="sr-only ">Username</label>
             </div>
         </div>
+        <div class="alert alert-danger py-1"
+                *ngIf="this.loginForm.get('username')!.hasError('minlength')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-exclamation-triangle-fill align-icon" viewBox="0 0 16 16">
+                    <path
+                        d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                </svg>
+                Username must be more than 6 characters
+            </div>
 
-        <div class="input-group input-group-lg mb-3">
+        <div class="input-group input-group-lg mt-3">
             <span class="input-group-text">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-key"
                     viewBox="0 0 16 16">
@@ -53,23 +62,7 @@
                 </svg>
             </span>
         </div>
-        <div class="checkbox mb-3 ">
-            <label>
-                <input type="checkbox" value="remember-me"> Remember Me (I don't know how to do this yet)
-            </label>
-        </div>
-
-        <div class="list-group mb-2">
-            <li class="list-group-item list-group-item-danger"
-                *ngIf="this.loginForm.get('username')!.hasError('minlength')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-exclamation-triangle-fill align-icon" viewBox="0 0 16 16">
-                    <path
-                        d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-                </svg>
-                Username must be more than 6 characters
-            </li>
-            <li class="list-group-item list-group-item-danger"
+        <div class="alert alert-danger py-1"
                 *ngIf="this.loginForm.get('password')!.hasError('minlength')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-exclamation-triangle-fill align-icon" viewBox="0 0 16 16">
@@ -77,14 +70,16 @@
                         d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
                 </svg>
                 Password must be more than 8 characters
-            </li>
+</div>
+   
+        <div class="d-grid mt-3">
+            <button class="btn btn-lg btn-warning btn-block" type="submit" [disabled]="(loginForm.invalid || loginProcessing)">
+                <span class="spinner-border me-1" style="width: 1.5rem; height: 1.5rem;" role="status"
+                aria-hidden="true" *ngIf="loginProcessing"></span>
+            <span class="sr-only">
+                Sign In</span>
+            </button>
         </div>
-
-        <div class="d-grid">
-            <button class="btn btn-lg btn-warning btn-block" type="submit">Sign In</button>
-        </div>
-        <!-- //TODO:[disabled]="loginForm.invalid -->
-
     </form>
     <div class="text-center">
         <div class="d-grid-flex mt-2">
@@ -127,15 +122,13 @@
                 fill="currentColor" class="bi bi-x-octagon-fill align-icon me-1" viewBox="0 0 16 16">
                 <path
                     d="M11.46.146A.5.5 0 0 0 11.107 0H4.893a.5.5 0 0 0-.353.146L.146 4.54A.5.5 0 0 0 0 4.893v6.214a.5.5 0 0 0 .146.353l4.394 4.394a.5.5 0 0 0 .353.146h6.214a.5.5 0 0 0 .353-.146l4.394-4.394a.5.5 0 0 0 .146-.353V4.893a.5.5 0 0 0-.146-.353L11.46.146zm-6.106 4.5L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z" />
-            </svg>Login Unsuccessful</h4>
+            </svg>Login Unsuccessful. Wrong Username/Password</h4>
     </div>
     <div class="modal-footer bg-danger-subtle d-flex justify-content-end">
         <button class="btn btn-danger" (click)="modal.close()" ngbAutofocus>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-cart align-icon" viewBox="0 0 16 16">
-                <path
-                    d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg align-icon" viewBox="0 0 16 16">
+                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+              </svg>
             Cancel
         </button>
     </div>

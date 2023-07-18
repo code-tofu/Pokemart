@@ -1,4 +1,4 @@
-import { Component, Output, inject } from '@angular/core';
+import { Component, Input, Output, inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RoutesRecognized } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -18,7 +18,8 @@ export class NavTopComponent {
   userSvc = inject(UserService);
   page!:String
 
-  logoimg:String="dark";
+  @Input()
+  logoimg!:String;
   // For class.dropdown-menu-end. Remove?
   window:number=window.innerWidth;
   
@@ -37,7 +38,8 @@ export class NavTopComponent {
   switchThemeNav(){
     this.onSwitch$.next();
     //TODO: USE CLASS.SELECTED AND FILTER BRIGHTNESS TO CHANGE IMAGE INSTEAD?
-    this.logoimg==="dark"? this.logoimg="light": this.logoimg="dark";
+    this.logoimg === 'light' ? (this.logoimg = 'dark') : (this.logoimg = 'light');
+
   }
 
 
@@ -49,5 +51,10 @@ export class NavTopComponent {
         queryParams: { query: this.searchQuery.value.trim() },
       });
     }
+  }
+
+  signout():void{
+    this.userSvc.signout();
+    this.router.navigate(['/']);
   }
 }

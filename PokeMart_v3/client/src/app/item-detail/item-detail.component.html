@@ -53,6 +53,8 @@
             <p class="text-danger" *ngIf="this.quantity!.hasError('max')"><small>You are only allowed to purchase a
                     maximum of {{this.item.stock}} due to limited
                     stock</small></p>
+            <p class="text-danger" *ngIf="this.quantity!.value==this.item.stock"><small>There is only {{this.item.stock}} 
+                stock available at this store</small></p>
 
             <div class="d-flex justify-content-between mb-2">
                 <div>

@@ -59,7 +59,6 @@ public class JWTUtil {
         return extractExpiration(jwtToken).before(new Date());
     }
 
-    //TODO: REVIEW MW
     public boolean checkJwtToken(String jwtStr) {
         try {
           Jwts.parserBuilder().setSigningKey(getSecretKey()).build().parse(jwtStr);

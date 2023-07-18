@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 import { Order } from 'src/app/model/order.model';
 import { OrderService } from 'src/app/services/order.service';
 
@@ -17,9 +17,18 @@ export class OrderDetailComponent {
   order$!: Observable<Order>;
 
   ngOnInit(): void {
+    this.loadOrderDetail()
+  }
+
+  loadOrderDetail(){
     this.order$ = this.orderSvc.getOrderByID(
       this.actRoute.snapshot.params['orderID']
     );
+  }
+
+  markDelivered(orderID: string) {
+    firstValueFrom(this.orderSvc.markDelivered(orderID))
+    .then(()=> this.loadOrderDetail())
   }
 
 }

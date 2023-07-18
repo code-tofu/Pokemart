@@ -27,5 +27,6 @@ public class OrderDAO {
     private double total;
     private List<OrderItemDTO> items;
     // private List<VoucherDTO> vouchers;
+    private boolean delivered; //primitive initialises as false
 
 }

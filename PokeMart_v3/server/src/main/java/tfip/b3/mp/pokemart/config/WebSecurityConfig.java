@@ -31,6 +31,7 @@ public class WebSecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+        //default Rounds is 10 
         return new BCryptPasswordEncoder();
     }
 
@@ -52,16 +53,18 @@ public class WebSecurityConfig {
         http.csrf(csrf -> csrf.disable())
             //configure filter settings
             .authorizeHttpRequests(auth -> 
-            auth.requestMatchers("/api/auth/**").permitAll()
+            auth
+            .requestMatchers("/api/auth/**").permitAll()
             .requestMatchers("/api/inventory/**").permitAll()
             .requestMatchers("/api/product/**").permitAll()
+            .requestMatchers("/api/location/**").permitAll()
             .requestMatchers("/api/img/**").permitAll()
-            .requestMatchers("/api/user/**").permitAll()
-            .requestMatchers("/api/sales/**").permitAll()
-            .requestMatchers("/api/cart/**").permitAll()
-            .requestMatchers("/api/map/**").permitAll()
-                        .requestMatchers("/api/order/**").permitAll()
-            // .hasAuthority("ROLE_DEVELOPER")
+            .requestMatchers("/api/user/**").authenticated()
+            .requestMatchers("/api/cart/**").authenticated()
+            .requestMatchers("/api/map/**").authenticated()
+            .requestMatchers("/api/order/**").authenticated()
+            .requestMatchers("/api/sales/**").hasAuthority("ROLE_SELLER")
+            .requestMatchers("/api/dev/**").hasAuthority("ROLE_DEVELOPER")
             .anyRequest().authenticated()
             )
             //configure sessionmanagement

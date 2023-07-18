@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import {
   AfterViewInit,
   Component,
+  ElementRef,
   OnInit,
   ViewChild,
   inject,
@@ -14,6 +15,7 @@ import {
 } from '@angular/forms';
 import { GoogleMap } from '@angular/google-maps';
 import { Router } from '@angular/router';
+import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, Subscription, firstValueFrom } from 'rxjs';
 import { API_KEY, GMAP_GEOCODE_URL, HQ_ISS } from 'src/app/endpoint.constants';
 import { CartItem } from 'src/app/model/cart.model';
@@ -68,6 +70,15 @@ export class CheckoutComponent implements OnInit {
   shippingChangeflag: boolean = false;
   EXPRESS_FACTOR:number = 2
 
+  modalService = inject(NgbModal);
+  modalConfig=inject(NgbModalConfig)
+  orderProcessing:boolean=false
+  countdown:number=3;
+  @ViewChild('success')
+  success!: ElementRef;
+  @ViewChild('unsuccess')
+  unsuccess!: ElementRef;
+
   ngOnInit(): void {
     this.getCart();
     this.stores$ = this.mapSvc.getAllStores();
@@ -91,7 +102,7 @@ export class CheckoutComponent implements OnInit {
         };
       }
       firstValueFrom(
-        this.mapSvc.geocodeAddress(this.userSvc.user.shippingAddress)
+        this.mapSvc.geocodeAddress(this.userSvc.user!.shippingAddress)
       )
         .then((resp) => {
           this.getShippingCosts(resp);
@@ -115,24 +126,24 @@ export class CheckoutComponent implements OnInit {
   createForm(): FormGroup {
     return this.fb.group({
       customerName: this.fb.control<string>(
-        !!this.userSvc.user.customerName ? this.userSvc.user.customerName : '',
+        !!this.userSvc.user!.customerName ? this.userSvc.user!.customerName : '',
         [Validators.required, Validators.minLength(3)]
       ),
       customerEmail: this.fb.control<string>(
-        !!this.userSvc.user.customerEmail
-          ? this.userSvc.user.customerEmail
+        !!this.userSvc.user!.customerEmail
+          ? this.userSvc.user!.customerEmail
           : '',
         [Validators.required, Validators.email]
       ),
       customerPhone: this.fb.control<string>(
-        !!this.userSvc.user.customerPhone
-          ? this.userSvc.user.customerPhone
+        !!this.userSvc.user!.customerPhone
+          ? this.userSvc.user!.customerPhone
           : '',
         [Validators.required, Validators.minLength(8)]
       ),
       customerShippingAddress: this.fb.control<string>(
-        !!this.userSvc.user.shippingAddress
-          ? this.userSvc.user.shippingAddress
+        !!this.userSvc.user!.shippingAddress
+          ? this.userSvc.user!.shippingAddress
           : '',
         [Validators.required]
       ),
@@ -222,23 +233,45 @@ export class CheckoutComponent implements OnInit {
   }
 
   checkOut(){
+    this.orderProcessing=true;
     if(this.shippingType == Shipping.SELFCOLLECT){
     this.shipForm.get("customerShippingAddress")?.setValue("POKEMON STORE:" + this.collectionStore.value);
     }
 
-    const newOrder:Order = this.orderSvc.generateOrder(this.cart, this.userSvc.userID, this.shipForm.value as DeliveryDetails, this.shipping[this.shippingType],this.selectedShippingCost,this.cartSvc.total, this.cartSvc.total + this.selectedShippingCost);
+    const newOrder:Order = this.orderSvc.generateOrder(this.cart, this.userSvc.userID!, this.shipForm.value as DeliveryDetails, this.shipping[this.shippingType],this.selectedShippingCost,this.cartSvc.total, this.cartSvc.total + this.selectedShippingCost);
 
     firstValueFrom(this.orderSvc.postOrder(newOrder))
     .then((resp) => {
       console.info('>> [INFO] Server Response:', resp);
-      alert('Your Order is being processed');
-      this.router.navigate(['/order', resp.orderID]);
+      this.orderProcessing=false;
+      // alert('Your Order is being processed');
+      this.openVerticallyCentered(this.success);
+          let 
+            timeinterval = setInterval(() => {
+              this.countdown-- ;
+              if (this.countdown <= 0) {
+                clearInterval(timeinterval);
+                this.modalService.dismissAll();
+                this.router.navigate(['/order', resp.orderID]);
+              }
+            }, 1000);
     })
     .catch((err) => {
-      alert('Connection Issue: Please Try Again Later');
+      // alert('Connection Issue: Please Try Again Later');
+      this.openVerticallyCentered(this.unsuccess);
+      this.orderProcessing=false;
       console.error('>> [ERROR] Server Error:', err);
     });
 
+  }
+
+  openVerticallyCentered(content: any) {
+    this.modalService.open(content, { centered: true });
+  }
+
+  skipCountdown(){
+    this.countdown=0;
+    console.info(">> [INFO] Countdown Skipped - ",this.countdown )
   }
 
 }
@@ -247,3 +280,4 @@ export class CheckoutComponent implements OnInit {
 //   Validators.minLength(6),
 //   Validators.maxLength(6),
 // ]);
+

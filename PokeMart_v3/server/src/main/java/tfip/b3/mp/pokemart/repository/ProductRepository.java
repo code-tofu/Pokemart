@@ -21,7 +21,6 @@ public class ProductRepository {
     @Autowired
     JdbcTemplate jTemplate;
 
-    //TODO: should we allow the case of no 
     @Transactional
     public boolean insertProduct(ProductDAO newProd) throws DataAccessException {
         if(jTemplate.queryForObject(EXISTS_PRODUCT_BY_API_ID,Boolean.class, newProd.getApiID())){

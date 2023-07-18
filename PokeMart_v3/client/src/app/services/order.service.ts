@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 import { UserService } from './user.service';
 import { DeliveryDetails, Order, OrderItem, OrderSummary } from '../model/order.model';
 import { orderURL } from '../endpoint.constants';
@@ -10,6 +10,7 @@ import { CartItem } from '../model/cart.model';
   providedIn: 'root',
 })
 export class OrderService {
+
   constructor() {}
 
   http = inject(HttpClient);
@@ -52,7 +53,8 @@ export class OrderService {
       shippingCost: shippingCost,
       subtotal: subtotal,
       total: total,
-      items:items
+      items:items,
+      delivered:false
     }
     return(newOrder)
   }
@@ -60,13 +62,18 @@ export class OrderService {
   getOrderHistory(): Observable<OrderSummary[]> {
     console.info(
       '>>[INFO] Retrieve History of User:',
-      this.userSvc.user.userID
+      this.userSvc.user!.userID
     );
     return this.http.get<OrderSummary[]>(
-      orderURL + 'history/' + this.userSvc.user.userID
+      orderURL + 'history/' + this.userSvc.user!.userID
     );
   }
 
+  markDelivered(orderID: string) {
+    console.info(
+      '>>[INFO] Marked as Delivered:', orderID);
+    return this.http.delete<string>(orderURL + orderID);
+    }
 
   
 

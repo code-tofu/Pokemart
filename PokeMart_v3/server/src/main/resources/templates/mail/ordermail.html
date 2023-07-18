@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Your Confirmed Order</title>
+</head>
+
+<style>
+    body {
+        font-family: "Roboto","Segoe UI","Helvetica Neue", Arial, Helvetica, sans-serif;
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+    td,
+    th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: center;
+        background-color: #198754;
+        color: white;
+    }
+</style>
+
+<body>
+    <div>
+        <h1>Thank You For Shopping at Pokemart!</h1>
+        <h2><u>Order Confirmation for Order Number: <span data-th-text="${orderID}"></span></u></h2>
+
+        <p> Hello <span data-th-text="${customerName}"></span>,</p>
+
+        <p>We have received your order and our hardworking crew is preparing to ship your package!
+            You can find out more details on your delivery progress with our Pokemart <a
+                href="https://t.me/PokePoryBot">Porygon Bot</a>!</p>
+
+        <h3>Your Order Details:</h3>
+        <ul>
+            <li><span style="font-weight:bold;">Order ID: </span>
+                <span data-th-text="${orderID}"></span>
+            </li>
+            <li><span style="font-weight:bold;">Order Date: </span>
+                <span data-th-text="${orderDate}"></span>
+            </li>
+            <li><span style="font-weight:bold;">Name: </span>
+                <span data-th-text="${customerName}"></span>
+            </li>
+            <li><span style="font-weight:bold;">Phone: </span>
+                <span data-th-text="${customerPhone}"></span>
+            </li>
+            <li><span style="font-weight:bold;">Email: </span>
+                <span data-th-text="${customerEmail}"></span>
+            </li>
+            <li><span style="font-weight:bold;">Shipping Address: </span>
+                <span data-th-text="${shippingAddress}"></span>
+            </li>
+            <li><span style="font-weight:bold;">Shipping Type: </span>
+                <span data-th-text="${shippingType}"></span>
+            </li>
+            <li><span style="font-weight:bold;">Shipping Cost: </span>
+                $<span data-th-text="${shippingCost}"></span>
+            </li>
+            <li><span style="font-weight:bold;">Subtotal: </span>
+                $<span data-th-text="${subtotal}"></span>
+            </li>
+            <li><span style="font-weight:bold;">Total: </span>
+                $<span data-th-text="${total}"></span>
+            </li>
+        </ul>
+
+        <p><small>The default delivery method of our delivery partner (PidgeyPost) is Contactless Delivery. Please refer
+                to PidgeyPost's website for more information on the various delivery options. You acknowledge that by
+                requesting delivery to your doorstep, security counter or other designated location, you bear the risk
+                of any loss or damage to your shipment parcel.</small></p>
+
+        <h3>What You Ordered:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Qty</th>
+                    <th scope="col">Price/ea</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-th-each="item: ${items}">
+                    <td th:text="${item.productName}"></a></td>
+                    <td th:text="${item.quantity}"></td>
+                    <td>
+                        <div class="d-flex flex-wrap">
+                            <div class="flex-shrink-1 me-1" data-th-unless="${item.discount}"
+                                th:text="${#numbers.formatDecimal(item.cost, 1, 2)}"></div>
+                            <div class="flex-shrink-1 text-danger" data-th-if="${item.discount}"><s><span
+                                        th:text="${#numbers.formatDecimal(item.cost, 1, 2)}"></span></s>
+                            </div>
+                            <div data-th-if="${item.discount}"
+                                th:text="${#numbers.formatDecimal(item.cost-item.discount, 1, 2)}">
+                            </div>
+                        </div>
+                    </td>
+                    <td th:text="${#numbers.formatDecimal(item.quantity * (item.cost-item.discount), 1, 2)}"></td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <p> Best regards,<br>
+            The Pokemart Team</p>
+
+        <img src="https://tofu-pokemart.sgp1.digitaloceanspaces.com/main/wave.gif" height="200" width="auto">
+    </div>
+</body>
+
+</html>

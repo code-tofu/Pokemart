@@ -11,6 +11,7 @@ export interface Order {
   subtotal: number;
   total: number;
   items: OrderItem[];
+  delivered: boolean;
 }
 
 export interface OrderItem {
@@ -32,4 +33,5 @@ export interface OrderSummary {
   orderID: string;
   orderDate: Date;
   total: number;
+  delivered:boolean;
 }

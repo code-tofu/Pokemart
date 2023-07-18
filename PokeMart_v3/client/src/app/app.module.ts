@@ -5,7 +5,7 @@ import { NavTopComponent } from './nav-top/nav-top.component';
 import { ErrorComponent } from './error/error.component';
 import { Router,RouterModule,Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule,HttpClientJsonpModule } from '@angular/common/http';
+import { HttpClientModule,HttpClientJsonpModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LandingComponent } from './landing/landing.component';
 import { CatalogueComponent } from './catalogue/catalogue/catalogue.component';
 import { CatalogueItemComponent } from './catalogue/catalogue-item/catalogue-item.component';
@@ -25,6 +25,8 @@ import { OrderDetailComponent } from './order/order-detail/order-detail.componen
 import { LocationComponent } from './about/location/location.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { HistoryComponent } from './order/history/history.component';
+import { HttpJWTInterceptor } from './auth.interceptor';
+import { DevComponent } from './admin/dev/dev.component';
 
 
 const routes: Routes = [
@@ -50,19 +52,14 @@ const routes: Routes = [
   { path: 'history', component: HistoryComponent },
 
   { path: 'findUs', component: LocationComponent },
+
+  { path: 'dev', component: DevComponent},
   
   { path: 'construction', component: ErrorComponent },
   { path: '**', component: ErrorComponent },
 
 
-  
-
 ]
-
-
-
-
-
 
 @NgModule({
   declarations: [
@@ -84,7 +81,8 @@ const routes: Routes = [
     ProfileComponent,
     OrderDetailComponent,
     LocationComponent,
-    HistoryComponent
+    HistoryComponent,
+    DevComponent
     
   ],
   imports: [
@@ -99,7 +97,7 @@ const routes: Routes = [
     HttpClientJsonpModule
   ],
 
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: HttpJWTInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

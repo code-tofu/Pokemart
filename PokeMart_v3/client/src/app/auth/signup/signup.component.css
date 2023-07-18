@@ -1,3 +1,7 @@
 .limit-md{
     max-width: 768px;
 }
+
+.align-icon {
+    vertical-align: -0.125em;
+}

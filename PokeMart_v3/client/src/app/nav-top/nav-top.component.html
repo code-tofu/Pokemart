@@ -62,15 +62,33 @@
         </ul>
 
         <div class="dropdown text-end">
-            <button class="btn btn-outline-success px-0 py-1 mx-1" type="button" data-bs-toggle="dropdown"
+            <button class="btn px-0 py-1 mx-1" type="button" data-bs-toggle="dropdown"
+                [class.btn-success]="this.userSvc.userID" [class.btn-outline-success]="!this.userSvc.userID"
                 aria-expanded="false">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                <svg *ngIf="!this.userSvc.userID" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                    fill="currentColor" class="bi bi-person-exclamation" viewBox="0 0 16 16">
                     <path
-                        d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                        d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm.256 7a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Z" />
+                    <path
+                        d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-3.5-2a.5.5 0 0 0-.5.5v1.5a.5.5 0 0 0 1 0V11a.5.5 0 0 0-.5-.5Zm0 4a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1Z" />
+                </svg>
+                <svg *ngIf="this.userSvc.userID" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                    fill="currentColor" class="bi bi-person-check" viewBox="0 0 16 16">
+                    <path
+                        d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514ZM11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
+                    <path
+                        d="M8.256 14a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Z" />
                 </svg>
             </button>
             <ul class="dropdown-menu front" [class.dropdown-menu-end]="(window>367 && window<675)|| window>700 ">
+                <li class="dropdown-item bg-success-subtle text-success" *ngIf="this.userSvc.userID">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-person-circle align-icon me-1" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                        <path fill-rule="evenodd"
+                            d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                    </svg><strong><small>{{this.userSvc.username}}</small></strong>
+                </li>
                 <li>
                     <button class="dropdown-item" (click)="switchThemeNav()">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -81,7 +99,7 @@
                         <small>Toggle Dark Mode</small>
                     </button>
                 </li>
-                <li>
+                <li *ngIf="!this.userSvc.userID">
                     <button type="button" class="dropdown-item" [routerLink]="['/auth/login']">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-box-arrow-in-right align-icon me-1" viewBox="0 0 16 16">
@@ -92,8 +110,8 @@
                         </svg>
                         <small>Sign In</small></button>
                 </li>
-                <li>
-                    <button type="button" class="dropdown-item">
+                <li *ngIf="this.userSvc.userID">
+                    <button type="button" class="dropdown-item" (click)="this.signout()">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-box-arrow-right align-icon me-1" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
@@ -126,16 +144,16 @@
                     </button>
                 </li>
 
-                <div>
+                <div *ngIf="((userSvc.role=='ROLE_SELLER') || (userSvc.role =='ROLE_ADMINSTRATOR' || userSvc.role =='ROLE_DEVELOPER'))">
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    <li>
+                    <li
+                        >
                         <h6 class="dropdown-header">ADMIN</h6>
                     </li>
                     <li>
-                        <button type="button" class="dropdown-item" [routerLink]="['/admin/upload']"
-                            [disabled]="userSvc.role!=='ROLE_DEVELOPER'">
+                        <button type="button" class="dropdown-item" [routerLink]="['/admin/upload']">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-database-add align-icon me-1" viewBox="0 0 16 16">
                                 <path
@@ -147,7 +165,7 @@
                     </li>
                     <li>
                         <button type="button" class="dropdown-item" [routerLink]="['/sales/edit']"
-                            [disabled]="userSvc.role!=='ROLE_DEVELOPER'">
+                            *ngIf="((userSvc.role=='ROLE_SELLER') || (userSvc.role =='ROLE_ADMINSTRATOR' || userSvc.role =='ROLE_DEVELOPER'))">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-box-seam align-icon me-1" viewBox="0 0 16 16">
                                 <path
@@ -156,7 +174,7 @@
                             <small>Edit Inventory</small></button>
                     </li>
                 </div>
-                <div>
+                <div *ngIf="userSvc.role=='ROLE_DEVELOPER'">
                     <li>
                         <hr class="dropdown-divider">
                     </li>
@@ -164,8 +182,7 @@
                         <h6 class="dropdown-header">DEVELOPER</h6>
                     </li>
                     <li>
-                        <button type="button" class="dropdown-item" [routerLink]="['/sales/edit']"
-                            [disabled]="userSvc.role!=='ROLE_DEVELOPER'">
+                        <button type="button" class="dropdown-item" [routerLink]="['/devw']">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-database-fill-gear align-icon me-1" viewBox="0 0 16 16">
                                 <path

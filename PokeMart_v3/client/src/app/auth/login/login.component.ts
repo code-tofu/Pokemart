@@ -14,16 +14,17 @@ import { UserService } from 'src/app/services/user.service';
 export class LoginComponent {
   userSvc = inject(UserService);
   fb = inject(FormBuilder);
-  modalService = inject(NgbModal);
-  modalConfig=inject(NgbModalConfig);
   router = inject(Router);
   loginForm!: FormGroup;
   welcomeimg = '';
-  loginSuccess: boolean = false;
-  countdown:number=3;
-
   @ViewChild('shpassword')
   pwInput!: ElementRef;
+
+  modalService = inject(NgbModal);
+  modalConfig=inject(NgbModalConfig);
+  countdown:number=3;
+  loginSuccess: boolean = false;
+  loginProcessing:boolean =false;
   @ViewChild('success')
   success!: ElementRef;
   @ViewChild('unsuccess')
@@ -46,12 +47,10 @@ export class LoginComponent {
         Validators.minLength(8),
       ]),
     });
-  }
 
-  authenticate() {
     let authSub = this.userSvc.authenticationStatus.subscribe(
       (status) => {
-        console.info(status);
+        console.info(">> [INFO] Auth Status:",status);
         this.loginSuccess = status;
         if (this.loginSuccess) {
           this.openVerticallyCentered(this.success);
@@ -59,6 +58,7 @@ export class LoginComponent {
             timeinterval = setInterval(() => {
               this.countdown-- ;
               if (this.countdown <= 0) {
+                this.loginProcessing = false;
                 clearInterval(timeinterval);
                 this.modalService.dismissAll();
                 this.router.navigate(['/shop']);
@@ -66,9 +66,14 @@ export class LoginComponent {
             }, 1000);
         } else {
           this.openVerticallyCentered(this.unsuccess);
+          this.loginProcessing = false;
         }
       }
     )
+  }
+
+  authenticate() {
+    this.loginProcessing = true;
     this.userSvc.authenticate(this.loginForm.value as AuthRequest)
   }
 

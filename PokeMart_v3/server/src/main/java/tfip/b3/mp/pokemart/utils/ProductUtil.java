@@ -26,7 +26,6 @@ public class ProductUtil {
         return newProduct;
     }
 
-    //TODO: Review Exception Case
     public static String getENflavourText(JsonArray pokeJsonArr) {
         for (JsonValue pokeJsonObj : pokeJsonArr) {
             String lang = pokeJsonObj.asJsonObject().getJsonObject("language").getString("name");
@@ -39,7 +38,6 @@ public class ProductUtil {
         return "";
     }
 
-    //TODO: Review Exception Case
     public static String getENname(JsonArray pokeJsonArr) {
         for (JsonValue pokeJsonObj : pokeJsonArr) {
             String lang = pokeJsonObj.asJsonObject().getJsonObject("language").getString("name");

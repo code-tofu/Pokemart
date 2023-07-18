@@ -38,8 +38,11 @@ public class UserRepository {
     public UserProfileDAO getUserProfileByUserID(String userID) throws DataAccessException{
         return jTemplate.queryForObject(SELECT_USERPROFILE_BY_USERID, new UserProfileMapper(),userID);
     }
-    
 
+    public boolean checkEmail(String userID, String email) throws DataAccessException{
+        return jTemplate.queryForObject(EXIST_BY_EMAIL_AND_ID, Boolean.class, userID,email);
+    }
+    
     @Transactional
     public String createNewUser(RegisterRequest registerRequest,  Roles role) throws DataAccessException{
         String newUserID = "u" + GeneralUtils.generateUUID(8);

@@ -86,7 +86,8 @@ public class OrderUtil {
                 jsonob.getJsonNumber("subtotal").doubleValue(),
                 jsonob.getJsonNumber("shippingCost").doubleValue(),
                 jsonob.getJsonNumber("total").doubleValue(),
-                items);
+                items,
+                false);
     }
 
     public static Document createDocFromOrder(OrderDAO order) {
@@ -129,6 +130,7 @@ public class OrderUtil {
         // }
         System.out.println(doc.getString("shippingType"));
         System.out.println("BREAKPOINT");
+
         return new OrderDAO(
                 doc.getString("orderID"),
                 doc.getDate("orderDate"),
@@ -141,7 +143,8 @@ public class OrderUtil {
                 doc.getDouble("subtotal"),
                 doc.getDouble("shippingCost"),
                 doc.getDouble("total"),
-                items);
+                items,
+                doc.getBoolean("delivered", false));
                 // vouchers);
     }
 

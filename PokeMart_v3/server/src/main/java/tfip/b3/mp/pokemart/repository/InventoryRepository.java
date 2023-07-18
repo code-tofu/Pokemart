@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-    //TODO: REWRITE WITH TRY CATCH FOR EmptyResultDataAccessException
-
 @Repository
 public class InventoryRepository {
 
@@ -86,8 +84,6 @@ public class InventoryRepository {
         return Optional.empty();
     }
 
-
-    //FIXME: FIX NULL ISSUES
     public Optional<Integer> getProductsTotalCount() throws DataAccessException {
         return Optional.of(jTemplate.queryForObject(SELECT_TOTAL_COUNT_ALL_PRODUCTS, Integer.class));
     }

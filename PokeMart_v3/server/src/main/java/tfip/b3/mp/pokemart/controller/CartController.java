@@ -81,16 +81,6 @@ public class CartController {
         }
     }
 
-    //TODO: THESE TWO ARE THE SAME RIGHT?
-    @GetMapping("/api/cart/itemsOnly/{userID}")
-    public ResponseEntity<String> getFullCartProductIDsbyUser(@PathVariable String userID) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(GeneralUtils
-                    .createItemJsonABFromMap(cartSvc.getFullCart(userID), "productID", "quantity").build().toString());
-        } catch (Exception ex) {
-            return ControllerUtil.exceptionHandler(ex);
-        }
-    }
     @GetMapping("/api/cart/summary/{userID}")
     public ResponseEntity<String> getFullCartSummarybyUser(@PathVariable String userID) {
         try {

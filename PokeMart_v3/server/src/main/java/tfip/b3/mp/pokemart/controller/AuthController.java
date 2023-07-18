@@ -38,8 +38,6 @@ public class AuthController {
     @Autowired
     PasswordEncoder pwdEncoder;
 
-
-    //TODO: HANDLE EXCEPTIONS
     @PostMapping(path="/api/auth/login",consumes = "application/json") 
     public ResponseEntity<String> authenticateUser(@RequestBody AuthRequest authRequest) {
         System.out.println(">> [INFO] Authenticate:" + authRequest.getUsername());
