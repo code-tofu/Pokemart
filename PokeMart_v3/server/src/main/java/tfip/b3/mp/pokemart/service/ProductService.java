@@ -19,7 +19,6 @@ import tfip.b3.mp.pokemart.repository.SpacesRepository;
 import tfip.b3.mp.pokemart.utils.GeneralUtils;
 import tfip.b3.mp.pokemart.utils.ProductUtil;
 
-
 @Service
 public class ProductService {
 
@@ -40,55 +39,56 @@ public class ProductService {
         return productRepo.getAllProductIDs(limit, offset);
     }
 
-    public AttributeDAO getAttributesOfProduct(String productID){
+    public AttributeDAO getAttributesOfProduct(String productID) {
         return productRepo.getAttributesOfProduct(productID);
     }
 
     @Transactional
-    public String insertCustomProductFromJson(JsonObject jsonObj, MultipartFile file, String fileType) throws java.io.IOException{
-        String productID = "p"+ GeneralUtils.generateUUID(8);
-        while(productRepo.checkProductIDExisting(productID)){
+    public String insertCustomProductFromJson(JsonObject jsonObj, MultipartFile file, String fileType)
+            throws java.io.IOException {
+        String productID = "p" + GeneralUtils.generateUUID(8);
+        while (productRepo.checkProductIDExisting(productID)) {
             System.out.println(">> [WARNING] Insert Product: ProductID Already Exists. Generating New Product ID");
-            productID = "p"+ GeneralUtils.generateUUID(8);
+            productID = "p" + GeneralUtils.generateUUID(8);
         }
-        ProductDAO newProduct = new ProductDAO(productID, 0, GeneralUtils.concatWords(jsonObj.getString("productName")), null, jsonObj.getJsonNumber("cost").doubleValue(), jsonObj.getString("description"), jsonObj.getString("productName"));
+        ProductDAO newProduct = new ProductDAO(productID, 0, GeneralUtils.concatWords(jsonObj.getString("productName")),
+                null, jsonObj.getJsonNumber("cost").doubleValue(), jsonObj.getString("description"),
+                jsonObj.getString("productName"));
         productRepo.insertCustomProduct(newProduct,
-            ProductUtil.createAttributeDAOFromJson(jsonObj,productID)
-        ); 
+                ProductUtil.createAttributeDAOFromJson(jsonObj, productID));
         Map<String, String> prodData = new HashMap<>();
-        prodData.put("productID",productID);
+        prodData.put("productID", productID);
         prodData.put("productName", newProduct.getProductName());
-        spacesRepo.uploadImage(prodData, file,newProduct.getNameID(), fileType);
+        spacesRepo.uploadImage(prodData, file, newProduct.getNameID(), fileType);
         return "";
     }
 
-    @Transactional //for api/sprite creation/upload
-    public String insertCustomProductFromJson(JsonObject jsonObj, MultipartFile file, String fileType, int apiID, String category) throws java.io.IOException{
-        String productID = "p"+ GeneralUtils.generateUUID(8);
-        while(productRepo.checkProductIDExisting(productID)){
+    @Transactional // for api/sprite creation/upload
+    public String insertCustomProductFromJson(JsonObject jsonObj, MultipartFile file, String fileType, int apiID,
+            String category) throws java.io.IOException {
+        String productID = "p" + GeneralUtils.generateUUID(8);
+        while (productRepo.checkProductIDExisting(productID)) {
             System.out.println(">> [WARNING] Insert Product: ProductID Already Exists. Generating New Product ID");
-            productID = "p"+ GeneralUtils.generateUUID(8);
+            productID = "p" + GeneralUtils.generateUUID(8);
         }
 
-        ProductDAO newProduct = new ProductDAO(productID, 
-        apiID, 
-        GeneralUtils.concatWords(jsonObj.getString("productName")),
-        category,
-        jsonObj.getJsonNumber("cost").doubleValue(),
-        jsonObj.getString("description"),
-        jsonObj.getString("productName"));
+        ProductDAO newProduct = new ProductDAO(productID,
+                apiID,
+                GeneralUtils.concatWords(jsonObj.getString("productName")),
+                category,
+                jsonObj.getJsonNumber("cost").doubleValue(),
+                jsonObj.getString("description"),
+                jsonObj.getString("productName"));
 
         productRepo.insertCustomProduct(newProduct,
-            ProductUtil.createAttributeDAOFromJson(jsonObj,productID)
-        ); 
-        
+                ProductUtil.createAttributeDAOFromJson(jsonObj, productID));
+
         Map<String, String> prodData = new HashMap<>();
-        prodData.put("productID",productID);
+        prodData.put("productID", productID);
         prodData.put("apiID", Integer.toString(newProduct.getApiID()));
         prodData.put("productName", newProduct.getProductName());
-        spacesRepo.uploadImage(prodData, file,newProduct.getNameID(), fileType);
+        spacesRepo.uploadImage(prodData, file, newProduct.getNameID(), fileType);
         return productID;
     }
-    
-}
 
+}

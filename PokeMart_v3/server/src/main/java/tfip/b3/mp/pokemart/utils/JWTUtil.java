@@ -29,40 +29,41 @@ public class JWTUtil {
     @Value("${jwt.expiration.ms}")
     private int expireTimeMs;
 
-    //vaildate that there is a subject (username)
-    //validte that username and token is correct
+    // vaildate that there is a subject (username)
+    // validte that username and token is correct
 
     private Key getSecretKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-
-    //TOKEN PARSERS
+    // TOKEN PARSERS
     private Claims extractAllClaims(String jwtToken) {
         return Jwts.parserBuilder().setSigningKey(getSecretKey()).build().parseClaimsJws(jwtToken).getBody();
     }
+
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
+
     private Date extractExpiration(String token) {
         return (Date) extractClaim(token, Claims::getExpiration);
-      }
+    }
 
-
-    //TOKEN VALIDATORS
-    public boolean checkJwtExpiry(String jwtToken){
+    // TOKEN VALIDATORS
+    public boolean checkJwtExpiry(String jwtToken) {
         return extractExpiration(jwtToken).before(new Date());
     }
 
     public boolean checkJwtToken(String jwtStr) {
         try {
-          Jwts.parserBuilder().setSigningKey(getSecretKey()).build().parse(jwtStr);
-          return true;
+            Jwts.parserBuilder().setSigningKey(getSecretKey()).build().parse(jwtStr);
+            return true;
         } catch (MalformedJwtException malformedErr) {
             System.out.println(">> [ERROR] JWT Error:" + malformedErr);
         } catch (ExpiredJwtException expiredErr) {
@@ -71,31 +72,34 @@ public class JWTUtil {
             System.out.println(">> [ERROR]JWT Error:" + unsupportedErr);
         } catch (IllegalArgumentException illegalArgumentErr) {
             System.out.println(">> [ERROR] JWT Error:" + illegalArgumentErr);
-        } catch (SignatureException signatureErr){
+        } catch (SignatureException signatureErr) {
             System.out.println(">> [ERROR] JWT Error:" + signatureErr);
         }
         return false;
-      }
-    public Boolean validateToken(String jwtStr, UserDetails userDetails) {
-    final String username = extractUsername(jwtStr);
-    return (username.equals(userDetails.getUsername()) && !checkJwtExpiry(jwtStr));
     }
 
+    public Boolean validateToken(String jwtStr, UserDetails userDetails) {
+        final String username = extractUsername(jwtStr);
+        return (username.equals(userDetails.getUsername()) && !checkJwtExpiry(jwtStr));
+    }
 
-    //TOKEN GENERATORS
+    // TOKEN GENERATORS
     public String generateToken(String subject) {
         System.out.println(">> [INFO] TOKENGEN: Generate Token  Subject:" + subject);
-        return generateToken(subject,new HashMap<>());
+        return generateToken(subject, new HashMap<>());
     }
-    public String generateToken(String subject, Map<String, Object> customClaims){
-        System.out.println(">> [INFO] TOKENGEN: Generate Custom Token Subject:" + subject + "|Custom Claims:" + customClaims);
+
+    public String generateToken(String subject, Map<String, Object> customClaims) {
+        System.out.println(
+                ">> [INFO] TOKENGEN: Generate Custom Token Subject:" + subject + "|Custom Claims:" + customClaims);
         return buildToken(subject, customClaims);
     }
-    public String buildToken(String subject,Map<String, Object> customClaims) {
+
+    public String buildToken(String subject, Map<String, Object> customClaims) {
         System.out.println(">> [INFO] TOKENGEN: Building Token");
         return Jwts
                 .builder()
-                .setClaims(customClaims) //NOTE: This will override existing claims. is this necessary?
+                .setClaims(customClaims) // NOTE: This will override existing claims. is this necessary?
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expireTimeMs))

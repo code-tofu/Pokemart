@@ -16,7 +16,7 @@ public class ProductUtil {
         String details = getENflavourText(pokeJsonObj.getJsonArray("flavor_text_entries")) + " " +
                 pokeJsonObj.getJsonArray("effect_entries").getJsonObject(0).getString("effect");
         ProductDAO newProduct = new ProductDAO(
-                "p"+ GeneralUtils.generateUUID(8),
+                "p" + GeneralUtils.generateUUID(8),
                 pokeJsonObj.getInt("id"),
                 pokeJsonObj.getString("name"),
                 pokeJsonObj.getJsonObject("category").getString("name"),
@@ -48,10 +48,10 @@ public class ProductUtil {
         return "";
     }
 
-    public static AttributeDAO createAttributeDAOFromJson(JsonObject pokeJsonObj, String productId){
+    public static AttributeDAO createAttributeDAOFromJson(JsonObject pokeJsonObj, String productId) {
         JsonArray pokeJsonArr = pokeJsonObj.getJsonArray("attributes");
         List<String> attrList = new ArrayList<>();
-        for (JsonValue pokeJsonVal : pokeJsonArr){
+        for (JsonValue pokeJsonVal : pokeJsonArr) {
             attrList.add(pokeJsonVal.asJsonObject().getString("name"));
         }
         return new AttributeDAO(productId, attrList);

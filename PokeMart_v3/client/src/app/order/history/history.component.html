@@ -21,7 +21,7 @@
                 <td>${{order.total | number: '1.2-2'}}</td>
                 <td class="text-center">
                     <span class="badge rounded-pill text-bg-success" *ngIf="order.delivered">Delivered</span>
-                    <button type="button" class="btn btn-primary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" *ngIf="!order.delivered" (click)="markDelivered(order.orderID)">Marked Delivered</button>
+                    <button type="button" class="btn btn-primary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" *ngIf="!order.delivered" (click)="markDelivered(order.orderID)">Marked As Delivered</button>
                 </td>
             </tr>
         </tbody>

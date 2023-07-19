@@ -59,6 +59,7 @@ public class EmailService {
         thymeleafContext.setVariable("shippingCost", processedOrder.getShippingCost());
         thymeleafContext.setVariable("subtotal", processedOrder.getSubtotal());
         thymeleafContext.setVariable("total", processedOrder.getTotal());
+        thymeleafContext.setVariable("paymentID", processedOrder.getPaymentID());
         thymeleafContext.setVariable("items", processedOrder.getItems());
         
         MimeMessage mimeMail= mailSender.createMimeMessage();

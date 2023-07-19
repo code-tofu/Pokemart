@@ -7,8 +7,8 @@
         </li>
         <li class="list-group-item"><span style="font-weight:bold;">Status: </span>
             <span *ngIf="orderdetail.delivered" class="text-success">Delivered</span>
-            <span *ngIf="!orderdetail.delivered" class="text-warning-emphasis">Pending</span>
-            <button type="button" class="btn btn-primary ms-2" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" *ngIf="!orderdetail.delivered" (click)="markDelivered(orderdetail.orderID)">Marked Delivered</button>
+            <span *ngIf="!orderdetail.delivered" class="text-warning-emphasis">Pending Delivery</span>
+            <button type="button" class="btn btn-primary ms-2" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" *ngIf="!orderdetail.delivered" (click)="markDelivered(orderdetail.orderID)">Marked As Delivered</button>
         </li>
         <li class="list-group-item"><span style="font-weight:bold;">Name: </span>{{orderdetail.customerName}}</li>
         <li class="list-group-item"><span style="font-weight:bold;">Phone: </span>{{orderdetail.customerPhone}}</li>

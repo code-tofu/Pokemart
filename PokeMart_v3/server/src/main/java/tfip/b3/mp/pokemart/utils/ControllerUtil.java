@@ -10,7 +10,6 @@ import com.google.maps.errors.ApiException;
 
 import java.io.IOException;
 
-
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
@@ -26,26 +25,29 @@ public class ControllerUtil {
         }
         if (ex instanceof EmptyResultDataAccessException) {
             System.err.println(">> [ERROR] " + ex);
-            JsonObject resp = Json.createObjectBuilder().add("404 Not Found Error", "Requested Resource Does Not Exist In Database")
+            JsonObject resp = Json.createObjectBuilder()
+                    .add("404 Not Found Error", "Requested Resource Does Not Exist In Database")
                     .build();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resp.toString());
         }
         if (ex instanceof DataAccessException) {
             System.err.println(">> [ERROR] " + ex);
-            JsonObject resp = Json.createObjectBuilder().add("500 Internal Server Error", "Request Failed: Database Error")
+            JsonObject resp = Json.createObjectBuilder()
+                    .add("500 Internal Server Error", "Request Failed: Database Error")
                     .build();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resp.toString());
         }
         if (ex instanceof JsonProcessingException) {
             System.err.println(">> [ERROR] " + ex);
-            JsonObject resp = Json.createObjectBuilder().add("500 Internal Server Error", "Request Failed: JSON Format Error")
+            JsonObject resp = Json.createObjectBuilder()
+                    .add("500 Internal Server Error", "Request Failed: JSON Format Error")
                     .build();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resp.toString());
         }
-        if (ex instanceof ApiException | ex instanceof InterruptedException | ex instanceof IOException){
+        if (ex instanceof ApiException | ex instanceof InterruptedException | ex instanceof IOException) {
             System.out.println(">> [INFO] Distance Matrix Error: " + ex);
-             JsonObjectBuilder resp = Json.createObjectBuilder().add("Error", ex.toString());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resp.build().toString());
+            JsonObjectBuilder resp = Json.createObjectBuilder().add("Error", ex.toString());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resp.build().toString());
 
         }
         JsonObjectBuilder jsonOB = Json.createObjectBuilder().add("Error", ex.toString());
@@ -54,4 +56,3 @@ public class ControllerUtil {
     }
 
 }
-

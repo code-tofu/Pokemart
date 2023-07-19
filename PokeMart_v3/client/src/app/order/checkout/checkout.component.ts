@@ -31,6 +31,8 @@ import { OrderService } from 'src/app/services/order.service';
 import { UserService } from 'src/app/services/user.service';
 import { IntentRequest } from 'src/app/model/payment.model';
 
+
+
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
@@ -89,6 +91,7 @@ export class CheckoutComponent implements OnInit {
   elementsOptions: StripeElementsOptions = {
     locale: 'en'
   };
+
 
   ngOnInit(): void {
     this.getCart();
@@ -255,7 +258,7 @@ export class CheckoutComponent implements OnInit {
     this.paymentProcessing=false;
     const req:IntentRequest = {
       total: this.cartSvc.total + this.selectedShippingCost,
-      userid: this.userSvc.userID as string,
+      userID: this.userSvc.userID as string,
     }
     firstValueFrom(this.orderSvc.postPaymentIntent(req))
     .then((resp)=>{
@@ -267,11 +270,13 @@ export class CheckoutComponent implements OnInit {
   }
 
   pay() {
+    this.paymentProcessing=true;
     this.stripeSvc.confirmPayment({elements: this.paymentElement.elements,confirmParams: {},redirect: 'if_required'})
     .subscribe(result => {
       if (result.error) {
         alert(result.error.message);
         console.log('>> [INFO] PAYMENT ERROR:', result);
+        this.paymentProcessing = false;
       } else {
         if (result.paymentIntent.status === 'succeeded') {
           this.generateOrder(result.paymentIntent.id)
@@ -285,7 +290,7 @@ export class CheckoutComponent implements OnInit {
     const newOrder:Order = this.orderSvc.generateOrder(this.cart, this.userSvc.userID!, this.shipForm.value as DeliveryDetails, this.shipping[this.shippingType],this.selectedShippingCost,this.cartSvc.total, this.cartSvc.total + this.selectedShippingCost,paymentID);
     firstValueFrom(this.orderSvc.postOrder(newOrder))
     .then((resp) => {
-      console.info('>> [INFO] Server Response:', resp);
+      console.info('>> [INFO] ORDER RESPONSE:', resp);
       this.paymentProcessing=false;
       this.openVerticallyCentered(this.success);
           let 

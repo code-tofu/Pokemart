@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import tfip.b3.mp.pokemart.model.OrderDAO;
 import tfip.b3.mp.pokemart.model.OrderItemDTO;
 import tfip.b3.mp.pokemart.model.OrderSummaryDAO;
@@ -29,13 +28,14 @@ public class OrderService {
         for (OrderItemDTO item : order.getItems()) {
             cartRepo.deleteCartItem(order.getCustomerID(), item.getProductID());
             Optional<Integer> currentStock = invRepo.getStockofProduct(item.getProductID());
-            if(currentStock.isPresent()){
-            invRepo.updateInventoryStock(item.getProductID(), currentStock.get() - item.getQuantity());
-            System.out.println(">> [INFO] Updated Stock:" + item.getProductID() + " | Stock:" + (currentStock.get() - item.getQuantity()) );
+            if (currentStock.isPresent()) {
+                invRepo.updateInventoryStock(item.getProductID(), currentStock.get() - item.getQuantity());
+                System.out.println(">> [INFO] Updated Stock:" + item.getProductID() + " | Stock:"
+                        + (currentStock.get() - item.getQuantity()));
             }
 
         }
-    return orderRepo.createNewOrder(order);
+        return orderRepo.createNewOrder(order);
     }
 
     public OrderDAO getOrderbyOrderID(String orderID) {
@@ -49,9 +49,5 @@ public class OrderService {
     public boolean markOrderDelivered(String orderId) {
         return orderRepo.markOrderDelivered(orderId);
     }
-
-
-
-
 
 }

@@ -78,14 +78,14 @@ public class DevService {
                 }
 
                 ProductDAO newProduct = ProductUtil.createProductDAOFromAPIJson(productJson);
-                while(productRepo.checkProductIDExisting(newProduct.getProductID())){
-                    System.out.println(">> [WARNING] Insert Product: ProductID Already Exists. Generating New Product ID");
-                    newProduct.setProductID("p"+ GeneralUtils.generateUUID(8));
+                while (productRepo.checkProductIDExisting(newProduct.getProductID())) {
+                    System.out.println(
+                            ">> [WARNING] Insert Product: ProductID Already Exists. Generating New Product ID");
+                    newProduct.setProductID("p" + GeneralUtils.generateUUID(8));
                 }
 
                 if (!productRepo.insertProduct(newProduct,
-                    ProductUtil.createAttributeDAOFromJson(productJson,newProduct.getProductID())
-                )) {
+                        ProductUtil.createAttributeDAOFromJson(productJson, newProduct.getProductID()))) {
                     System.out.println(">> [WARNING] Insertion into DB Failed. Restarting Download");
                     continue;
                 }
@@ -101,10 +101,10 @@ public class DevService {
             } catch (DataAccessException daErr) {
                 System.out.println(">> [ERROR] " + daErr);
                 System.out.println(">> [ERROR] DataAccessException. Restarting Download.");
-            } catch (MalformedURLException malformedErr){
+            } catch (MalformedURLException malformedErr) {
                 System.out.println(">> [ERROR] " + malformedErr);
                 System.out.println(">> [ERROR] Image Issue, please manually upload");
-            } catch (IOException ioErr){
+            } catch (IOException ioErr) {
                 System.out.println(">> [ERROR] " + ioErr);
                 System.out.println(">> [ERROR] Image Issue, please manually upload");
             }
@@ -135,7 +135,8 @@ public class DevService {
         try {
             List<String> products = productRepo.getAllProductIDs(MAX_PRODUCT_DB_SIZE, 0);
             for (String productID : products) {
-                if(invRepo.checkProductExistsInInventory(productID)) continue;
+                if (invRepo.checkProductExistsInInventory(productID))
+                    continue;
                 invRepo.insertInventoryItem(productID, rand.nextInt(MAX_STOCK_SIZE) + 1);
             }
         } catch (DataAccessException daErr) {
@@ -143,20 +144,20 @@ public class DevService {
         }
     }
 
-    public void uploadSprite(ProductDAO product) throws MalformedURLException, IOException{
+    public void uploadSprite(ProductDAO product) throws MalformedURLException, IOException {
         Map<String, String> prodData = new HashMap<>();
-        prodData.put("productID",product.getProductID());
+        prodData.put("productID", product.getProductID());
         prodData.put("apiID", Integer.toString(product.getApiID()));
         prodData.put("productName", product.getProductName());
         URL url = new URL(productImgURL + product.getNameID() + "." + productImgType);
         InputStream is = new BufferedInputStream(url.openStream());
         byte[] img = is.readAllBytes();
-        spacesRepo.uploadSprite(prodData, img,product.getNameID(), productImgType);
+        spacesRepo.uploadSprite(prodData, img, product.getNameID(), productImgType);
     }
 
     public void createNewStores() {
         System.out.println(">> [INFO] Retrieve Data From:" + sbStoresURL);
-         RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate();
         RequestEntity<Void> req = RequestEntity.get(sbStoresURL).build();
         try {
             ResponseEntity<String> resp = restTemplate.exchange(req, String.class);
@@ -164,8 +165,8 @@ public class DevService {
             JsonObject respJson = GeneralUtils.getJsonObjectFromStr(resp.getBody());
             JsonArray jsonArr = respJson.getJsonObject("data").getJsonArray("store");
             System.out.println(">> [INFO] Creating Stores DB of Size:" + jsonArr.size());
-            int count=0;
-            for(JsonValue jsonVal:jsonArr){
+            int count = 0;
+            for (JsonValue jsonVal : jsonArr) {
                 storesRepo.insertStore(jsonVal.asJsonObject());
                 count++;
             }
@@ -176,4 +177,3 @@ public class DevService {
     }
 
 }
-

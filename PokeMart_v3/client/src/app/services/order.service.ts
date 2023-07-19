@@ -29,7 +29,7 @@ export class OrderService {
   }
 
   postPaymentIntent(req:IntentRequest):Observable<IntentResponse>{
-    return this.http.post<IntentResponse>("api/createPayment",req);
+    return this.http.post<IntentResponse>(orderURL + 'payment',req);
   }
 
   postOrder(order: Order): Observable<any> {

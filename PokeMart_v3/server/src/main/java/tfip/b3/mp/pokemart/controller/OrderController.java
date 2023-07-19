@@ -3,6 +3,7 @@ package tfip.b3.mp.pokemart.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,7 +15,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
+import com.stripe.param.PaymentIntentCreateParams;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import tfip.b3.mp.pokemart.model.OrderDAO;
@@ -34,17 +40,26 @@ public class OrderController {
     @Autowired
     EmailService emailSvc;
 
+    @Value("${STRIPE_SECRET_KEY}")
+    private String secretKey;
+
+    @PostConstruct
+    public void init() {
+        Stripe.apiKey = secretKey; //set global api key
+    }
+
     @PostMapping(path = "/api/order/newOrder", consumes = "application/json")
-    public ResponseEntity<String> placeOrder(@RequestBody String orderJson) {
-        System.out.println(">> [INFO] Recieved:" + orderJson);
+    public ResponseEntity<String> placeOrder(@RequestBody String order) {
+        System.out.println(">> [INFO] Recieved:" + order);
+        JsonObject orderJson = GeneralUtils.getJsonObjectFromStr(order);
         try {
             OrderDAO processedOrder = orderSvc
-                    .createNewOrder(OrderUtil.createOrderFromJson(GeneralUtils.getJsonObjectFromStr(orderJson)));
+                    .createNewOrder(OrderUtil.createOrderFromJson(orderJson));
             System.out.println(
                     ">> [INFO] Created Order:" + processedOrder.getOrderID() + " |Date: "
                             + processedOrder.getOrderDate());
                         
-            emailSvc.sendOrderEmail("pokemart.tofucode@gmail.com", //processedOrder.getCustomerEmail()
+            emailSvc.sendOrderEmail(orderJson.getString("customerEmail"), //processedOrder.getCustomerEmail()
             "Your Order " + processedOrder.getOrderID() + " has been confirmed!", processedOrder);
 
             ObjectMapper mapper = new ObjectMapper();
@@ -53,6 +68,21 @@ public class OrderController {
             return ControllerUtil.exceptionHandler(ex);
         }
     }
+
+    @PostMapping("api/order/payment")
+    public ResponseEntity<String>  createPaymentIntent(@RequestBody String payload) throws StripeException{
+        JsonObject payloadJson = GeneralUtils.getJsonObjectFromStr(payload);
+        PaymentIntentCreateParams createParams = new PaymentIntentCreateParams.Builder()
+                .setCurrency("sgd")
+                .setAmount(Double.valueOf(payloadJson.getJsonNumber("total").doubleValue() * 100).longValue())
+                .setDescription(payloadJson.getString("userID"))
+                .build();   
+        PaymentIntent intent = PaymentIntent.create(createParams);
+        String clientSecret = intent.getClientSecret();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(Json.createObjectBuilder().add("clientSecret", clientSecret).build().toString());
+    }
+
 
     @GetMapping("/api/order/{orderID}")
     public ResponseEntity<String> getOrderDetailByOrderID(@PathVariable String orderID) {
@@ -87,5 +117,6 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.toString());
 
     }
+
 
 }

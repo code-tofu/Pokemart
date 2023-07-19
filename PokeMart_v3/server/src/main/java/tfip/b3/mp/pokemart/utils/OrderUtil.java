@@ -71,7 +71,7 @@ public class OrderUtil {
         // JsonArray jsonVoucherArr = jsonob.getJsonArray("vouchers");
         // List<VoucherDTO> vouchers = new LinkedList<>();
         // for (JsonValue e : jsonVoucherArr) {
-        //     vouchers.add(createVoucherDTOfromJSON(e.asJsonObject()));
+        // vouchers.add(createVoucherDTOfromJSON(e.asJsonObject()));
         // }
 
         return new OrderDAO(
@@ -87,7 +87,8 @@ public class OrderUtil {
                 jsonob.getJsonNumber("shippingCost").doubleValue(),
                 jsonob.getJsonNumber("total").doubleValue(),
                 items,
-                false);
+                false,
+                jsonob.getString("paymentID"));
     }
 
     public static Document createDocFromOrder(OrderDAO order) {
@@ -97,7 +98,7 @@ public class OrderUtil {
         }
         // List<Document> vouchersDocuments = new LinkedList<>();
         // for (VoucherDTO voucher : order.getVouchers()) {
-        //     vouchersDocuments.add(createDocumentFromVoucherDTO(voucher));
+        // vouchersDocuments.add(createDocumentFromVoucherDTO(voucher));
         // }
         Document newDoc = new Document();
         newDoc.append("orderID", order.getOrderID());
@@ -111,6 +112,7 @@ public class OrderUtil {
         newDoc.append("shippingCost", order.getShippingCost());
         newDoc.append("subtotal", order.getSubtotal());
         newDoc.append("total", order.getTotal());
+        newDoc.append("paymentID", order.getPaymentID());
         newDoc.append("items", itemsDocuments);
         // newDoc.append("vouchers", vouchersDocuments);
         return newDoc;
@@ -126,11 +128,9 @@ public class OrderUtil {
         // List<Document> itemsVouchers = doc.getList("vouchers", Document.class);
         // List<VoucherDTO> vouchers = new LinkedList<>();
         // for (Document voucherDoc : itemsVouchers) {
-        //     vouchers.add(createVoucherDTOfromDocument(voucherDoc));
+        // vouchers.add(createVoucherDTOfromDocument(voucherDoc));
         // }
         System.out.println(doc.getString("shippingType"));
-        System.out.println("BREAKPOINT");
-
         return new OrderDAO(
                 doc.getString("orderID"),
                 doc.getDate("orderDate"),
@@ -144,8 +144,9 @@ public class OrderUtil {
                 doc.getDouble("shippingCost"),
                 doc.getDouble("total"),
                 items,
-                doc.getBoolean("delivered", false));
-                // vouchers);
+                doc.getBoolean("delivered", false),
+                doc.getString("paymentID"));
+        // vouchers);
     }
 
 }

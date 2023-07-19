@@ -40,7 +40,7 @@ public class BotService extends TelegramLongPollingBot {
     private TTLRepository TTLRepo;
     @Autowired
     private EmailService emailSvc;
-    @Autowired 
+    @Autowired
     private UserRepository userRepo;
     @Autowired
     private OrderRepository orderRepo;
@@ -100,16 +100,17 @@ public class BotService extends TelegramLongPollingBot {
                     sendMsg(id, "Boooop! I can only help those who help themselves");
                     break;
                 case "/register":
-                    if(checkRegistered(id)) return;
+                    if (checkRegistered(id))
+                        return;
                     sendMsg(id, "Beep! You requested to register your telegram account with Pokemart");
-                    sendMsg(id,"""
-                    Please key in user ID and email in this format, boop!
-                    AUT <yourUserID> <yourEmail>
-                    Example: AUT u12345678 ashKetchum@pokemail.com
-                    """);
+                    sendMsg(id, """
+                            Please key in user ID and email in this format, boop!
+                            AUT <yourUserID> <yourEmail>
+                            Example: AUT u12345678 ashKetchum@pokemail.com
+                            """);
                     break;
                 case "/orders":
-                    if (!authFilter(id)){ 
+                    if (!authFilter(id)) {
                         sendMsg(id, "Boooop! You have not registered this telegram account!");
                         return;
                     }
@@ -117,16 +118,16 @@ public class BotService extends TelegramLongPollingBot {
                     getOrderSummaries(id);
                     break;
                 case "/delivered":
-                    if (!authFilter(id)){
+                    if (!authFilter(id)) {
                         sendMsg(id, "Boooop! You have not registered this telegram account!");
                         return;
                     }
                     sendMsg(id, "Boop! You requested to mark an order as delivered");
-                    sendMsg(id,"""
-                    Please key in the order number you want to mark as delivered:
-                    DEL <yourOrderNumber>
-                    Example: DEL oA1b23c4d 
-                    """);
+                    sendMsg(id, """
+                            Please key in the order number you want to mark as delivered:
+                            DEL <yourOrderNumber>
+                            Example: DEL oA1b23c4d
+                            """);
                     break;
                 case "/outlets":
                     sendMsg(id, "Beep! You requested to know our outlet locations");
@@ -138,20 +139,22 @@ public class BotService extends TelegramLongPollingBot {
             // case "/settings":
             return;
         }
-        if(txt.length()>4){
-            String inputs=txt.substring(0,4);
-            if(inputs.equals("AUT ")){
-                if(!checkRegistered(id)) return;
+        if (txt.length() > 4) {
+            String inputs = txt.substring(0, 4);
+            if (inputs.equals("AUT ")) {
+                if (!checkRegistered(id))
+                    return;
                 createAuth(id, txt);
                 return;
             }
-            if(inputs.equals("OTP ")){
-                if(!checkRegistered(id)) return;
+            if (inputs.equals("OTP ")) {
+                if (!checkRegistered(id))
+                    return;
                 checkAuth(id, txt);
                 return;
             }
-            if(inputs.equals("DEL ")){
-                teleMarkDelivered(id,txt);
+            if (inputs.equals("DEL ")) {
+                teleMarkDelivered(id, txt);
                 return;
             }
         }
@@ -182,7 +185,7 @@ public class BotService extends TelegramLongPollingBot {
         sendMsg(id, resp + "!");
     }
 
-    public boolean checkRegistered(Long id){
+    public boolean checkRegistered(Long id) {
         if (teleRepo.checkTelegramID(id.toString())) {
             sendMsg(id, "Boooop! You already registered this telegram account!");
             return true;
@@ -200,31 +203,32 @@ public class BotService extends TelegramLongPollingBot {
 
     public boolean createOTP(Long id) {
         if (TTLRepo.existsTTL(id.toString())) {
-            sendMsg(id,"""
-            Boop! Please key in the OTP already sent to your email in this format:
-            OTP <your6CharacterOTP>
-            Example: OTP 123abc
-            """);
+            sendMsg(id, """
+                    Boop! Please key in the OTP already sent to your email in this format:
+                    OTP <your6CharacterOTP>
+                    Example: OTP 123abc
+                    """);
             return false;
         } else {
             return true;
         }
     }
-    
+
     public boolean createAuth(Long id, String txt) {
-        String[] teleReq = txt.split(" ",0);
+        String[] teleReq = txt.split(" ", 0);
         System.out.println(">> [INFO] Telerequest:" + teleReq[1] + "," + teleReq[2]);
-        if(!createOTP(id)) return false;
-        if(userRepo.checkEmail(teleReq[1], teleReq[2])){
+        if (!createOTP(id))
+            return false;
+        if (userRepo.checkEmail(teleReq[1], teleReq[2])) {
             String OTP = GeneralUtils.generateUUID(6);
             TTLRepo.newTTL(id.toString(), OTP);
-            emailSvc.sendOTPEmail(teleReq[2],OTP);
-            teleRepo.registerTelegramID(teleReq[1],id.toString());
-            sendMsg(id,"""
-            Boop! Please check your email and key in the provided OTP in this format:
-            OTP <your6CharacterOTP>
-            Example: OTP 123abc
-            """);
+            emailSvc.sendOTPEmail(teleReq[2], OTP);
+            teleRepo.registerTelegramID(teleReq[1], id.toString());
+            sendMsg(id, """
+                    Boop! Please check your email and key in the provided OTP in this format:
+                    OTP <your6CharacterOTP>
+                    Example: OTP 123abc
+                    """);
             return true;
         } else {
             sendMsg(id, "You have keyed in an invalid userID or email!");
@@ -233,73 +237,73 @@ public class BotService extends TelegramLongPollingBot {
     }
 
     public boolean checkAuth(Long id, String txt) {
-        String[] teleReq = txt.split(" ",0);
-        String otp=teleReq[1];
+        String[] teleReq = txt.split(" ", 0);
+        String otp = teleReq[1];
         Optional<String> value = TTLRepo.getValue(id.toString());
-        if(value.isEmpty()){
-            sendMsg(id,"""
-            Please key in user ID and email in this format, boop!
-            AUT <yourUserID> <yourEmail>
-            Example: AUT u12345678 ashKetchum@pokemail.com
-            """);
+        if (value.isEmpty()) {
+            sendMsg(id, """
+                    Please key in user ID and email in this format, boop!
+                    AUT <yourUserID> <yourEmail>
+                    Example: AUT u12345678 ashKetchum@pokemail.com
+                    """);
             return false;
         } else if (value.get().equals(otp)) {
-            teleRepo.authenticateByTelegramID(id.toString(),true);
-            sendMsg(id,"Beepbeep! Your Telegram account is registered!");
+            teleRepo.authenticateByTelegramID(id.toString(), true);
+            sendMsg(id, "Beepbeep! Your Telegram account is registered!");
             return true;
         } else {
-        sendMsg(id, "Boooop! You have keyed in an invalid or expired OTP!");
-        return false;
+            sendMsg(id, "Boooop! You have keyed in an invalid or expired OTP!");
+            return false;
         }
 
     }
 
-    public boolean teleMarkDelivered(Long id, String txt){
-        String[] teleReq = txt.split(" ",0);
-        String orderId=teleReq[1];
+    public boolean teleMarkDelivered(Long id, String txt) {
+        String[] teleReq = txt.split(" ", 0);
+        String orderId = teleReq[1];
         String customerID = teleRepo.getUserIDfromTelegramID(id.toString());
-        if(orderId.length() != 9 && orderId.charAt(0) == 'o'){
+        if (orderId.length() != 9 && orderId.charAt(0) == 'o') {
             sendMsg(id, "Boooop! You have keyed in an invalid order ID");
-        return false;
+            return false;
         }
-        if(!orderRepo.getCustomerIDbyOrderID(orderId).equals(customerID)){
+        if (!orderRepo.getCustomerIDbyOrderID(orderId).equals(customerID)) {
             sendMsg(id, "Boooop! Order " + orderId + " does not belong to " + customerID);
             return false;
         }
-        if(orderRepo.markOrderDelivered(orderId)){
+        if (orderRepo.markOrderDelivered(orderId)) {
             sendMsg(id, "Order " + orderId + " marked as delivered. Beep!");
             return true;
-        }else{
+        } else {
             sendMsg(id, "Beeep! This order does not exist.");
             return false;
         }
     }
 
-    public void getOrderSummaries(Long id){
+    public void getOrderSummaries(Long id) {
         String customerID = teleRepo.getUserIDfromTelegramID(id.toString());
         System.out.println(">> [BOT] Getting Orders of " + customerID);
 
         List<OrderSummaryDAO> orderSummaries = orderRepo.getOrderSummaryByCustomerID(customerID);
         String msg = "Your Orders: \n";
-        int count=1;
-        for(OrderSummaryDAO summary : orderSummaries){
+        int count = 1;
+        for (OrderSummaryDAO summary : orderSummaries) {
             msg += count + ". [ ";
             msg += summary.getOrderID() + " | ";
             msg += summary.getOrderDate() + " | Total Cost:$";
             msg += summary.getTotal() + " | ";
-            if(summary.isDelivered()){
+            if (summary.isDelivered()) {
                 msg += "Delivered";
-            } else{
-                msg += "Pending";
+            } else {
+                msg += "Pending Del";
             }
             msg += " ] \n";
             count++;
         }
-        sendMsg(id,msg);
+        sendMsg(id, msg);
 
     }
 
-    public boolean helpMePls(Long id){return true;}
+    public boolean helpMePls(Long id) {
+        return true;
+    }
 }
-
-

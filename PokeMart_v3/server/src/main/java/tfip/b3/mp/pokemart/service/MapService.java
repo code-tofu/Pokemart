@@ -37,26 +37,28 @@ public class MapService {
         return storeRepo.getAllStores();
     }
 
-    //THIS CAN BE DONE ON CLIENT SIDE, BUT USING SERVER FOR FAMILIARISATION WITH JAVA CLIENT
-    public JsonObject getDistanceCost(LatLng destination) throws ApiException, InterruptedException, IOException, Exception {
+    // THIS CAN BE DONE ON CLIENT SIDE, BUT USING SERVER FOR FAMILIARISATION WITH
+    // JAVA CLIENT
+    public JsonObject getDistanceCost(LatLng destination)
+            throws ApiException, InterruptedException, IOException, Exception {
         GeoApiContext context = new GeoApiContext.Builder().apiKey(GMAP_KEY).queryRateLimit(QPS_MAX).build();
         System.out.println(context.toString());
         System.out.println(">> [INFO] Distance Matrix Request From: " + destination.toString());
         DistanceMatrixApiRequest distanceRequest = DistanceMatrixApi.newRequest(context);
         DistanceMatrix resp = distanceRequest.origins(originLatLng).destinations(destination).mode(TravelMode.DRIVING)
                 .await();
-        if(resp.rows[0].elements[0].status.toString() == "ZERO_RESULTS"){
+        if (resp.rows[0].elements[0].status.toString() == "ZERO_RESULTS") {
             System.out.println(">> [ERROR] Destination Location Does Not Exist By road");
             throw new Exception("Destination Location Does Not Exist By Road");
         }
         context.close();
         context.shutdown();
         return Json.createObjectBuilder()
-        .add("distance",resp.rows[0].elements[0].distance.inMeters)
-        .add("defaultCost",resp.rows[0].elements[0].distance.inMeters * costPerM)
-        .add("expressCost",resp.rows[0].elements[0].distance.inMeters * costPerM * expressMultiplier)
-        .add("duration",resp.rows[0].elements[0].duration.inSeconds)
-        .build();
+                .add("distance", resp.rows[0].elements[0].distance.inMeters)
+                .add("defaultCost", resp.rows[0].elements[0].distance.inMeters * costPerM)
+                .add("expressCost", resp.rows[0].elements[0].distance.inMeters * costPerM * expressMultiplier)
+                .add("duration", resp.rows[0].elements[0].duration.inSeconds)
+                .build();
     }
 
 }

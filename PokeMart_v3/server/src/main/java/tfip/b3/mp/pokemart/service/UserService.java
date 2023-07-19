@@ -13,26 +13,26 @@ import tfip.b3.mp.pokemart.model.UserProfileDAO;
 import tfip.b3.mp.pokemart.repository.UserRepository;
 
 @Service
-public class UserService implements UserDetailsService{
+public class UserService implements UserDetailsService {
 
     @Autowired
     UserRepository userRepo;
 
     @Override
-    public UserDetailsImpl loadUserByUsername(String username) throws UsernameNotFoundException{
+    public UserDetailsImpl loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepo.getUserDetailsByUsername(username);
     }
 
-    public UserDetailsImpl loadUserByUserID(String userID) throws UsernameNotFoundException{
+    public UserDetailsImpl loadUserByUserID(String userID) throws UsernameNotFoundException {
         return userRepo.getUserDetailsByUserID(userID);
     }
 
-    public String createNewUser(RegisterRequest registerRequest,Roles role){
-        return userRepo.createNewUser(registerRequest,role);
+    public String createNewUser(RegisterRequest registerRequest, Roles role) {
+        return userRepo.createNewUser(registerRequest, role);
     }
 
-    public UserProfileDAO getUserProfileByUserID(String userID) throws DataAccessException{
+    public UserProfileDAO getUserProfileByUserID(String userID) throws DataAccessException {
         return userRepo.getUserProfileByUserID(userID);
     }
-    
+
 }

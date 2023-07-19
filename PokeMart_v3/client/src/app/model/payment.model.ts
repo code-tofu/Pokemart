@@ -4,5 +4,5 @@ export interface IntentResponse {
 
 export interface IntentRequest{
     total: number;
-    userid:string;
+    userID:string;
 }
