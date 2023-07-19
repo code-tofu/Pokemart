@@ -27,6 +27,8 @@ import { GoogleMapsModule } from '@angular/google-maps';
 import { HistoryComponent } from './order/history/history.component';
 import { HttpJWTInterceptor } from './auth.interceptor';
 import { DevComponent } from './admin/dev/dev.component';
+import { NgxStripeModule } from 'ngx-stripe';
+import { STRIPE_PKEY } from './endpoint.constants';
 
 
 const routes: Routes = [
@@ -82,14 +84,14 @@ const routes: Routes = [
     OrderDetailComponent,
     LocationComponent,
     HistoryComponent,
-    DevComponent
-    
+    DevComponent,
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(routes, { useHash: true, scrollPositionRestoration: "enabled" },),
     HttpClientModule,
     FormsModule,
+    NgxStripeModule.forRoot(STRIPE_PKEY),
     ReactiveFormsModule,
     WebcamModule,
     NgbModule,

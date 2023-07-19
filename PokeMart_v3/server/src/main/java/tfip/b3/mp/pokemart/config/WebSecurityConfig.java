@@ -65,7 +65,8 @@ public class WebSecurityConfig {
             .requestMatchers("/api/order/**").authenticated()
             .requestMatchers("/api/sales/**").hasAuthority("ROLE_SELLER")
             .requestMatchers("/api/dev/**").hasAuthority("ROLE_DEVELOPER")
-            .anyRequest().authenticated()
+            .anyRequest().permitAll()
+            // .authenticated()
             )
             //configure sessionmanagement
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -5,6 +5,7 @@ import { UserService } from './user.service';
 import { DeliveryDetails, Order, OrderItem, OrderSummary } from '../model/order.model';
 import { orderURL } from '../endpoint.constants';
 import { CartItem } from '../model/cart.model';
+import { IntentRequest, IntentResponse } from '../model/payment.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,7 @@ export class OrderService {
 
   http = inject(HttpClient);
   userSvc = inject(UserService);
+  client_secret!: string | undefined; //TODO: CHECK ME
 
   createOrderItem(cartItem: CartItem): OrderItem {
     return {
@@ -24,6 +26,10 @@ export class OrderService {
       discount: cartItem.item.discount,
       quantity: cartItem.quantity,
     };
+  }
+
+  postPaymentIntent(req:IntentRequest):Observable<IntentResponse>{
+    return this.http.post<IntentResponse>("api/createPayment",req);
   }
 
   postOrder(order: Order): Observable<any> {
@@ -36,7 +42,7 @@ export class OrderService {
     return this.http.get<Order>(orderURL + orderID);
   }
 
-  generateOrder(cart: CartItem[],customerID :string, deliveryDetails:DeliveryDetails,shippingType:string,shippingCost:number,subtotal:number, total:number):Order {
+  generateOrder(cart: CartItem[],customerID :string, deliveryDetails:DeliveryDetails,shippingType:string,shippingCost:number,subtotal:number, total:number,paymentID: string):Order {
     let items: OrderItem[] = [];
     cart.forEach((item) => {
       items.push(this.createOrderItem(item));
@@ -54,7 +60,8 @@ export class OrderService {
       subtotal: subtotal,
       total: total,
       items:items,
-      delivered:false
+      delivered:false,
+      paymentID: paymentID,
     }
     return(newOrder)
   }

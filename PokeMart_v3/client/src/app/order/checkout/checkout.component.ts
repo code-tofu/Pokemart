@@ -16,6 +16,10 @@ import {
 import { GoogleMap } from '@angular/google-maps';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
+import { StripePaymentElementComponent, StripeService } from 'ngx-stripe';
+import {
+  StripeElementsOptions,
+} from '@stripe/stripe-js';
 import { Observable, Subscription, firstValueFrom } from 'rxjs';
 import { API_KEY, GMAP_GEOCODE_URL, HQ_ISS } from 'src/app/endpoint.constants';
 import { CartItem } from 'src/app/model/cart.model';
@@ -25,8 +29,7 @@ import { CartService } from 'src/app/services/cart.service';
 import { MapService } from 'src/app/services/map.service';
 import { OrderService } from 'src/app/services/order.service';
 import { UserService } from 'src/app/services/user.service';
-
-
+import { IntentRequest } from 'src/app/model/payment.model';
 
 @Component({
   selector: 'app-checkout',
@@ -78,6 +81,14 @@ export class CheckoutComponent implements OnInit {
   success!: ElementRef;
   @ViewChild('unsuccess')
   unsuccess!: ElementRef;
+
+  @ViewChild(StripePaymentElementComponent)
+  paymentElement!: StripePaymentElementComponent;
+  stripeSvc = inject(StripeService);
+  paymentProcessing = false;
+  elementsOptions: StripeElementsOptions = {
+    locale: 'en'
+  };
 
   ngOnInit(): void {
     this.getCart();
@@ -237,14 +248,45 @@ export class CheckoutComponent implements OnInit {
     if(this.shippingType == Shipping.SELFCOLLECT){
     this.shipForm.get("customerShippingAddress")?.setValue("POKEMON STORE:" + this.collectionStore.value);
     }
+    this.createPaymentIntent();
+  }
 
-    const newOrder:Order = this.orderSvc.generateOrder(this.cart, this.userSvc.userID!, this.shipForm.value as DeliveryDetails, this.shipping[this.shippingType],this.selectedShippingCost,this.cartSvc.total, this.cartSvc.total + this.selectedShippingCost);
+  createPaymentIntent(){
+    this.paymentProcessing=false;
+    const req:IntentRequest = {
+      total: this.cartSvc.total + this.selectedShippingCost,
+      userid: this.userSvc.userID as string,
+    }
+    firstValueFrom(this.orderSvc.postPaymentIntent(req))
+    .then((resp)=>{
+      this.elementsOptions.clientSecret = resp.clientSecret;
+      console.info('>> [INFO] PAYMENT INTENT REQ:',req)
+      console.info('>> [INFO] PAYMENT INTENT ID:',resp.clientSecret);
+    }
+    )
+  }
 
+  pay() {
+    this.stripeSvc.confirmPayment({elements: this.paymentElement.elements,confirmParams: {},redirect: 'if_required'})
+    .subscribe(result => {
+      if (result.error) {
+        alert(result.error.message);
+        console.log('>> [INFO] PAYMENT ERROR:', result);
+      } else {
+        if (result.paymentIntent.status === 'succeeded') {
+          this.generateOrder(result.paymentIntent.id)
+          console.log('>> [INFO] PAYMENT RESULT:', result);
+        }
+      }
+    });
+  }
+
+  generateOrder(paymentID: string){
+    const newOrder:Order = this.orderSvc.generateOrder(this.cart, this.userSvc.userID!, this.shipForm.value as DeliveryDetails, this.shipping[this.shippingType],this.selectedShippingCost,this.cartSvc.total, this.cartSvc.total + this.selectedShippingCost,paymentID);
     firstValueFrom(this.orderSvc.postOrder(newOrder))
     .then((resp) => {
       console.info('>> [INFO] Server Response:', resp);
-      this.orderProcessing=false;
-      // alert('Your Order is being processed');
+      this.paymentProcessing=false;
       this.openVerticallyCentered(this.success);
           let 
             timeinterval = setInterval(() => {
@@ -256,13 +298,11 @@ export class CheckoutComponent implements OnInit {
               }
             }, 1000);
     })
-    .catch((err) => {
-      // alert('Connection Issue: Please Try Again Later');
+    .catch((err) => { //TODO: CatchError and Retry
       this.openVerticallyCentered(this.unsuccess);
-      this.orderProcessing=false;
+      this.paymentProcessing=false;
       console.error('>> [ERROR] Server Error:', err);
     });
-
   }
 
   openVerticallyCentered(content: any) {

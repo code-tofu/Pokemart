@@ -12,6 +12,7 @@ export interface Order {
   total: number;
   items: OrderItem[];
   delivered: boolean;
+  paymentID: string;
 }
 
 export interface OrderItem {
