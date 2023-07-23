@@ -1,0 +1,162 @@
+<div class="container text-body limit-md">
+
+
+
+    <div class="d-flex justify-content-between mb-2">
+        <h5 class="text-primary-emphasis">Your Profile:</h5>
+        <button class="btn btn-warning btn-sm" (click)="editProfile()" *ngIf="!editingProfile">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-pencil-square align-icon me-1" viewBox="0 0 16 16">
+                <path
+                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                <path fill-rule="evenodd"
+                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+            </svg>
+            Edit Details
+        </button>
+    </div>
+    <dl class="row">
+        <dt class="col-5">User ID:</dt>
+        <dd class="col-7">{{this.userSvc.user!.userID}}</dd>
+        <dt class="col-5">Member Since:</dt>
+        <dd class="col-7">{{this.userSvc.user!.memberSince | date}}</dd>
+        <dt class="col-5">Membership:</dt>
+        <dd class="col-7">{{this.userSvc.user!.memberLevel}}</dd>
+    </dl>
+
+    <form [formGroup]="profileForm" readonly>
+        <fieldset [disabled]="!editingProfile">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control form-control-plaintext" readonly id="name"
+                    formControlName="customerName" placeholder="Name">
+                <label for="name">Name</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="email" formControlName="customerEmail" placeholder="Email">
+                <label for="email">Email</label>
+            </div>
+            <div class="alert alert-danger py-1" *ngIf="this.profileForm.get('customerEmail')!.hasError('email')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-exclamation-triangle-fill align-icon" viewBox="0 0 16 16">
+                    <path
+                        d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                </svg>
+                Please enter a valid email format
+            </div>
+
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="phone" formControlName="customerPhone" placeholder="Phone">
+                <label for="phone">Phone</label>
+            </div>
+            <div class="alert alert-danger py-1" *ngIf="this.profileForm.get('customerPhone')!.hasError('minlength')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-exclamation-triangle-fill align-icon" viewBox="0 0 16 16">
+                    <path
+                        d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                </svg>
+                Phone Number must be at least 8 numbers
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="shippingAddress" formControlName="shippingAddress"
+                    placeholder="Shipping Address">
+                <label for="shippingAddress">Shipping Address</label>
+            </div>
+            <div class="alert alert-danger py-1" *ngIf="this.profileForm.get('shippingAddress')!.hasError('minlength')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-exclamation-triangle-fill align-icon" viewBox="0 0 16 16">
+                    <path
+                        d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                </svg>
+                Shipping Address must be at least 8 characters
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control form-control-plaintext" id="birthdate"
+                    formControlName="birthdate" placeholder="DOB" readonly>
+                <label for="birthdate">Date of Birth</label>
+            </div>
+
+            <div class="form-floating ">
+                <select class="form-select" id="gender" formControlName="gender" placeholder="Gender">
+                    <option value="M">M</option>
+                    <option value="F">F</option>
+                    <option value="L">L</option>
+                    <option value="G">G</option>
+                    <option value="B">B</option>
+                    <option value="T">T</option>
+                    <option value="Q">Q</option>
+                    <option value="I">I</option>
+                    <option value="A">A</option>
+                    <option value="A">+</option>
+                </select>
+                <label for="gender">Gender</label>
+            </div>
+            <br>
+        </fieldset>
+
+        <button class="btn btn-success btn" (click)="updateProfile()" *ngIf="editingProfile"
+            [disabled]="(profileForm.invalid || updateProcessing)">
+            <span class="spinner-border me-1" style="width: 1.5rem; height: 1.5rem;" role="status" aria-hidden="true"
+                *ngIf="updateProcessing"></span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-clipboard2-check align-icon" viewBox="0 0 16 16">
+                <path
+                    d="M9.5 0a.5.5 0 0 1 .5.5.5.5 0 0 0 .5.5.5.5 0 0 1 .5.5V2a.5.5 0 0 1-.5.5h-5A.5.5 0 0 1 5 2v-.5a.5.5 0 0 1 .5-.5.5.5 0 0 0 .5-.5.5.5 0 0 1 .5-.5h3Z" />
+                <path
+                    d="M3 2.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 0 0-1h-.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1H12a.5.5 0 0 0 0 1h.5a.5.5 0 0 1 .5.5v12a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5v-12Z" />
+                <path
+                    d="M10.854 7.854a.5.5 0 0 0-.708-.708L7.5 9.793 6.354 8.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3Z" />
+            </svg>
+
+            Save Details
+        </button>
+    </form>
+
+</div>
+
+
+
+<ng-template #success let-modal>
+    <div class="modal-header bg-success-subtle">
+        <h4 class="modal-title text-success-emphasis"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                fill="currentColor" class="bi bi-check-circle-fill align-icon me-1" viewBox="0 0 16 16">
+                <path
+                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+            </svg>Update Successful.</h4>
+    </div>
+    <div class="modal-footer bg-success-subtle text-center">
+        <button class="btn btn-outline-success" (click)="modal.close()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-box-arrow-in-right align-icon me-1" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z" />
+                <path fill-rule="evenodd"
+                    d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z" />
+            </svg>
+            Ok
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #unsuccess let-modal>
+    <div class="modal-header bg-danger-subtle border-danger">
+        <h4 class="modal-title text-danger-emphasis"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                fill="currentColor" class="bi bi-x-octagon-fill align-icon me-1" viewBox="0 0 16 16">
+                <path
+                    d="M11.46.146A.5.5 0 0 0 11.107 0H4.893a.5.5 0 0 0-.353.146L.146 4.54A.5.5 0 0 0 0 4.893v6.214a.5.5 0 0 0 .146.353l4.394 4.394a.5.5 0 0 0 .353.146h6.214a.5.5 0 0 0 .353-.146l4.394-4.394a.5.5 0 0 0 .146-.353V4.893a.5.5 0 0 0-.146-.353L11.46.146zm-6.106 4.5L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z" />
+            </svg>Update Unsuccessful. Please Try Again</h4>
+    </div>
+    <div class="modal-footer bg-danger-subtle d-flex justify-content-end">
+        <button class="btn btn-danger" (click)="modal.close()" ngbAutofocus>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-x-lg align-icon" viewBox="0 0 16 16">
+                <path
+                    d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+            </svg>
+            Cancel
+        </button>
+    </div>
+</ng-template>

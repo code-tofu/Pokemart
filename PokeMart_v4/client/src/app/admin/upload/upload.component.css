@@ -1,0 +1,18 @@
+.img-80{
+    max-width: 80%;
+    height:auto;
+}
+
+.border-box{
+    border: 1px solid lightgrey;
+    border-radius: 3%;
+    overflow: hidden;
+}
+
+.align-icon {
+    vertical-align: -0.125em;
+}
+
+.limit-md{
+    max-width: 768px;
+}

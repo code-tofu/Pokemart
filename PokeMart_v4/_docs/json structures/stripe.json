@@ -1,0 +1,57 @@
+{
+    "Response body": {
+      "id": "pi_3NVVLSLGmrz8ddRe1ht3FlQj",
+      "object": "payment_intent",
+      "amount": 50000,
+      "amount_details": {
+        "tip": {}
+      },
+      "automatic_payment_methods": null,
+      "canceled_at": null,
+      "cancellation_reason": null,
+      "capture_method": "automatic",
+      "client_secret": "pi_3N**********************_******_*********************dbLU",
+      "confirmation_method": "automatic",
+      "created": 1689753770,
+      "currency": "usd",
+      "description": null,
+      "last_payment_error": null,
+      "livemode": false,
+      "next_action": null,
+      "payment_method": "pm_1NVVLhLGmrz8ddReURUVcSBU",
+      "payment_method_types": [
+        "card"
+      ],
+      "processing": null,
+      "receipt_email": null,
+      "setup_future_usage": null,
+      "shipping": null,
+      "source": null,
+      "status": "succeeded"
+    },
+    "Request POST body": {
+      "payment_method_data": {
+        "billing_details": {
+          "address": {
+            "country": "SG"
+          }
+        },
+        "type": "card",
+        "card": {
+          "number": "**** **** **** 4242",
+          "exp_month": "01",
+          "cvc": "***",
+          "exp_year": "25"
+        },
+        "payment_user_agent": "stripe.js/16b690c3e9; stripe-js-v3/16b690c3e9; payment-element",
+        "muid": "efdfd463-7943-4812-a110-f2540ec9fbeb1cb40a",
+        "sid": "973839a2-6d3e-4e67-8264-b1a4e440e56e99323c",
+        "guid": "e6af53cf-7710-48dc-bb87-8664226b37a2d528f1",
+        "time_on_page": "15048"
+      },
+      "use_stripe_sdk": "true",
+      "key": "pk_test_*********************************************************************************************Z8Dq24",
+      "client_secret": "************************************************************",
+      "expected_payment_method_type": "card"
+    }
+  }

@@ -1,0 +1,21 @@
+.img-fit {
+    height: auto;
+    width: 100%;
+}
+.align-icon {
+    vertical-align: -0.125em;
+}
+.discount-text{
+    text-decoration: line-through;
+    color: #808080;
+}
+
+.btn-max-100{
+    width:100%;
+    max-width: 100px;
+}
+
+.btn-max-50{
+    width:100%;
+    max-width: 50px;
+}

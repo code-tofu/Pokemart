@@ -1,0 +1,13 @@
+.img-50{
+    height:auto;
+    max-width:200px;
+    width:50%;
+}
+
+.align-icon {
+    vertical-align: -0.125em;
+}
+
+.limit-md{
+    max-width: 768px;
+}

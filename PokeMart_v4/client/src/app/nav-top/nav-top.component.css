@@ -1,0 +1,25 @@
+.logo {
+    height: 2.5em;
+}
+
+.credit {
+    bottom: 0%;
+    text-align: right;
+    font-size: 0.75em;
+}
+
+.align-icon {
+    vertical-align: -0.125em;
+}
+
+.front {
+    z-index: 1021;
+}
+
+.limit-xl {
+    max-width: 1200px;
+}
+
+.width-max {
+    width: 100%
+}

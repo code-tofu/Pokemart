@@ -1,0 +1,28 @@
+.right-text {
+    text-align: right;
+}
+
+.img-300px {
+    height: auto;
+    max-width: 200px;
+    margin: auto;
+}
+
+.img-30vh {
+    height: 30vh;
+    width: auto;
+    margin: auto;
+}
+
+.align-icon {
+    vertical-align: -0.125em;
+}
+
+.discount-text{
+    text-decoration: line-through;
+    color: #808080;
+}
+
+.limit-md{
+    max-width: 768px;
+}

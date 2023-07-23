@@ -1,0 +1,8 @@
+<div class="bg-body"[attr.data-bs-theme]="theme">
+<div class="app-container" >
+  <app-nav-top (onSwitch$) = "switchTheme()" [logoimg]="theme"></app-nav-top>
+  <div class="container limit-xl p-0">
+  <router-outlet></router-outlet>
+</div>
+</div>
+</div>

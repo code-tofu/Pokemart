@@ -1,0 +1,8 @@
+.app-container {
+    margin: auto;
+    min-height: 100vh;
+}
+
+.limit-xl{
+    max-width: 1200px;
+}
