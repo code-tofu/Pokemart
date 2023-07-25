@@ -63,11 +63,17 @@ public class WebSecurityConfig {
             .requestMatchers("/api/cart/**").authenticated()
             .requestMatchers("/api/map/**").authenticated()
             .requestMatchers("/api/order/**").authenticated()
-            .requestMatchers("/api/sales/**").hasAuthority("ROLE_SELLER")
+            .requestMatchers("/api/sales/**").hasAnyAuthority("ROLE_SELLER","ROLE_ADMINISTRATOR", "ROLE_DEVELOPER")
+            .requestMatchers("/api/admin/**").hasAnyAuthority("ROLE_ADMINISTRATOR", "ROLE_DEVELOPER")
             .requestMatchers("/api/dev/**").hasAuthority("ROLE_DEVELOPER")
             .anyRequest().permitAll()
-            // .authenticated()
             )
+            // .authenticated()
+            // ROLE_DEVELOPER,
+            // ROLE_ADMINISTRATOR,
+            // ROLE_SELLER,
+            // ROLE_CUSTOMER
+
             //configure sessionmanagement
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             //configure the auth providers and filter

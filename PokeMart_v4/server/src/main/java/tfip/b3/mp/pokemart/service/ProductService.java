@@ -59,7 +59,7 @@ public class ProductService {
             productID = "p" + GeneralUtils.generateUUID(8);
         }
         ProductDAO newProduct = new ProductDAO(productID, 0, GeneralUtils.concatWords(jsonObj.getString("productName")),
-                null, jsonObj.getJsonNumber("cost").doubleValue(), jsonObj.getString("description"),
+                jsonObj.getString("category"), jsonObj.getJsonNumber("cost").doubleValue(), jsonObj.getString("description"),
                 jsonObj.getString("productName"));
 
         JsonArray pokeJsonArr = jsonObj.getJsonArray("attributes");

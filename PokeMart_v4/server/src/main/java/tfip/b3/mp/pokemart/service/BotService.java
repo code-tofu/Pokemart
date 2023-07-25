@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-// @Service
+@Service
 public class BotService extends TelegramLongPollingBot {
 
     @Value("${telegram.bot.username}")
@@ -111,7 +111,6 @@ public class BotService extends TelegramLongPollingBot {
                     break;
                 case "/orders":
                     if (!authFilter(id)) {
-                        sendMsg(id, "Boooop! You have not registered this telegram account!");
                         return;
                     }
                     sendMsg(id, "Boop! You requested to check your order history");
@@ -119,7 +118,6 @@ public class BotService extends TelegramLongPollingBot {
                     break;
                 case "/delivered":
                     if (!authFilter(id)) {
-                        sendMsg(id, "Boooop! You have not registered this telegram account!");
                         return;
                     }
                     sendMsg(id, "Boop! You requested to mark an order as delivered");
@@ -131,6 +129,7 @@ public class BotService extends TelegramLongPollingBot {
                     break;
                 case "/outlets":
                     sendMsg(id, "Beep! You requested to know our outlet locations");
+                    sendMsg(id, "I haven't learnt how to do this yet! Tell my developer to level me up! Beepbeepbeep!");
                     break;
                 default:
                     sendMsg(id, "BeepBoop! Sorry I do not understand that command");
@@ -140,20 +139,24 @@ public class BotService extends TelegramLongPollingBot {
             return;
         }
         if (txt.length() > 4) {
+            System.out.println(">> [INFO] Telerequest CMD:" + txt);
             String inputs = txt.substring(0, 4);
             if (inputs.equals("AUT ")) {
-                if (!checkRegistered(id))
+                System.out.println(">> [INFO] Telerequest CMD: AUT");
+                if (checkRegistered(id))
                     return;
                 createAuth(id, txt);
                 return;
             }
             if (inputs.equals("OTP ")) {
-                if (!checkRegistered(id))
+                System.out.println(">> [INFO] Telerequest CMD: OTP");
+                if (checkRegistered(id))
                     return;
                 checkAuth(id, txt);
                 return;
             }
             if (inputs.equals("DEL ")) {
+                System.out.println(">> [INFO] Telerequest CMD: DEL");
                 teleMarkDelivered(id, txt);
                 return;
             }
@@ -186,6 +189,7 @@ public class BotService extends TelegramLongPollingBot {
     }
 
     public boolean checkRegistered(Long id) {
+        System.out.println(">> [INFO] Telerequest Check Registuer:" + id.toString());
         if (teleRepo.checkTelegramID(id.toString())) {
             sendMsg(id, "Boooop! You already registered this telegram account!");
             return true;
@@ -197,7 +201,7 @@ public class BotService extends TelegramLongPollingBot {
     public boolean authFilter(Long id) {
         boolean valid = teleRepo.checkTelegramID(id.toString());
         if (!valid)
-            sendMsg(id, "You need to register your account first, beep!");
+            sendMsg(id, "Boooop! You have not registered this telegram account!");
         return valid;
     }
 

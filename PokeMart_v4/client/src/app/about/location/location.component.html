@@ -1,6 +1,6 @@
 <div class="container text-body">
 
-    <div class="container text-body limit-md">
+    <div class="container text-body limit-md p-0">
         <h5 class="text-primary-emphasis">Want to find out more? Check Your orders? Talk to our very own Pokemart Bot!
         </h5>
 
@@ -12,7 +12,7 @@
             </svg> Talk to Porygon </button>
     </div>
 
-    <div *ngIf="apiLoaded; else noMap" class="mb-2">
+    <div *ngIf="apiLoaded; else noMap" class="mt-2">
         <h5 class="text-primary-emphasis">Find a Pokemart near you!</h5>
         <google-map [options]="mapOptions" width="100%" #findUs>
             <map-marker [position]="{lat:HQ.storeLat, lng:HQ.storeLng}" [options]="HQMarkerOptions" #marker="mapMarker"

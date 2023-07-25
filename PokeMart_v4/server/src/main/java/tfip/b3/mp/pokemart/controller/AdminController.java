@@ -25,7 +25,6 @@ public class AdminController {
     InventoryService invSvc;
 
     @PostMapping(path = "/api/admin/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @RolesAllowed({ "ROLE_ADMINISTRATOR", "ROLE_DEVELOPER" })
     public ResponseEntity<String> createNewProduct(@RequestPart String itemDetails, @RequestPart MultipartFile image) {
         System.out.println(
                 "Recieved:" + itemDetails.toString() + "," + image.getOriginalFilename() + "| DATA:" + image);

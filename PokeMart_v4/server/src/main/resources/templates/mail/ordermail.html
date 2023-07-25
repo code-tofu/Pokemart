@@ -66,7 +66,7 @@
                 <span data-th-text="${shippingType}"></span>
             </li>
             <li><span style="font-weight:bold;">Shipping Cost: </span>
-                $<span data-th-text="${#numbers.formatDecimal(shippingCost.cost, 1, 2)}"></span>
+                $<span data-th-text="${#numbers.formatDecimal(shippingCost, 1, 2)}"></span>
             </li>
             <li><span style="font-weight:bold;">Subtotal: </span>
                 $<span data-th-text="${#numbers.formatDecimal(subtotal, 1, 2)}"></span>

@@ -36,6 +36,7 @@ export class DevComponent {
     firstValueFrom(this.devSvc.getDefaultInventory())
       .then((resp) => {
         alert(JSON.stringify(resp));
+        this.processingCreate = false;
       })
       .catch((err) => {
         alert(JSON.stringify(err));

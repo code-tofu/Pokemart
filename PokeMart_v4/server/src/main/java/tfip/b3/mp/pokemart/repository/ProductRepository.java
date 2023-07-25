@@ -62,8 +62,7 @@ public class ProductRepository {
     public boolean insertCustomProduct(ProductDAO newProd, AttributeDAO attributes) throws DataAccessException {
         jTemplate.update(INSERT_NEW_PRODUCT,
                 newProd.getProductID(),
-                // null,
-                0000,
+                null,
                 newProd.getNameID(),
                 newProd.getCategory(),
                 newProd.getCost(),

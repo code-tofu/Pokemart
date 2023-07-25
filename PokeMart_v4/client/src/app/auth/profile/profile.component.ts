@@ -85,12 +85,16 @@ export class ProfileComponent {
         this.updateProcessing = false;
         this.userSvc
           .getUserDetails(this.userSvc.username as string)
-          .subscribe(() => this.initProfile());
+          .subscribe(() => {
+            this.initProfile();
+            this.editingProfile = false;
+          });
       })
       .catch((err) => {
         console.info(err);
         this.openVerticallyCentered(this.unsuccess);
         this.updateProcessing = false;
+        
       });
   }
 
