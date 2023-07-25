@@ -23,37 +23,37 @@ public class ProductRepository {
 
     @Transactional
     public boolean insertProduct(ProductDAO newProd) throws DataAccessException {
-        if(jTemplate.queryForObject(EXISTS_PRODUCT_BY_API_ID,Boolean.class, newProd.getApiID())){
+        if (jTemplate.queryForObject(EXISTS_PRODUCT_BY_API_ID, Boolean.class, newProd.getApiID())) {
             System.out.println(">> [WARNING] Insert Product: Product(API_ID) Already Exists");
             return false;
         }
         jTemplate.update(INSERT_NEW_PRODUCT,
-            newProd.getProductID(),
-            newProd.getApiID(),
-            newProd.getNameID(),
-            newProd.getCategory(),
-            newProd.getCost(),
-            newProd.getDescription(),
-            newProd.getProductName());
+                newProd.getProductID(),
+                newProd.getApiID(),
+                newProd.getNameID(),
+                newProd.getCategory(),
+                newProd.getCost(),
+                newProd.getDescription(),
+                newProd.getProductName());
         return true;
     }
 
     @Transactional
     public boolean insertProduct(ProductDAO newProd, AttributeDAO attributes) throws DataAccessException {
-        if(jTemplate.queryForObject(EXISTS_PRODUCT_BY_API_ID,Boolean.class, newProd.getApiID())){
+        if (jTemplate.queryForObject(EXISTS_PRODUCT_BY_API_ID, Boolean.class, newProd.getApiID())) {
             System.out.println(">> [WARNING] Insert Product: Product (API_ID) Already Exists");
             return false;
         }
         jTemplate.update(INSERT_NEW_PRODUCT,
-            newProd.getProductID(),
-            newProd.getApiID(), 
-            newProd.getNameID(),
-            newProd.getCategory(),
-            newProd.getCost(),
-            newProd.getDescription(),
-            newProd.getProductName());
-        for(String attribute: attributes.getAttributes()){
-            jTemplate.update(INSERT_ATTRIBUTE, newProd.getProductID(),attribute);
+                newProd.getProductID(),
+                newProd.getApiID(),
+                newProd.getNameID(),
+                newProd.getCategory(),
+                newProd.getCost(),
+                newProd.getDescription(),
+                newProd.getProductName());
+        for (String attribute : attributes.getAttributes()) {
+            jTemplate.update(INSERT_ATTRIBUTE, newProd.getProductID(), attribute);
         }
         return true;
     }
@@ -61,19 +61,18 @@ public class ProductRepository {
     @Transactional
     public boolean insertCustomProduct(ProductDAO newProd, AttributeDAO attributes) throws DataAccessException {
         jTemplate.update(INSERT_NEW_PRODUCT,
-            newProd.getProductID(),
-            null, 
-            newProd.getNameID(),
-            newProd.getCategory(),
-            newProd.getCost(),
-            newProd.getDescription(),
-            newProd.getProductName());
-        for(String attribute: attributes.getAttributes()){
-            jTemplate.update(INSERT_ATTRIBUTE, newProd.getProductID(),attribute);
+                newProd.getProductID(),
+                null,
+                newProd.getNameID(),
+                newProd.getCategory(),
+                newProd.getCost(),
+                newProd.getDescription(),
+                newProd.getProductName());
+        for (String attribute : attributes.getAttributes()) {
+            jTemplate.update(INSERT_ATTRIBUTE, newProd.getProductID(), attribute);
         }
         return true;
     }
-
 
     public Optional<ProductDAO> getProductByApiID(int apiID) throws DataAccessException {
         return Optional.of(jTemplate.queryForObject(SELECT_PRODUCT_BY_API_ID, new ProductDAOMapper(), apiID));
@@ -92,11 +91,12 @@ public class ProductRepository {
         return item_ids;
     }
 
-    public AttributeDAO getAttributesOfProduct(String productID){
-        return new AttributeDAO(productID, jTemplate.queryForList(SELECT_ATTRIBUTES_BY_PRODUCT_ID,String.class, productID));
+    public AttributeDAO getAttributesOfProduct(String productID) {
+        return new AttributeDAO(productID,
+                jTemplate.queryForList(SELECT_ATTRIBUTES_BY_PRODUCT_ID, String.class, productID));
     }
 
     public boolean checkProductIDExisting(String productID) throws DataAccessException {
-        return jTemplate.queryForObject(EXISTS_PRODUCT_BY_PRODUCT_ID,Boolean.class, productID);
+        return jTemplate.queryForObject(EXISTS_PRODUCT_BY_PRODUCT_ID, Boolean.class, productID);
     }
 }

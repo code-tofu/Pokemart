@@ -1,7 +1,8 @@
 import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { WebcamImage, WebcamInitError } from 'ngx-webcam';
-import { Subject } from 'rxjs';
+import { Subject, firstValueFrom } from 'rxjs';
+import { SalesService } from 'src/app/services/sales.service';
 
 @Component({
   selector: 'app-upload',
@@ -10,6 +11,7 @@ import { Subject } from 'rxjs';
 })
 export class UploadComponent {
   fb = inject(FormBuilder);
+  salesSvc = inject(SalesService);
   uploadForm!: FormGroup;
   attributeArr!: FormArray;
 
@@ -18,25 +20,30 @@ export class UploadComponent {
   @ViewChild('camDiv')
   camDiv!: ElementRef;
 
-  cameraOn:boolean = false;
+  cameraOn: boolean = false;
   viewWidth = 0;
   viewHeight = 0;
   trigger$ = new Subject<void>();
-  photoImg!:WebcamImage //imageAsDataUrl
 
-  initCam(){
-    this.cameraOn? this.cameraOn=false : this.cameraOn=true;
+  imgUrl: string | ArrayBuffer | null = '';
+
+  initCam() {
+    this.cameraOn ? (this.cameraOn = false) : (this.cameraOn = true);
   }
-  takePicture() {
-    this.trigger$.next()
+  takeCamPicture() {
+    this.trigger$.next();
   }
-  getImage(camImage: WebcamImage) {
-    console.info('>>[INFO] Camera Image:', camImage)
-    this.photoImg=camImage;
+  getCamPicture(camImage: WebcamImage) {
+    console.info('>>[INFO] Camera Image:', camImage);
+    this.imgUrl = camImage.imageAsDataUrl;
+    this.cameraOn = false;
   }
   handleInitError(error: WebcamInitError): void {
-    if (error.mediaStreamError && error.mediaStreamError.name === "NotAllowedError") {
-      console.warn("Camera access was not allowed by user!");
+    if (
+      error.mediaStreamError &&
+      error.mediaStreamError.name === 'NotAllowedError'
+    ) {
+      console.warn('Camera access was not allowed by user!');
     }
   }
 
@@ -47,20 +54,20 @@ export class UploadComponent {
         cost: this.fb.control<number>(1, [Validators.required]),
         description: this.fb.control<string>('', [Validators.required]),
         productName: this.fb.control<string>('', [Validators.required]),
-        attribute: this.attributeArr,
+        attributes: this.attributeArr,
         image: this.fb.control<File | null>(null, [Validators.required]),
         file: this.fb.control<File | null>(null, [Validators.required]),
       }));
   }
 
-  url: string|ArrayBuffer|null = '';
-  onSelectFile(event:any) {
+  onSelectFile(event: any) {
     if (event.target.files && event.target.files[0]) {
       let reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]); // read file as data url
-      reader.onload = (event) => { // called once readAsDataURL is completed
-        this.url = event.target!.result;
-      }
+      reader.onload = (event) => {
+        // called once readAsDataURL is completed
+        this.imgUrl = event.target!.result;
+      };
     }
   }
 
@@ -70,30 +77,39 @@ export class UploadComponent {
   delAttribute(i: number) {
     this.attributeArr.removeAt(i);
   }
-  
-  upload(){
-    const uploadImg: File = this.uploadFile.nativeElement.files[0]
-    const uploadData = this.uploadForm.value;
-    const uploadPhoto = this.photoImg.imageAsBase64.length;
-    console.info(uploadData,uploadImg,uploadPhoto)
-  } 
 
+  upload() {
+    // const uploadImg: File = this.uploadFile.nativeElement.files[0];
+    const uploadImg: File = this.dataURLtoFile(
+      this.imgUrl as string,
+      this.uploadForm.get('productName')!.value
+    );
+
+    firstValueFrom(
+      this.salesSvc.uploadNewProduct(
+        JSON.stringify(this.uploadForm.value),
+        uploadImg
+      )
+    )
+      .then(() => {
+        alert('Product Successfully Uploaded');
+        this.uploadForm.reset();
+      })
+      .catch((err) => {
+        alert('Server Error:' + JSON.stringify(err));
+      });
+  }
+
+  dataURLtoFile(dataurl: string, filename: string) {
+    var arr = dataurl.split(','),
+      // @ts-ignore
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[arr.length - 1]),
+      n = bstr.length,
+      u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
+  }
 }
-
-// upload() {
-//   const f: File = this.uploadFile.nativeElement.files[0]
-//   //this.form.patchValue({ 'file': f })
-//   const data = this.form.value
-//   console.info('>>> data: ', data)
-//   console.info('>>> file: ', f)
-
-//   firstValueFrom(this.uploadSvc.upload(data['title'], f))
-//     .then(result => {
-//       alert('uploaded')
-//       this.form.reset()
-//     })
-//     .catch(err => {
-//       alert(JSON.stringify(err))
-//     })
-
-// }

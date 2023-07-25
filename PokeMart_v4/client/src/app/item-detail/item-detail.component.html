@@ -53,8 +53,9 @@
             <p class="text-danger" *ngIf="this.quantity!.hasError('max')"><small>You are only allowed to purchase a
                     maximum of {{this.item.stock}} due to limited
                     stock</small></p>
-            <p class="text-danger" *ngIf="this.quantity!.value==this.item.stock"><small>There is only {{this.item.stock}} 
-                stock available at this store</small></p>
+            <p class="text-danger" *ngIf="this.quantity!.value==this.item.stock"><small>There is only
+                    {{this.item.stock}}
+                    stock available at this store</small></p>
 
             <div class="d-flex justify-content-between mb-2">
                 <div>
@@ -74,10 +75,21 @@
             <div class="d-flex justify-content-between">
                 <button [routerLink]="['/shop']" class="btn btn-warning me-md-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-bag align-icon" viewBox="0 0 16 16">
-                    <path
-                        d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
-                </svg> Back to Shop</button>
+                        class="bi bi-bag align-icon" viewBox="0 0 16 16">
+                        <path
+                            d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
+                    </svg> Back to Shop</button>
+                <button class="btn btn-danger" (click)="editProduct()"
+                    *ngIf="((userSvc.role=='ROLE_SELLER') || (userSvc.role =='ROLE_ADMINSTRATOR' || userSvc.role =='ROLE_DEVELOPER'))">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-pencil-square align-icon me-1" viewBox="0 0 16 16">
+                        <path
+                            d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                        <path fill-rule="evenodd"
+                            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                    </svg>
+                    Edit Inventory
+                </button>
                 <button class="btn btn-success" (click)="addToCart()" [disabled]="quantity.invalid"
                     *ngIf="this.cartSvc.userSvc.userID; else signInRequired">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -90,17 +102,19 @@
             </div>
         </div>
     </div>
-    
+
 </div>
 
 <ng-template #content let-modal>
-	<div class="modal-header bg-success-subtle border-success">
-		<h4 class="modal-title text-success-emphasis"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check-circle-fill align-icon" viewBox="0 0 16 16">
-            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-          </svg> Successfully Added to Cart</h4>
-		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-	</div>
-	<div class="modal-footer bg-success-subtle d-flex justify-content-between">
+    <div class="modal-header bg-success-subtle border-success">
+        <h4 class="modal-title text-success-emphasis"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                fill="currentColor" class="bi bi-check-circle-fill align-icon" viewBox="0 0 16 16">
+                <path
+                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+            </svg> Successfully Added to Cart</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-footer bg-success-subtle d-flex justify-content-between">
         <button class="btn btn-warning" [routerLink]="['/shop']" (click)="modal.close()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                 class="bi bi-bag align-icon" viewBox="0 0 16 16">
@@ -111,17 +125,18 @@
         </button>
         <button class="btn btn-success" [routerLink]="['/cart']" (click)="modal.close()" ngbAutofocus>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-            class="bi bi-cart align-icon" viewBox="0 0 16 16">
-            <path
-                d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-        </svg>
+                class="bi bi-cart align-icon" viewBox="0 0 16 16">
+                <path
+                    d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+            </svg>
             Go to Cart
         </button>
-	</div>
+    </div>
 </ng-template>
 
 <ng-template #signInRequired>
-    <button type="button" class="btn btn-outline-secondary" [ngbPopover]="popContent" popoverClass="bg-primary-subtle p-0">
+    <button type="button" class="btn btn-outline-secondary" [ngbPopover]="popContent"
+        popoverClass="bg-primary-subtle p-0">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
             class="bi bi-cart-x-fill align-icon" viewBox="0 0 16 16">
             <path
@@ -142,4 +157,3 @@
         </div>
     </div>
 </ng-template>
-

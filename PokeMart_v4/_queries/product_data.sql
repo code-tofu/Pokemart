@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS product_data;
 CREATE TABLE product_data (
     product_id VARCHAR(10) NOT NULL,
-    api_id INT NOT NULL,
+    api_id INT,-- NOT NULL,
     name_id VARCHAR(50) NOT NULL,
     category VARCHAR(50),
     cost DOUBLE(8,2) NOT NULL,

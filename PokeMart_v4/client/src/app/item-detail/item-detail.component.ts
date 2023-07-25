@@ -8,7 +8,7 @@ import { CartReq } from '../model/cart.model';
 import { CartService } from '../services/cart.service';
 import { Utils } from '../utils';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-item-detail',
@@ -21,13 +21,13 @@ export class ItemDetailComponent {
   actRoute = inject(ActivatedRoute);
   router = inject(Router);
   modalService = inject(NgbModal);
-  
+  userSvc = inject(UserService);
+
   item!: ItemDetail;
   imgsrc!: String;
-  
+
   @ViewChild('content')
   content!: ElementRef;
-
 
   quantity: FormControl = new FormControl<number>(
     !!this.actRoute.snapshot.queryParams['quantity']
@@ -42,7 +42,7 @@ export class ItemDetailComponent {
       )
     )
       .then((resp) => {
-        console.info(">> [INFO] Product Details: ", resp);
+        console.info('>> [INFO] Product Details: ', resp);
         this.item = resp;
         this.imgsrc = Utils.generateImgURL(this.item.nameID);
         this.quantity.setValidators([
@@ -54,9 +54,7 @@ export class ItemDetailComponent {
       .catch((err) => {
         this.catalogueSvc.error.httpObjErrorHandler(err);
       });
-
   }
-
 
   increaseQty() {
     if (this.quantity!.value < this.item.stock)
@@ -73,12 +71,17 @@ export class ItemDetailComponent {
       productID: this.item.productID,
       quantity: +this.quantity.value,
     };
-    this.cartSvc.addToCart(req).subscribe()
-    this.openVerticallyCentered(this.content)
+    this.cartSvc.addToCart(req).subscribe();
+    this.openVerticallyCentered(this.content);
   }
 
-	openVerticallyCentered(content:any) {
-		this.modalService.open(content, { centered: true });
-	}
+  openVerticallyCentered(content: any) {
+    this.modalService.open(content, { centered: true });
+  }
 
+  editProduct() {
+    this.router.navigate(['/sales', 'edit'], {
+      queryParams: { product: this.item.productID.substring(1) },
+    });
+  }
 }

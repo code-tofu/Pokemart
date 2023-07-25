@@ -25,6 +25,10 @@ export class ProfileComponent {
   updateProcessing: Boolean = false;
 
   ngOnInit(): void {
+    this.initProfile();
+  }
+
+  initProfile() {
     const birthdate = new Date(this.userSvc.user!.birthdate);
     const birthdateStr =
       birthdate.getDay() +
@@ -79,6 +83,9 @@ export class ProfileComponent {
         console.info(status);
         this.openVerticallyCentered(this.success);
         this.updateProcessing = false;
+        this.userSvc
+          .getUserDetails(this.userSvc.username as string)
+          .subscribe(() => this.initProfile());
       })
       .catch((err) => {
         console.info(err);

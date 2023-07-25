@@ -57,6 +57,6 @@ export class NavTopComponent {
 
   signout(): void {
     this.userSvc.signout();
-    this.router.navigate(['/']);
+    this.router.navigate(['/']).then(() => window.location.reload());
   }
 }

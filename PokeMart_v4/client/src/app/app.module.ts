@@ -3,9 +3,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { NavTopComponent } from './nav-top/nav-top.component';
 import { ErrorComponent } from './error/error.component';
-import { Router,RouterModule,Routes } from '@angular/router';
+import { Router, RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule,HttpClientJsonpModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {
+  HttpClientModule,
+  HttpClientJsonpModule,
+  HTTP_INTERCEPTORS,
+} from '@angular/common/http';
 import { LandingComponent } from './landing/landing.component';
 import { CatalogueComponent } from './catalogue/catalogue/catalogue.component';
 import { CatalogueItemComponent } from './catalogue/catalogue-item/catalogue-item.component';
@@ -30,7 +34,6 @@ import { DevComponent } from './admin/dev/dev.component';
 import { NgxStripeModule } from 'ngx-stripe';
 import { STRIPE_PKEY } from './endpoint.constants';
 
-
 const routes: Routes = [
   { path: '', component: LandingComponent },
   { path: 'shop', component: CatalogueComponent },
@@ -39,13 +42,12 @@ const routes: Routes = [
   { path: 'category', component: CategoryComponent },
   { path: 'detail/:productID', component: ItemDetailComponent },
 
+  { path: 'auth/login', component: LoginComponent },
+  { path: 'auth/signup', component: SignupComponent },
+  { path: 'user/profile', component: ProfileComponent },
 
-  { path: 'auth/login', component:LoginComponent},
-  { path: 'auth/signup', component:SignupComponent},
-  { path: 'user/profile', component:ProfileComponent},
-
-  { path: 'sales/edit', component:EditComponent},
-  { path: 'admin/upload', component:UploadComponent},
+  { path: 'sales/edit', component: EditComponent },
+  { path: 'admin/upload', component: UploadComponent },
 
   { path: 'cart', component: CartComponent },
   { path: 'checkout', component: CheckoutComponent },
@@ -53,15 +55,13 @@ const routes: Routes = [
 
   { path: 'history', component: HistoryComponent },
 
-  { path: 'findUs', component: LocationComponent },
+  { path: 'about', component: LocationComponent },
 
-  { path: 'dev', component: DevComponent},
-  
+  { path: 'dev', component: DevComponent },
+
   { path: 'construction', component: ErrorComponent },
   { path: '**', component: ErrorComponent },
-
-
-]
+];
 
 @NgModule({
   declarations: [
@@ -88,7 +88,10 @@ const routes: Routes = [
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(routes, { useHash: true, scrollPositionRestoration: "enabled" },),
+    RouterModule.forRoot(routes, {
+      useHash: true,
+      scrollPositionRestoration: 'enabled',
+    }),
     HttpClientModule,
     FormsModule,
     NgxStripeModule.forRoot(STRIPE_PKEY),
@@ -96,10 +99,12 @@ const routes: Routes = [
     WebcamModule,
     NgbModule,
     GoogleMapsModule,
-    HttpClientJsonpModule
+    HttpClientJsonpModule,
   ],
 
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: HttpJWTInterceptor, multi: true }],
-  bootstrap: [AppComponent]
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: HttpJWTInterceptor, multi: true },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

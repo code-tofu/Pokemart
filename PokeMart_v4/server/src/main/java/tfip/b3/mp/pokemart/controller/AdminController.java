@@ -23,15 +23,17 @@ public class AdminController {
 
     @PostMapping(path = "/api/admin/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @RolesAllowed({ "ROLE_ADMINISTRATOR", "ROLE_DEVELOPER" })
-    public ResponseEntity<String> createNewProduct(@RequestPart String itemDetails, @RequestPart MultipartFile image){
-        System.out.println("Recieved:" + itemDetails + "," + image.getOriginalFilename());
-        try{
-            String productID = productSvc.insertCustomProductFromJson(GeneralUtils.getJsonObjectFromStr(itemDetails), image, image.getContentType());
-            return  ResponseEntity.status(HttpStatus.CREATED)
+    public ResponseEntity<String> createNewProduct(@RequestPart String itemDetails, @RequestPart MultipartFile image) {
+        System.out.println(
+                "Recieved:" + itemDetails.toString() + "," + image.getOriginalFilename() + "| DATA:" + image);
+        try {
+            String productID = productSvc.insertCustomProductFromJson(GeneralUtils.getJsonObjectFromStr(itemDetails),
+                    image, image.getContentType());
+            return ResponseEntity.status(HttpStatus.CREATED)
                     .body(Json.createObjectBuilder().add("201 CREATED", productID).build().toString());
         } catch (Exception ex) {
             return ControllerUtil.exceptionHandler(ex);
-        } 
+        }
     }
-    
+
 }

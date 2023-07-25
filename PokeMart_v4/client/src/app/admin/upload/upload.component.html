@@ -2,21 +2,23 @@
     <h5>Please Input New Product Details:</h5>
     <form [formGroup]="uploadForm">
         <div class="d-flex justify-content-center mb-2">
-            <img class="img-80" [src]="url">
+            <img class="img-80" [src]="imgUrl">
         </div>
 
         <div class="mb-2" *ngIf="cameraOn">
             <div class="d-flex justify-content-center">
-                <webcam [width]="container.offsetWidth*0.8" [trigger]="trigger$" (imageCapture)="getImage($event)"
+                <webcam [width]="container.offsetWidth*0.8" [trigger]="trigger$" (imageCapture)="getCamPicture($event)"
                     (initError)="handleInitError($event)">
                 </webcam>
             </div>
             <div class="d-grid">
-                <button type="button " class="btn btn-outline-success btn-block" (click)="takePicture()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-fill" viewBox="0 0 16 16">
-                        <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
-                        <path d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"/>
-                      </svg>
+                <button type="button " class="btn btn-outline-success btn-block" (click)="takeCamPicture()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-camera-fill" viewBox="0 0 16 16">
+                        <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
+                        <path
+                            d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z" />
+                    </svg>
                 </button>
             </div>
         </div>
@@ -36,6 +38,10 @@
             <input type="text" class="form-control" id="inputCost" placeholder="cost" formControlName="category">
             <label for="inputCategory">Category</label>
         </div>
+        <div class="form-floating mb-2">
+            <input type="text" class="form-control" id="inputCost" placeholder="cost" formControlName="description">
+            <label for="inputCategory">Description</label>
+        </div>
         <div class="mb-2">
             <div class="d-flex justify-content-between mb-2">
                 <label for="formFile" class="form-label ">Product Image:</label>
@@ -48,7 +54,7 @@
 
 
 
-        <div formArrayName="attribute">
+        <div formArrayName="attributes">
 
 
             <div class="d-flex justify-content-between mb-2">

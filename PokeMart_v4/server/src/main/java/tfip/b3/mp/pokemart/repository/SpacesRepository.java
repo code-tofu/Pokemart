@@ -15,7 +15,6 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 
-
 @Repository
 public class SpacesRepository {
 
@@ -26,7 +25,6 @@ public class SpacesRepository {
     private String bucket;
     @Value("${s3.dir.name}")
     private String dirName;
-    
 
     @Autowired
     private AmazonS3 s3;
@@ -48,21 +46,24 @@ public class SpacesRepository {
         return s3.getUrl(bucket, key).toString();
     }
 
-        public String uploadImage(Map<String, String> prodData, MultipartFile file, String fileName,
+    // KEEPING SEPARATE BUT POSSIBLE TO REFACTOR? CURRENTLY FORCED TO PNG
+    public String uploadImage(Map<String, String> prodData, MultipartFile file, String fileName,
             String fileType) throws IOException {
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(type + fileType);
         metadata.setContentLength(file.getSize());
         metadata.setUserMetadata(prodData);
 
-        String key = dirName + "/image/" + fileName;
+        // String[] fileFormat = fileType.split("/");
+        // String key = dirName + "/sprite/" + fileName + "." +
+        // fileFormat[fileFormat.length - 1];
+        String key = dirName + "/sprite/" + fileName + "." + fileType;
         PutObjectRequest putReq = new PutObjectRequest(bucket, key,
                 file.getInputStream(), metadata);
         putReq = putReq.withCannedAcl(CannedAccessControlList.PublicRead);
         PutObjectResult result = s3.putObject(putReq);
-        System.out.printf(">> [INFO] Uploaded:" + result.toString());
+        System.out.println(">> [INFO] Uploaded:" + result.toString() + "|KEY:" + s3.getUrl(bucket, key).toString());
 
         return s3.getUrl(bucket, key).toString();
     }
 }
-

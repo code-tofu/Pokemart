@@ -1,6 +1,6 @@
 import { Component, OnInit, SimpleChanges, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { CatalogueItem } from 'src/app/model/catalogue.model';
 import { CatalogueService } from 'src/app/services/catalogue.service';
 import { itemsPerPage } from 'src/app/endpoint.constants';
@@ -19,6 +19,7 @@ export class CatalogueComponent implements OnInit {
   currentPage: number = 1;
   maxPage!: number;
   itemsPerPage = itemsPerPage;
+  qpSub!: Subscription;
 
   ngOnInit(): void {
     console.info('>> [INFO] Route:', this.actRoute.snapshot.routeConfig);
@@ -30,33 +31,34 @@ export class CatalogueComponent implements OnInit {
           .getTotalCountByCategory(this.userParam)
           .subscribe((resp) => {
             this.maxPage = resp;
-            console.info(">> [INFO] Max Page ", this.maxPage );
+            console.info('>> [INFO] Max Page ', this.maxPage);
           });
-        
+
         this.catalogue$ = this.loadCataloguePage(this.catalogueType);
         console.info('>> [INFO] ', 'Load Shop by Category:', this.userParam);
         break;
       }
       case 'shop/search': {
         this.catalogueType = 2;
-        this.userParam = this.actRoute.snapshot.queryParams['query'];
-        this.catalogueSvc
-          .getTotalCountBySearch(this.userParam)
-          .subscribe((resp) => {
-            this.maxPage = resp;
-            console.info(">> [INFO] Max Page ", this.maxPage );
-          });
-        this.catalogue$ = this.loadCataloguePage(this.catalogueType);
-        console.info('>> [INFO] ', 'Load Shop by Search:', this.userParam);
+        this.qpSub = this.actRoute.queryParams.subscribe((params) => {
+          console.info('>> [INFO] QueryParams:', params['query']);
+          this.userParam = params['query'];
+          this.catalogueSvc
+            .getTotalCountBySearch(this.userParam)
+            .subscribe((resp) => {
+              this.maxPage = resp;
+              console.info('>> [INFO] Max Page ', this.maxPage);
+            });
+          this.catalogue$ = this.loadCataloguePage(this.catalogueType);
+          console.info('>> [INFO] ', 'Load Shop by Search:', this.userParam);
+        });
         break;
       }
       default: {
-        this.catalogueSvc
-          .getTotalCountFullCatalogue()
-          .subscribe((resp) => {
-            this.maxPage = resp;
-            console.info(">> [INFO] Max Page ", this.maxPage );
-          });
+        this.catalogueSvc.getTotalCountFullCatalogue().subscribe((resp) => {
+          this.maxPage = resp;
+          console.info('>> [INFO] Max Page ', this.maxPage);
+        });
         this.catalogue$ = this.loadCataloguePage(this.catalogueType);
         console.info('>> [INFO] Load Shop Catalogue');
         break;
@@ -89,5 +91,12 @@ export class CatalogueComponent implements OnInit {
     console.info('>> [INFO] User Selected Page:', e);
     this.currentPage = e;
     this.catalogue$ = this.loadCataloguePage(this.catalogueType);
+  }
+
+  ngOnDestroy(): void {
+    if (this.qpSub) {
+      this.qpSub.unsubscribe();
+      console.info('>> [INFO] Unsubscribed QueryParams');
+    }
   }
 }

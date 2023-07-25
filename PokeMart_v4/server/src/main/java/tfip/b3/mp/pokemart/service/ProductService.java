@@ -1,16 +1,21 @@
 package tfip.b3.mp.pokemart.service;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import tfip.b3.mp.pokemart.model.AttributeDAO;
 import tfip.b3.mp.pokemart.model.ProductDAO;
@@ -26,6 +31,8 @@ public class ProductService {
     ProductRepository productRepo;
     @Autowired
     SpacesRepository spacesRepo;
+    @Value("${api.img.file.type}")
+    private String productImgType;
 
     public Optional<ProductDAO> getProductByProductID(String productID) throws DataAccessException {
         return productRepo.getProductByProductID(productID);
@@ -54,16 +61,23 @@ public class ProductService {
         ProductDAO newProduct = new ProductDAO(productID, 0, GeneralUtils.concatWords(jsonObj.getString("productName")),
                 null, jsonObj.getJsonNumber("cost").doubleValue(), jsonObj.getString("description"),
                 jsonObj.getString("productName"));
+
+        JsonArray pokeJsonArr = jsonObj.getJsonArray("attributes");
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> attrList = Arrays.asList(mapper.readValue(pokeJsonArr.toString(), String[].class));
+        System.out.println(attrList);
+        AttributeDAO attributeObj = new AttributeDAO(productID, attrList);
         productRepo.insertCustomProduct(newProduct,
-                ProductUtil.createAttributeDAOFromJson(jsonObj, productID));
+                attributeObj);
+
         Map<String, String> prodData = new HashMap<>();
         prodData.put("productID", productID);
         prodData.put("productName", newProduct.getProductName());
-        spacesRepo.uploadImage(prodData, file, newProduct.getNameID(), fileType);
+        spacesRepo.uploadImage(prodData, file, newProduct.getNameID(), productImgType);
         return "";
     }
 
-    @Transactional // for api/sprite creation/upload
+    @Transactional // for api/sprite creation/upload - remove?
     public String insertCustomProductFromJson(JsonObject jsonObj, MultipartFile file, String fileType, int apiID,
             String category) throws java.io.IOException {
         String productID = "p" + GeneralUtils.generateUUID(8);

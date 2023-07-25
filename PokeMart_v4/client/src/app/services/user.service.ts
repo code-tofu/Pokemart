@@ -72,11 +72,8 @@ export class UserService {
         console.info('>> [INFO] Authenticated|UserID:', this.userID);
         this.role = response.role;
         console.info('>> [INFO] Authenticated|Role:', this.role);
-        this.getUserDetails(auth.username).subscribe((response) => {
-          this.user = response;
-          this.tokenSvc.saveUser(this.user);
-        });
         this.authenticationStatus.next(true);
+        this.getUserDetails(auth.username).subscribe();
       })
       .catch((err) => {
         if (err.status == 401)
@@ -122,7 +119,12 @@ export class UserService {
     return this.http.post<any>(authURL + 'registerCustomer', signup);
   }
 
-  getUserDetails(username: string): Observable<UserProfile> {
-    return this.http.get<UserProfile>(userURL + 'profile/' + username);
+  getUserDetails(username: string): Observable<any> {
+    return this.http.get<UserProfile>(userURL + 'profile/' + username).pipe(
+      map((response) => {
+        this.user = response;
+        this.tokenSvc.saveUser(this.user);
+      })
+    );
   }
 }
