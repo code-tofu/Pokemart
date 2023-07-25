@@ -104,7 +104,8 @@
                 seconds</time>.</p>
     </div>
     <div class="modal-footer bg-success-subtle text-center">
-        <button class="btn btn-outline-success" (click)="skipCountdown()" (click)="modal.close()">
+        <button class="btn btn-outline-success" (click)="skipCountdown()" (click)="modal.close()"
+        (click)="this.modalService.dismissAll()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                 class="bi bi-bag align-icon" viewBox="0 0 16 16">
                 <path
@@ -124,7 +125,7 @@
             </svg>Login Unsuccessful. Wrong Username/Password</h4>
     </div>
     <div class="modal-footer bg-danger-subtle d-flex justify-content-end">
-        <button class="btn btn-danger" (click)="modal.close()" ngbAutofocus>
+        <button class="btn btn-danger" (click)="modal.close()" (click)="this.modalService.dismissAll()" ngbAutofocus>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                 class="bi bi-x-lg align-icon" viewBox="0 0 16 16">
                 <path

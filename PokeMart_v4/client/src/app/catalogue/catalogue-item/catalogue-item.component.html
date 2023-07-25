@@ -13,7 +13,7 @@
                     <span [ngClass]="{'discount-text': item.discount}" >${{item.cost | number: '1.2-2'}}</span>
                     <span class="text-danger" *ngIf="item.discount"><br>${{item.cost-item.discount | number:
                         '1.2-2'}}
-                        <span class="badge bg-danger">{{item.discount/item.cost * 100 | number: '1.0'}}% OFF</span>
+                        <span class="badge bg-danger">{{item.discount/item.cost * 100 | number: '1.0-2'}}% OFF</span>
                     </span>
                     <br><small>{{item.stock}} IN STOCK</small>
                 </h6>

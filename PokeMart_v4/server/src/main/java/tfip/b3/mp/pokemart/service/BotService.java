@@ -288,6 +288,11 @@ public class BotService extends TelegramLongPollingBot {
         System.out.println(">> [BOT] Getting Orders of " + customerID);
 
         List<OrderSummaryDAO> orderSummaries = orderRepo.getOrderSummaryByCustomerID(customerID);
+        if(orderSummaries.size()<1){
+            sendMsg(id,"You have no orders");
+            return;
+        }
+
         String msg = "Your Orders: \n";
         int count = 1;
         for (OrderSummaryDAO summary : orderSummaries) {

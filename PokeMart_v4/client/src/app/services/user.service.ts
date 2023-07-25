@@ -108,7 +108,7 @@ export class UserService {
       gender: profileForm.get('gender')!.value,
     };
     console.info('>> [INFO] Update User:', newUpdate);
-    return this.http.post<any>(userURL + '/updateCustomer', newUpdate);
+    return this.http.post<any>(userURL + 'updateCustomer', newUpdate);
   }
 
   postAuthRequest(auth: AuthRequest): Observable<AuthResponse> {

@@ -64,7 +64,7 @@ public class WebSecurityConfig {
             .requestMatchers("/api/map/**").authenticated()
             .requestMatchers("/api/order/**").authenticated()
             .requestMatchers("/api/sales/**").hasAnyAuthority("ROLE_SELLER","ROLE_ADMINISTRATOR", "ROLE_DEVELOPER")
-            .requestMatchers("/api/admin/**").hasAnyAuthority("ROLE_ADMINISTRATOR", "ROLE_DEVELOPER")
+            .requestMatchers("/api/admin/**").hasAnyAuthority("ROLE_SELLER","ROLE_ADMINISTRATOR", "ROLE_DEVELOPER")
             .requestMatchers("/api/dev/**").hasAuthority("ROLE_DEVELOPER")
             .anyRequest().permitAll()
             )

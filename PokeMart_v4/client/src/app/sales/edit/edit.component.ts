@@ -27,8 +27,7 @@ export class EditComponent {
   ]);
   discount: FormControl = new FormControl<number>(0, [
     Validators.required,
-    Validators.min(0),
-    Validators.max(100),
+    Validators.min(0)
   ]);
   comment: FormControl = new FormControl<string>('', [
     Validators.required,
