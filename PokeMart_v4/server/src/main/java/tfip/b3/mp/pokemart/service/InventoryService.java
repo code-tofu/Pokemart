@@ -74,4 +74,12 @@ public class InventoryService {
         return invRepo.updateInventoryStock(productID, stock);
     }
 
+    public boolean insertNewInventoryItem(String productID){
+        if (!invRepo.checkProductExistsInInventory(productID)){
+        return invRepo.insertInventoryItem(productID,1);
+        } else {
+            return false;
+        }
+    }
+
 }

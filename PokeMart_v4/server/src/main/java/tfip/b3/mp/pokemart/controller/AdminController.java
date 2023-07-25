@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.json.Json;
+import tfip.b3.mp.pokemart.service.InventoryService;
 import tfip.b3.mp.pokemart.service.ProductService;
 import tfip.b3.mp.pokemart.utils.ControllerUtil;
 import tfip.b3.mp.pokemart.utils.GeneralUtils;
@@ -20,6 +21,8 @@ public class AdminController {
 
     @Autowired
     ProductService productSvc;
+        @Autowired
+    InventoryService invSvc;
 
     @PostMapping(path = "/api/admin/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @RolesAllowed({ "ROLE_ADMINISTRATOR", "ROLE_DEVELOPER" })
@@ -29,8 +32,9 @@ public class AdminController {
         try {
             String productID = productSvc.insertCustomProductFromJson(GeneralUtils.getJsonObjectFromStr(itemDetails),
                     image, image.getContentType());
+            invSvc.insertNewInventoryItem(productID);
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(Json.createObjectBuilder().add("201 CREATED", productID).build().toString());
+                    .body(Json.createObjectBuilder().add("createdID", productID).build().toString());
         } catch (Exception ex) {
             return ControllerUtil.exceptionHandler(ex);
         }

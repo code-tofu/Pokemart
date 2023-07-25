@@ -74,7 +74,7 @@ public class ProductService {
         prodData.put("productID", productID);
         prodData.put("productName", newProduct.getProductName());
         spacesRepo.uploadImage(prodData, file, newProduct.getNameID(), productImgType);
-        return "";
+        return productID;
     }
 
     @Transactional // for api/sprite creation/upload - remove?

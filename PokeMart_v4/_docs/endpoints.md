@@ -9,8 +9,8 @@
  /api/cart/summary/{userID
 
  /api/dev/create/productDB
- /api/setup/create/inventory
- /api/setup/create/stores
+ /api/dev/create/inventory
+ /api/dev/create/stores
 
 OK
  api/inventory/shop

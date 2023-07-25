@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { WebcamImage, WebcamInitError } from 'ngx-webcam';
 import { Subject, firstValueFrom } from 'rxjs';
 import { SalesService } from 'src/app/services/sales.service';
@@ -14,6 +15,7 @@ export class UploadComponent {
   salesSvc = inject(SalesService);
   uploadForm!: FormGroup;
   attributeArr!: FormArray;
+  router = inject(Router);
 
   @ViewChild('imageFile')
   uploadFile!: ElementRef;
@@ -55,8 +57,8 @@ export class UploadComponent {
         description: this.fb.control<string>('', [Validators.required]),
         productName: this.fb.control<string>('', [Validators.required]),
         attributes: this.attributeArr,
-        image: this.fb.control<File | null>(null, [Validators.required]),
-        file: this.fb.control<File | null>(null, [Validators.required]),
+        image: this.fb.control<File | null>(null),
+        file: this.fb.control<File | null>(null),
       }));
   }
 
@@ -91,9 +93,12 @@ export class UploadComponent {
         uploadImg
       )
     )
-      .then(() => {
-        alert('Product Successfully Uploaded');
+      .then((resp) => {
+        alert('Product Successfully Uploaded:\n' + JSON.stringify(resp));
         this.uploadForm.reset();
+        this.router.navigate(['/sales', 'edit'], {
+          queryParams: { product: resp.createdID.substring(1) },
+        });
       })
       .catch((err) => {
         alert('Server Error:' + JSON.stringify(err));

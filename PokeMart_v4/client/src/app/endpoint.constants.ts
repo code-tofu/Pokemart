@@ -8,6 +8,7 @@ export const orderURL = 'api/order/';
 export const mapURL = 'api/map/';
 export const locationURL = 'api/location/';
 export const adminURL = '/api/admin/';
+export const devURL= '/api/dev/';
 
 export const itemsPerPage: number = 10; //pagination vs offset done on server side
 export const catPerPage: number = 15;
